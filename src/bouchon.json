@@ -1,0 +1,48 @@
+[
+    {
+        "step":0,
+        "type":"media",
+        "title":"Apple respectueuse de l'environnement.",
+        "url":"https://www.youtube.com/embed/WNzYJVoyU-8",
+        "isVideo":true
+    },
+    {
+        "step":1,
+        "type":"textField",
+        "title": "Interessés vous à l'environnement?"
+    },
+    {
+        "step":2,
+        "type":"multipleChoice",
+        "title":"Dans quel type de restaurant mangez vous?",
+        "choices":[
+            "Fast food",
+            "Resto Vegan",
+            "Boulangerie",
+            "Restaurant",
+            "Je ne vais pas au restaurant"
+        ]
+    },
+    {
+        "step":3,
+        "type":"Boolean",
+        "title":"Faites vous le tri ?"
+    },
+    {
+        "step":4,
+        "type":"media",
+        "title":"La place de la faune dans le réchauffement climatique.",
+        "url":"https://picsum.photos/id/693/1900/1050"
+    },
+    {
+        "step":5,
+        "type":"radio",
+        "title":"Qui de ces animaux est le plus responsable du réchaffement climatique ?",
+        "choices":[
+            "La vache",
+            "Le canard",
+            "La carpe de méditérannée",
+            "Le Kiwi"
+        ]
+    }
+]
