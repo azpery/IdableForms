@@ -11,7 +11,7 @@
         <form *ngIf="(step.content.type == 'Boolean')">
             <div class="form-group">
                 <button type="button" class="btn btn-success">Oui</button>
-                <button type="button" class="btn btn-error">Non</button>
+                <button type="button" class="btn btn-primary">Non</button>
             </div>
         </form>
         <form *ngIf="(step.content.type == 'multipleChoice')">
@@ -49,15 +49,4 @@
 
   <ng-template #color let-step>
     <div style="background-color: black;width: 100%; height: 100%;" class="picsum-img-wrapper"></div>
-    <container-element [ngSwitch]="step.content.type">
-        <form *ngSwitchCase="textField">
-            <div class="form-group">
-                <label for="exampleInputEmail1">step.content.title</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-            </div>
-        </form>
-        
-        <some-element *ngSwitchDefault>...</some-element>
-      </container-element>
   </ng-template>

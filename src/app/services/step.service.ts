@@ -23,7 +23,7 @@ export class StepService {
         
         let s = steps as Array<any>
         console.log(s.default)
-        return steps.default.map(this.decodeStep);
+        return s.default.map(this.decodeStep);
     }
 
     decodeStep(json: StepJSON): Step {

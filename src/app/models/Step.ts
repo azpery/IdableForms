@@ -35,7 +35,6 @@ export interface StepJSON {
   type: string;
   title: string;
   url: string;
-  question: string;
   choices: string[];
   isVideo:boolean;
 }
