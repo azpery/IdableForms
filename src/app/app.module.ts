@@ -17,11 +17,9 @@ import { YesNoDirective } from './directives/yesno.directive';
     AppComponent,
     CarouselFormsComponent,
     QuestionComponent,
-    SafePipe,
-    YesNoDirective
-    
+    SafePipe
   ],
-  imports: [
+  imports: [ 
     BrowserModule,
     AppRoutingModule,
     NgbModule,
