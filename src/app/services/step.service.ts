@@ -21,8 +21,8 @@ export class StepService {
 
     getSteps(): Step[]{
         
-        let s = steps as Array<any>
-        console.log(s.default)
+        let s = steps 
+        console.log(s)
         return s.default.map(this.decodeStep);
     }
 

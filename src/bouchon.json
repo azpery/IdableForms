@@ -25,7 +25,7 @@
     },
     {
         "step":3,
-        "type":"Boolean",
+        "type":"yesno",
         "title":"Faites vous le tri ?"
     },
     {

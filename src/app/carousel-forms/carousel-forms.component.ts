@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { StepService } from '../services/step.service'
 import { Step } from '../models/Step';
+import { QuestionComponent } from '../components/question.component';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,8 @@ export class CarouselFormsComponent implements OnInit {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = false;
     config.showNavigationIndicators = true;
+
+    QuestionComponent
     
     
   }

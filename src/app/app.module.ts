@@ -7,6 +7,8 @@ import { CarouselFormsComponent } from './carousel-forms/carousel-forms.componen
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap'; 
 import { HttpClientModule } from '@angular/common/http'; 
 import {SafePipe} from './safePipe'
+import { QuestionComponent } from './components/question.component';
+import { YesNoDirective } from './directives/yesno.directive';
 
 
 
@@ -14,7 +16,10 @@ import {SafePipe} from './safePipe'
   declarations: [
     AppComponent,
     CarouselFormsComponent,
-    SafePipe
+    QuestionComponent,
+    SafePipe,
+    YesNoDirective
+    
   ],
   imports: [
     BrowserModule,
@@ -23,6 +28,6 @@ import {SafePipe} from './safePipe'
     HttpClientModule
   ],
   providers: [],
-  bootstrap: [AppComponent, CarouselFormsComponent]
+  bootstrap: [AppComponent, CarouselFormsComponent,QuestionComponent]
 })
 export class AppModule { }

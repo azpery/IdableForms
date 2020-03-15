@@ -2,24 +2,10 @@
     <ng-template ngbSlide *ngFor="let step of steps; index as i">
       <div class="carousel-caption">
         <h3>{{step.content.title}} </h3>
-        <form *ngIf="(step.content.type == 'textField')">
-            <div class="form-group">
-                <label for="exampleInputEmail1">{{step.content.title}}</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Entrez la réponse">
-            </div>
-        </form>
-        <ng-container 
-             [ngTemplateOutlet]="(step.content.type == 'Boolean') ?yesno : defaultCheck" 
-             [ngTemplateOutletContext]="{step:step}">
-        </ng-container>
-        <ng-container 
-             [ngTemplateOutlet]="(step.content.type == 'multipleChoice') ?multipleChoice : defaultCheck" 
-             [ngTemplateOutletContext]="{step:step}">
-        </ng-container>
-        <ng-container 
-             [ngTemplateOutlet]="(step.content.type == 'radio') ?radio : defaultCheck" 
-             [ngTemplateOutletContext]="{step:step}">
-        </ng-container>
+        <question-view
+        [type]="step.content.type"
+        [step]="step">
+        </question-view>
       </div>
       
       <a href="https://www.google.fr/?q=Number+{{i+1}}" target="_blank" rel="nofollow noopener noreferrer" *ngIf="(step.content.type == 'media')">
@@ -32,36 +18,3 @@
         style="width:100%;height:100%;position: absolute; top:0" [src]="step.content.url | safe" *ngIf="step.content.isVideo"></iframe>
     </ng-template>
   </ngb-carousel>
-
-  <ng-template #color let-step>
-    <div style="background-color: black;width: 100%; height: 100%;" class="picsum-img-wrapper"></div>
-  </ng-template>
-
-  <ng-template #yesno let-step>
-    <div class="form-group">
-        <button type="button" class="btn btn-success">Oui</button>
-        <button type="button" class="btn btn-primary">Non</button>
-    </div>
-  </ng-template>
-
-  <ng-template #multipleChoice let-step='step'>
-    <div class="form-group">
-      <div class="form-check" *ngFor="let choice of step.content.choices; index as i">
-            <input class="form-check-input" type="checkbox" value="" id="defaultCheck{{i}}">
-            <label class="form-check-label" for="defaultCheck{{i}}">
-              {{choice}}
-            </label>
-          </div>
-    </div>
-  </ng-template>
-
-<ng-template #radio let-step='step'>
-  <div class="form-group">
-    <div class="form-check" *ngFor="let choice of step.content.choices; index as i">
-        <input class="form-check-input" type="radio" name="{{step.step}}" value="" id="defaultCheck{{i}}">
-        <label class="form-check-label" for="defaultCheck{{i}}">
-          {{choice}}
-        </label>
-      </div>
-  </div>
-</ng-template>

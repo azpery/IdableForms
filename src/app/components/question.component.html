@@ -1,0 +1,42 @@
+
+<ng-container [ngSwitch]="type">
+    <ng-container *ngSwitchCase="'yesno'">
+        <ng-container *ngTemplateOutlet="yesNoTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'radio'">
+        <ng-container *ngTemplateOutlet="radioTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'text'">
+        <ng-container *ngTemplateOutlet="textTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+</ng-container>
+
+
+<ng-template #yesNoTemplate let-step>
+    <div class="form-group">
+        <button type="button" class="btn btn-success">Oui</button>
+        <button type="button" class="btn btn-primary">Non</button>
+    </div>
+  </ng-template>
+
+  <ng-template #multipleChoice let-step='step'>
+    <div class="form-group">
+      <div class="form-check" *ngFor="let choice of step.content.choices; index as i">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck{{i}}">
+            <label class="form-check-label" for="defaultCheck{{i}}">
+              {{choice}}
+            </label>
+          </div>
+    </div>
+  </ng-template>
+
+<ng-template #radioTemplate let-step>
+  <div class="form-group">
+    <div class="form-check" *ngFor="let choice of step.content.choices; index as i">
+        <input class="form-check-input" type="radio" name="{{step.step}}" value="" id="defaultCheck{{i}}">
+        <label class="form-check-label" for="defaultCheck{{i}}">
+          {{choice}}
+        </label>
+      </div>
+  </div>
+</ng-template>
