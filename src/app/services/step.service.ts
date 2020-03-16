@@ -21,12 +21,12 @@ export class StepService {
 
     getSteps(): Step[]{
         
-        let s = steps 
+        let s = steps as [StepJSON] 
         console.log(s)
-        return s.default.map(this.decodeStep);
+        return s.default.map(this.decodeStep, this);
     }
 
-    decodeStep(json: StepJSON): Step {
+    decodeStep(json: StepJSON): any {
         var content:Content =  {
             title : json.title,
             type : json.type as unknown as ContentType
@@ -67,8 +67,13 @@ export class StepService {
                 } as Boolean
                 break;
             default:
+                if(json.length > 0){
+                    
+                    return json.map(this.decodeStep, this) as [Step];
+                }
                 break;
         }
+        
         return  {
             step: json.step,
             content : content

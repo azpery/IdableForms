@@ -8,7 +8,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http'; 
 import {SafePipe} from './safePipe'
 import { QuestionComponent } from './components/question.component';
-import { YesNoDirective } from './directives/yesno.directive';
+import { Ng5SliderModule } from 'ng5-slider';
+import { BackgroundComponent } from './background/background.component';
 
 
 
@@ -17,13 +18,15 @@ import { YesNoDirective } from './directives/yesno.directive';
     AppComponent,
     CarouselFormsComponent,
     QuestionComponent,
-    SafePipe
+    SafePipe,
+    BackgroundComponent
   ],
   imports: [ 
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
+    Ng5SliderModule
   ],
   providers: [],
   bootstrap: [AppComponent, CarouselFormsComponent,QuestionComponent]

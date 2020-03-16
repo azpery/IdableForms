@@ -37,6 +37,7 @@ export interface StepJSON {
   url: string;
   choices: string[];
   isVideo:boolean;
+  steps:[StepJSON]
 }
 
 export enum ContentType{

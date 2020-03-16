@@ -1,0 +1,14 @@
+<ng-container *ngIf="step.content != undefined;else color">
+    <a href="https://www.google.fr/?q=Number+{{i+1}}" target="_blank" rel="nofollow noopener noreferrer" *ngIf="(step.content.type == 'media')">
+        <div class="picsum-img-wrapper">
+        <img [src]="step.content.url" alt="My image {{i + 1}} description" *ngIf="!step.content.isVideo">
+        </div>
+    </a>
+    <div style="background-color: black;width: 100%; height: 100%;" class="picsum-img-wrapper" *ngIf="(step.content.type != 'media')"></div>
+    <iframe frameborder="0" allowfullscreen
+        style="width:100%;height:100%;position: absolute; top:0" [src]="step.content.url | safe" *ngIf="step.content.isVideo"></iframe>
+</ng-container>
+
+<ng-template #color>
+    <div style="background-color: black;width: 100%; height: 100%;" class="picsum-img-wrapper" ></div>
+  </ng-template>

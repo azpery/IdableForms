@@ -1,3 +1,4 @@
+<h3>{{step.content.title}} </h3>
 
 <ng-container [ngSwitch]="type">
     <ng-container *ngSwitchCase="'yesno'">
@@ -8,6 +9,9 @@
     </ng-container>
     <ng-container *ngSwitchCase="'text'">
         <ng-container *ngTemplateOutlet="textTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'jauge'">
+        <ng-container *ngTemplateOutlet="jaugeTemplate; context: {$implicit: step}"></ng-container>
     </ng-container>
 </ng-container>
 
@@ -40,3 +44,7 @@
       </div>
   </div>
 </ng-template>
+
+<ng-template #jaugeTemplate let-step>
+    <ng5-slider [(value)]="value" [options]="options"></ng5-slider>
+  </ng-template>

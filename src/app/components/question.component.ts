@@ -1,8 +1,7 @@
 import { Component, ContentChild, Input, TemplateRef, OnInit } from '@angular/core';
 
-import {RadioDirective} from '../directives/radio.directive';
-import {TextDirective} from '../directives/text.directive';
-import {YesNoDirective} from '../directives/yesno.directive';
+import { Options } from 'ng5-slider';
+
 import { Step } from '../models/Step';
 
 @Component({
@@ -11,16 +10,15 @@ import { Step } from '../models/Step';
   })
 export class QuestionComponent implements OnInit{ 
     @Input() step;
-    @Input() type: 'radio' | 'yesno' | 'text' | 'else' = 'else';
- 
-    // Read in our structural directives as TemplateRefs
-    @ContentChild(RadioDirective, {read: TemplateRef}) radioTemplate;
-    @ContentChild(TextDirective, {read: TemplateRef}) textTemplate;
-    @ContentChild(YesNoDirective, {read: TemplateRef}) yesNoTemplate;
+    @Input() type: 'radio' | 'yesno' | 'text' | 'else' | 'jauge' = 'else';
+
+    value: number = 100;
+    options: Options = {
+    floor: 0,
+    ceil: 200
+    };
 
     ngOnInit() {
-        console.log(this.step)
-        console.log(this.type)
     }
 
 }
