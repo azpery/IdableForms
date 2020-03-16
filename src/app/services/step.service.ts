@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Step,StepJSON,Content,Media, MultipleChoice, Radio, TextField,Boolean, ContentType } from '../models/Step';
+import { Step,StepJSON,Content,Media, MultipleChoice, Radio, TextField,Boolean, ContentType, Section,Text } from '../models/Step';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as steps from '../../bouchon.json';
 
@@ -66,11 +66,23 @@ export class StepService {
                     type : json.type as unknown as ContentType,
                 } as Boolean
                 break;
+            case "section":
+                content = {
+                    title : json.title,
+                    description : json.description,
+                    type : json.type as unknown as ContentType,
+                    steps : json.steps.map(this.decodeStep, this) as [Step]
+                } as Section
+                break;
+            case "text":
+                content = {
+                    title : json.title,
+                    body : json.body,
+                    type : json.type as unknown as ContentType
+                } as Text
+                break;
             default:
-                if(json.length > 0){
-                    
-                    return json.map(this.decodeStep, this) as [Step];
-                }
+                
                 break;
         }
         

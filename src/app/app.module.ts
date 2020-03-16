@@ -7,9 +7,11 @@ import { CarouselFormsComponent } from './carousel-forms/carousel-forms.componen
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap'; 
 import { HttpClientModule } from '@angular/common/http'; 
 import {SafePipe} from './safePipe'
-import { QuestionComponent } from './components/question.component';
+import { QuestionComponent } from './components/question/question.component';
 import { Ng5SliderModule } from 'ng5-slider';
-import { BackgroundComponent } from './background/background.component';
+import { BackgroundComponent } from './components/background/background.component';
+import { RandomcolorModule } from 'angular-randomcolor';
+
 
 
 
@@ -26,7 +28,8 @@ import { BackgroundComponent } from './background/background.component';
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    Ng5SliderModule
+    Ng5SliderModule,
+    RandomcolorModule
   ],
   providers: [],
   bootstrap: [AppComponent, CarouselFormsComponent,QuestionComponent]

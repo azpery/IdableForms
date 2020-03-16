@@ -6,43 +6,72 @@
         "url":"https://www.youtube.com/embed/d9SvlPvgAx4",
         "isVideo":true
     },
-    [{
+    { 
         "step":1,
-        "type":"jauge",
-        "title": "Interessés vous à l'environnement?"
+        "type":"section",
+        "title": "Première partie sur 45",
+        "description": "Lorem Ipsum ",
+        "steps":[{
+            "step":1,
+            "type":"jauge",
+            "title": "Interessés vous à l'environnement?"
+        },
+        {
+            "step":2,
+            "type":"radio",
+            "title":"Dans quel type de restaurant mangez vous?",
+            "choices":[
+                "Fast food",
+                "Resto Vegan",
+                "Boulangerie",
+                "Restaurant",
+                "Je ne vais pas au restaurant"
+            ]
+        },
+        {
+            "step":3,
+            "type":"yesno",
+            "title":"Faites vous le tri ?"
+        }]
+
     },
-    {
-        "step":2,
-        "type":"radio",
-        "title":"Dans quel type de restaurant mangez vous?",
-        "choices":[
-            "Fast food",
-            "Resto Vegan",
-            "Boulangerie",
-            "Restaurant",
-            "Je ne vais pas au restaurant"
-        ]
-    },
-    {
-        "step":3,
-        "type":"yesno",
-        "title":"Faites vous le tri ?"
-    }],
     {
         "step":4,
         "type":"media",
         "title":"La place de la faune dans le réchauffement climatique.",
         "url":"https://picsum.photos/id/693/1900/1050"
     },
-    {
+    { 
         "step":5,
-        "type":"radio",
-        "title":"Qui de ces animaux est le plus responsable du réchaffement climatique ?",
-        "choices":[
-            "La vache",
-            "Le canard",
-            "La carpe de méditérannée",
-            "Le Kiwi"
-        ]
+        "type":"section",
+        "title": "Deuxième partie",
+        "description": "Lorem Ipsum ",
+        "steps":[{
+            "step":6,
+            "type":"text",
+            "title": "Voici un texte sur l'environnement",
+            "body": "<p>L'<b>environnement</b> est «&nbsp;l'ensemble des éléments (<a href=\"/wiki/Biotique\" class=\"mw-redirect\" title=\"Biotique\">biotiques</a> ou <a href=\"/wiki/Abiotique\" class=\"mw-disambig\" title=\"Abiotique\">abiotiques</a>) qui entourent un individu ou une <a href=\"/wiki/Esp%C3%A8ce\" title=\"Espèce\">espèce</a> et dont certains contribuent directement à subvenir à ses <a href=\"/wiki/Besoin\" title=\"Besoin\">besoins</a>&nbsp;»<sup id=\"cite_ref-larousse_1-0\" class=\"reference\"><a href=\"#cite_note-larousse-1\"><span class=\"cite_crochet\">[</span>1<span class=\"cite_crochet\">]</span></a></sup>, ou encore comme «&nbsp;l'ensemble des conditions naturelles (<a href=\"/wiki/Physique\" title=\"Physique\">physiques</a>, <a href=\"/wiki/Chimie\" title=\"Chimie\">chimiques</a>, <a href=\"/wiki/Biologie\" title=\"Biologie\">biologiques</a>) et culturelles (<a href=\"/wiki/Sociologie\" title=\"Sociologie\">sociologiques</a>) susceptibles d’agir sur les <a href=\"/wiki/Organismes_vivants\" class=\"mw-redirect\" title=\"Organismes vivants\">organismes vivants</a> et les <a href=\"/wiki/Activit%C3%A9s_humaines\" class=\"mw-redirect\" title=\"Activités humaines\">activités humaines</a>&nbsp;»<sup id=\"cite_ref-2\" class=\"reference\"><a href=\"#cite_note-2\"><span class=\"cite_crochet\">[</span>2<span class=\"cite_crochet\">]</span></a></sup>.</p>"
+        },
+        {
+            "step":7,
+            "type":"radio",
+            "title":"Diriez vous que l'environnement est vitale à l'homme ?",
+            "choices":[
+                "Oui",
+                "Non",
+                "Touche à ton cul"
+            ]
+        },
+        {
+            "step":8,
+            "type":"yesno",
+            "title":"Êtes vous pour l'avortement ?"
+        },
+        {
+            "step":9,
+            "type":"jauge",
+            "title": "Pensez-vous pouvoir changer le monde ?"
+        }]
+
     }
 ]

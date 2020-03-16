@@ -1,3 +1,4 @@
+<form>
   <ngb-carousel #carousel [pauseOnHover]="pauseOnHover" (slide)="onSlide($event)">
     <ng-template ngbSlide *ngFor="let step of steps; index as i">
       <div class="carousel-caption">
@@ -7,16 +8,11 @@
           [step]="step">
           </question-view>
         </ng-container>
-        <ng-container *ngIf="step.length > 0">
-          <h3>{{step.length}} </h3>
-          <ng-container  *ngFor="let subStep of step; index as j">
-            <question-view
-            [type]="subStep.content.type"
-            [step]="subStep">
-            </question-view>
-          </ng-container>
-        </ng-container> 
       </div>
       <background [step]="step"></background>
     </ng-template>
-  </ngb-carousel>
+  </ngb-carousel>``
+  <div class="bottom-center">
+    <a role="button" class="btn btn-lg btn-success" (click)="next()"><span aria-hidden="true" class="carousel-control-next-icon"></span><span class="font-white">Passer à la section suivante</span><span class="sr-only">Next</span></a>
+  </div>
+</form>

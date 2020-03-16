@@ -1,0 +1,75 @@
+<ng-container *ngIf="step != null">
+      <ng-container [ngSwitch]="type"class="card-text" >
+          <ng-container *ngSwitchCase="'yesno'">
+              <ng-container *ngTemplateOutlet="yesNoTemplate; context: {$implicit: step}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'radio'">
+              <ng-container *ngTemplateOutlet="radioTemplate; context: {$implicit: step}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'text'">
+              <ng-container *ngTemplateOutlet="textTemplate; context: {$implicit: step}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'jauge'">
+              <ng-container *ngTemplateOutlet="jaugeTemplate; context: {$implicit: step}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'section'">
+            <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: step}"></ng-container>
+        </ng-container>
+      </ng-container>
+</ng-container>
+
+
+<ng-template #yesNoTemplate let-step>
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">{{step.content.title}}</label>
+    <div class="col-sm-10">
+      <button type="button" class="btn btn-outline-success btn-lg">Oui</button><br><br>
+      <button type="button" class="btn btn-outline-danger btn-lg">Non</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #radioTemplate let-step>
+  <fieldset class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-2">{{step.content.title}}</legend>
+      <div class="col-sm-10">
+        <div class="form-check" *ngFor="let choice of step.content.choices; index as i">
+            <input class="form-check-input" type="radio" name="{{step.step}}" value="" id="defaultCheck{{i}}">
+            <label class="form-check-label" for="defaultCheck{{i}}">
+              {{choice}}
+            </label>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</ng-template>
+
+<ng-template #jaugeTemplate let-step>
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">{{step.content.title}}</label>
+    <div class="col-sm-10">
+      <ng5-slider [(value)]="value" [options]="options"></ng5-slider>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #textTemplate let-step>
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">{{step.content.title}}</label>
+    <div class="col-sm-10" [innerHTML]="step.content.body">
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #sectionTemplate let-step>
+  <h1>{{step.content.title}}</h1>
+  <p>{{step.content.description}}</p>
+  <ng-container  *ngFor="let subStep of step.content.steps; index as j">
+    <question-view
+    [type]="subStep.content.type"
+    [step]="subStep">
+    </question-view>
+  </ng-container>
+</ng-template>
+

@@ -13,6 +13,15 @@ export interface Media extends Content{
     isVideo:boolean
 }
 
+export interface Text extends Content{
+  body:string
+}
+
+export interface Section extends Content{
+  description: string;
+  steps:[Step];
+}
+
 export interface TextField extends Content{
   
 }
@@ -37,6 +46,9 @@ export interface StepJSON {
   url: string;
   choices: string[];
   isVideo:boolean;
+  body:string;
+  description:string;
+  section:string;
   steps:[StepJSON]
 }
 
@@ -45,5 +57,7 @@ export enum ContentType{
   Media,
   Boolean,
   MultipleChoice,
-  Radio
+  Radio,
+  Section,
+  Text
 }

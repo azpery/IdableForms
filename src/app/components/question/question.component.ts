@@ -2,23 +2,23 @@ import { Component, ContentChild, Input, TemplateRef, OnInit } from '@angular/co
 
 import { Options } from 'ng5-slider';
 
-import { Step } from '../models/Step';
-
 @Component({
     selector: 'question-view',
-    templateUrl: './question.component.html'
+    templateUrl: './question.component.html',
+    styleUrls: ['./question.component.scss']
   })
 export class QuestionComponent implements OnInit{ 
     @Input() step;
-    @Input() type: 'radio' | 'yesno' | 'text' | 'else' | 'jauge' = 'else';
+    @Input() type: 'radio' | 'yesno' | 'text' | 'else' | 'jauge' | 'section' = 'else';
 
-    value: number = 100;
+    value: number = 5;
     options: Options = {
     floor: 0,
-    ceil: 200
+    ceil: 10
     };
 
     ngOnInit() {
+      console.log(this.step)
     }
 
 }
