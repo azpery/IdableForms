@@ -11,9 +11,7 @@ import { QuestionComponent } from './components/question/question.component';
 import { Ng5SliderModule } from 'ng5-slider';
 import { BackgroundComponent } from './components/background/background.component';
 import { RandomcolorModule } from 'angular-randomcolor';
-
-
-
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,7 +27,9 @@ import { RandomcolorModule } from 'angular-randomcolor';
     NgbModule,
     HttpClientModule,
     Ng5SliderModule,
-    RandomcolorModule
+    RandomcolorModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent, CarouselFormsComponent,QuestionComponent]

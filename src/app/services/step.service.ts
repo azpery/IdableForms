@@ -13,24 +13,27 @@ export class StepService {
         private http: HttpClient
         ) { }
 
-    getReelSteps(): Promise<Step[]> {
-        return this.http.get<StepJSON[]>('').toPromise().then(data => {
-            return data.map(this.decodeStep);
-        });
+    getSteps(): Promise<Step[]> {
+        let papa = this;
+        return this.http.get<StepJSON[]>('http://127.0.0.1:3000/').toPromise().then(function(data) {
+            return data.map(papa.decodeStep, this);
+        }.bind(this));
     }
 
-    getSteps(): Step[]{
+    // getSteps(): Step[]{
         
-        let s = steps as [StepJSON] 
-        console.log(s)
-        return s.default.map(this.decodeStep, this);
-    }
+    //     let s = steps as [StepJSON] 
+    //     console.log(s)
+    //     return [];
+    // }
+    
 
     decodeStep(json: StepJSON): any {
         var content:Content =  {
             title : json.title,
             type : json.type as unknown as ContentType
         }
+        console.log("coucou")
         switch (json.type) {
             case "media":
                 content  =  {

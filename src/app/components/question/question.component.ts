@@ -1,6 +1,7 @@
 import { Component, ContentChild, Input, TemplateRef, OnInit } from '@angular/core';
 
 import { Options } from 'ng5-slider';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'question-view',
@@ -10,6 +11,7 @@ import { Options } from 'ng5-slider';
 export class QuestionComponent implements OnInit{ 
     @Input() step;
     @Input() type: 'radio' | 'yesno' | 'text' | 'else' | 'jauge' | 'section' = 'else';
+    @Input() DataForm:FormGroup;
 
     value: number = 5;
     options: Options = {
@@ -18,7 +20,9 @@ export class QuestionComponent implements OnInit{
     };
 
     ngOnInit() {
-      console.log(this.step)
+      let inputName = this.step.step
+      console.log(inputName)
+      this.DataForm.addControl(inputName, new FormControl(''))
     }
 
 }

@@ -1,18 +1,23 @@
-<form>
+<form [formGroup]="DataForm">
   <ngb-carousel #carousel [pauseOnHover]="pauseOnHover" (slide)="onSlide($event)">
-    <ng-template ngbSlide *ngFor="let step of steps; index as i">
-      <div class="carousel-caption">
-        <ng-container *ngIf="step.length == undefined">
-          <question-view
-          [type]="step.content.type"
-          [step]="step">
-          </question-view>
-        </ng-container>
-      </div>
-      <background [step]="step"></background>
-    </ng-template>
-  </ngb-carousel>``
+    <ng-container *ngFor="let step of steps;let i = index">
+      <ng-template ngbSlide>
+        <div class="carousel-caption">
+          <ng-container *ngIf="step.length == undefined">
+            <question-view
+            [type]="step.content.type"
+            [step]="step"
+            [DataForm]="DataForm">
+            </question-view>
+          </ng-container>
+        </div>
+        <background [step]="step"></background>
+      </ng-template>
+    </ng-container>
+  </ngb-carousel>
   <div class="bottom-center">
     <a role="button" class="btn btn-lg btn-success" (click)="next()"><span aria-hidden="true" class="carousel-control-next-icon"></span><span class="font-white">Passer à la section suivante</span><span class="sr-only">Next</span></a>
+    <br><br>
+    <a role="button" class="btn btn-lg btn-primary" (click)="submit()" *ngIf="showEndButton"><span class="font-white">Envoyer les résultats</span></a>
   </div>
 </form>

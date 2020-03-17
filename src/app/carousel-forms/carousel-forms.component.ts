@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { StepService } from '../services/step.service'
 import { Step } from '../models/Step';
-import { QuestionComponent } from '../components/question/question.component';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +15,10 @@ export class CarouselFormsComponent implements OnInit {
   showNavigationIndicators = true;
   paused = true;
   pauseOnHover = false;
+  showEndButton = false;
+
+  DataForm: FormGroup = new FormGroup({});
+
 
   images = [700, 533, 807, 124,944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/1900/1050`);
   
@@ -26,7 +30,8 @@ export class CarouselFormsComponent implements OnInit {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = this.showNavigationArrows;
     config.showNavigationIndicators = this.showNavigationIndicators;    
-    
+    config.wrap = false
+    this.stepService = stepService
   }
 
   ngOnInit(): void {
@@ -36,15 +41,29 @@ export class CarouselFormsComponent implements OnInit {
   }
 
   onSlide($event){
+    console.log("ngb-slide-" + this.steps.length)
+    this.carousel
+    if($event.current == "ngb-slide-" + (this.steps.length - 1)){
+      this.showEndButton = true;
+    }else{
+      this.showEndButton = false;
+    }
     $event
   }
 
   getSteps():void{
-    this.steps = this.stepService.getSteps()
+    this.stepService.getSteps().then(data => {
+      console.log(data)
+      this.steps = data
+    })
   }
 
   next(){
     this.carousel.next();
   }
 
+  submit(){
+    console.log(JSON.stringify(this.DataForm.value))
+  }
+  
 }
