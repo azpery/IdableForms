@@ -20,9 +20,11 @@ export class QuestionComponent implements OnInit{
     };
 
     ngOnInit() {
-      let inputName = this.step.step
+      if (this.type == 'radio' || this.type == 'yesno' || this.type == 'jauge'  ){
+      let inputName = this.step._id
       console.log(inputName)
       this.DataForm.addControl(inputName, new FormControl(''))
+      }
     }
 
 }

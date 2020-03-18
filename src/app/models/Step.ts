@@ -1,6 +1,7 @@
 export interface Step {
     step: number;
     content:Content;
+    _id:String;
   }
 
 export interface Content{
@@ -39,18 +40,6 @@ export interface Radio extends MultipleChoice{
 }
 
 
-export interface StepJSON {
-  step: number;
-  type: string;
-  title: string;
-  url: string;
-  choices: string[];
-  isVideo:boolean;
-  body:string;
-  description:string;
-  section:string;
-  steps:[StepJSON]
-}
 
 export enum ContentType{
   TextField,

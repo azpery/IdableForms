@@ -3,6 +3,9 @@ import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource, NgbCarouselConfig } fr
 import { StepService } from '../services/step.service'
 import { Step } from '../models/Step';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Form } from '../models/Form';
+import { Answer } from '../models/Answer';
+import { AnswerService } from '../services/answer.service';
 
 @Component({
   selector: 'app-root',
@@ -23,10 +26,11 @@ export class CarouselFormsComponent implements OnInit {
   images = [700, 533, 807, 124,944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/1900/1050`);
   
   steps:Step[];
+  form: Form;
 
   @ViewChild('carousel', {static : true}) carousel: NgbCarousel;
 
-  constructor(config: NgbCarouselConfig, private stepService:StepService) {
+  constructor(config: NgbCarouselConfig, private stepService:StepService, private answerService:AnswerService) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = this.showNavigationArrows;
     config.showNavigationIndicators = this.showNavigationIndicators;    
@@ -52,9 +56,10 @@ export class CarouselFormsComponent implements OnInit {
   }
 
   getSteps():void{
-    this.stepService.getSteps().then(data => {
+    this.stepService.getForm().then(data => {
       console.log(data)
-      this.steps = data
+      this.steps = data.steps
+      this.form = data
     })
   }
 
@@ -63,7 +68,22 @@ export class CarouselFormsComponent implements OnInit {
   }
 
   submit(){
-    console.log(JSON.stringify(this.DataForm.value))
+    let formInstance = Date.now();
+    var result = new Array<Answer>();
+    let obj = this.DataForm.value;
+    for (var answer in obj) if (obj.hasOwnProperty(answer)) {
+      let ans = {
+        form : this.form._id,
+        formInstance: formInstance.toString(),
+        question: answer,
+        answer:obj[answer]
+      } as Answer
+      console.log(answer);
+      console.log(obj)
+      result.push(ans);
+    }
+    console.log(result)
+    this.answerService.sendAnswers(result)
   }
   
 }

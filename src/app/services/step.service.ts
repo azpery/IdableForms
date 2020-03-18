@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Step,StepJSON,Content,Media, MultipleChoice, Radio, TextField,Boolean, ContentType, Section,Text } from '../models/Step';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as steps from '../../bouchon.json';
+import { FormServer } from '../models/Step.md';
+import { Form } from '../models/Form';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +17,21 @@ export class StepService {
 
     getSteps(): Promise<Step[]> {
         let papa = this;
-        return this.http.get<StepJSON[]>('http://127.0.0.1:3000/').toPromise().then(function(data) {
-            return data.map(papa.decodeStep, this);
+        return this.http.get<FormServer>('http://localhost/api/form/get/5e71f38263b2db71a816a5d3').toPromise().then(function(data) {
+            console.log(data)
+            return data.form.questions.map(papa.decodeStep, this);
+        }.bind(this));
+    }
+
+    getForm(): Promise<Form> {
+        let papa = this;
+        return this.http.get<FormServer>('http://localhost/api/form/get/5e71f38263b2db71a816a5d3').toPromise().then(function(data) {
+            console.log(data)
+            return {
+                _id : data.form._id,
+                title: data.form.title,
+                steps:data.form.questions.map(papa.decodeStep, this) as [Step]
+            } as Form
         }.bind(this));
     }
 
@@ -31,7 +46,7 @@ export class StepService {
     decodeStep(json: StepJSON): any {
         var content:Content =  {
             title : json.title,
-            type : json.type as unknown as ContentType
+            type : json.type as unknown as ContentType,
         }
         console.log("coucou")
         switch (json.type) {
@@ -80,7 +95,7 @@ export class StepService {
             case "text":
                 content = {
                     title : json.title,
-                    body : json.body,
+                    body : json.content,
                     type : json.type as unknown as ContentType
                 } as Text
                 break;
@@ -91,6 +106,7 @@ export class StepService {
         
         return  {
             step: json.step,
+            _id: json._id,
             content : content
         } as Step
     }
