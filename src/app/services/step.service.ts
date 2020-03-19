@@ -46,6 +46,7 @@ export class StepService {
     decodeStep(json: StepJSON): any {
         var content:Content =  {
             title : json.title,
+            steps:[] as unknown as [Step],
             type : json.type as unknown as ContentType,
         }
         console.log("coucou")
@@ -55,6 +56,7 @@ export class StepService {
                     title : json.title,
                     type : json.type as unknown as ContentType,
                     url : json.url,
+                    steps: [] as unknown as [Step],
                     isVideo : json.isVideo
                 } as Media
                 break;

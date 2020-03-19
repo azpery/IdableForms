@@ -6,6 +6,7 @@ export interface Step {
 
 export interface Content{
   title: string;
+  steps:[Step];
   type: ContentType;
 }
 
@@ -20,7 +21,7 @@ export interface Text extends Content{
 
 export interface Section extends Content{
   description: string;
-  steps:[Step];
+  
 }
 
 export interface TextField extends Content{
