@@ -1,4 +1,5 @@
 export interface StepJSON {
+    _id : String;
     step: number;
     type: string;
     title: string;

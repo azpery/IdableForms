@@ -8,7 +8,7 @@ import { Answer } from '../models/Answer';
 import { AnswerService } from '../services/answer.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-carousel-forms',
   templateUrl: './carousel-forms.component.html',
   styleUrls: ['./carousel-forms.component.scss'],
   providers: [NgbCarouselConfig]

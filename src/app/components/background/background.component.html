@@ -1,7 +1,7 @@
 <ng-container *ngIf="step.content != undefined;else color">
-    <a href="https://www.google.fr/?q=Number+{{i+1}}" target="_blank" rel="nofollow noopener noreferrer" *ngIf="(step.content.type == 'media')">
+    <a href="{{step.content.url}}" target="_blank" rel="nofollow noopener noreferrer" *ngIf="(step.content.type == 'media')">
         <div class="picsum-img-wrapper">
-        <img [src]="step.content.url" alt="My image {{i + 1}} description" *ngIf="!step.content.isVideo">
+        <img [src]="step.content.url" alt="My image {{step.content.title}} description" *ngIf="!step.content.isVideo">
         </div>
     </a>
     <ng-container *ngIf="(step.content.type != 'media')"> 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Step,StepJSON,Content,Media, MultipleChoice, Radio, TextField,Boolean, ContentType, Section,Text } from '../models/Step';
+import { Step,Content,Media, MultipleChoice, Radio, TextField,Boolean, ContentType, Section,Text } from '../models/Step';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as steps from '../../bouchon.json';
-import { FormServer } from '../models/Step.md';
+import { FormServer, StepJSON } from '../models/Step.md';
 import { Form } from '../models/Form';
 
 @Injectable({
@@ -23,9 +23,9 @@ export class StepService {
         }.bind(this));
     }
 
-    getForm(): Promise<Form> {
+    getForm(id:String = "5e71f38263b2db71a816a5d3"): Promise<Form> {
         let papa = this;
-        return this.http.get<FormServer>('http://localhost/api/form/get/5e71f38263b2db71a816a5d3').toPromise().then(function(data) {
+        return this.http.get<FormServer>('http://localhost/api/form/get/'+id).toPromise().then(function(data) {
             console.log(data)
             return {
                 _id : data.form._id,

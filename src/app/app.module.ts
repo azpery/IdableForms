@@ -12,6 +12,7 @@ import { Ng5SliderModule } from 'ng5-slider';
 import { BackgroundComponent } from './components/background/background.component';
 import { RandomcolorModule } from 'angular-randomcolor';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormBuilderComponent } from './components/form-builder/form-builder.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     CarouselFormsComponent,
     QuestionComponent,
     SafePipe,
-    BackgroundComponent
+    BackgroundComponent,
+    FormBuilderComponent
   ],
   imports: [ 
     BrowserModule,
@@ -32,6 +34,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent, CarouselFormsComponent,QuestionComponent]
+  bootstrap: [AppComponent, CarouselFormsComponent]
 })
 export class AppModule { }
