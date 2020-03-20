@@ -1,8 +1,10 @@
 <form [formGroup]="FormIdable">
+
     <h1>{{form.title}}</h1>
-    <div class="form-group">
+    <div class="form-group" >
         <label for="formTitle">Titre du formulaire</label>
         <input type="text" class="form-control" id="formTitle" formControlName="title" value="{{form.title}}" placeholder="Entrer le titre du formulaire">
+        <button type="button" (click)="saveForm()" class="btn btn-success">Sauvegarder mes changements</button>
     </div>
     <div formArrayName="steps" class="well well-lg">
         <div *ngFor="let step of steps.controls; let i=index" [formGroupName]="i" >
@@ -12,6 +14,7 @@
                 <form-builder-item [stepGroup]="step" ></form-builder-item>
                 <div class="section" *ngIf="step.value.content.type == 'section'" >
                     <div  formArrayName="steps" class="well well-lg">
+                        <button type="button" *ngIf="subSteps(i).controls.length == 0" (click)="addSubStepAfter(i, 0)" class="btn btn-primary">Ajouter une sous-étape ici</button>
                         <div class="" *ngFor="let step of subSteps(i).controls; let j=index" [formGroupName]="j" >
                             <h4>Sous-Etape #{{j + 1}}</h4>
                             <div style="margin-left: 1em;"formGroupName="content">
@@ -30,7 +33,9 @@
             <button type="button" *ngIf="i == steps.controls.length - 1" (click)="addStepAfter(i)" class="btn btn-primary">Ajouter une étape ici</button>
             
         </div>
+        <br><br>
+        
     </div>
-    <br><br>
-    <button type="button" (click)="submit()" class="btn btn-success">Sauvegarder mes changements</button>
+    
+    
 </form>

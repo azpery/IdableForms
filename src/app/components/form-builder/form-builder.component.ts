@@ -4,6 +4,7 @@ import { Step, Section, Radio, Content, ContentType } from 'src/app/models/Step'
 import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { StepService } from 'src/app/services/step.service';
 import { ActivatedRoute } from '@angular/router';
+import { FormService } from 'src/app/services/form.service';
 
 @Component({
   selector: 'form-builder',
@@ -20,7 +21,7 @@ export class FormBuilderComponent implements OnInit {
 
   FormIdable:FormGroup = new FormGroup({});
 
-  constructor(private route:ActivatedRoute, private stepService:StepService, private formBuilder:FormBuilder) {
+  constructor(private route:ActivatedRoute, private stepService:StepService, private formBuilder:FormBuilder, private formService:FormService) {
     this.FormIdable = this.formBuilder.group(
       {
         title:[],
@@ -38,7 +39,7 @@ export class FormBuilderComponent implements OnInit {
         //Data binds to form
         let steps = this.form.steps.map(this.createStepsControls, this)
 
-        console.log(steps)
+
 
         let stepsArray = this.formBuilder.array(steps)
         this.FormIdable.setControl('steps', stepsArray)
@@ -52,15 +53,18 @@ export class FormBuilderComponent implements OnInit {
 
   subSteps(no): FormArray{
     let steps = this.FormIdable.get('steps') as FormArray;
-    console.log(steps.at(no).get('content').get('steps'))
     return steps.at(no).get('content').get('steps') as FormArray;
   }
 
-  submit(){
+  saveForm(){
+    console.log("submit")
     console.log(this.FormIdable.value)
+
+    this.formService.sendForm(this.FormIdable.value)
   }
 
   addStepAfter(index){
+    console.log(this.FormIdable.value)
     let steps = this.steps
     this.insertNewStep(steps, index);
   }
@@ -94,6 +98,8 @@ export class FormBuilderComponent implements OnInit {
       var stepsGroup = section.steps.map(this.createStepsControls, this);
 
       return this.formBuilder.group({
+        _id:step._id,
+        step:step.step,
         content:this.formBuilder.group({
           title:step.content.title,
           type:step.content.type,
@@ -106,6 +112,8 @@ export class FormBuilderComponent implements OnInit {
       if(radio.choices != undefined)
         step.content.choices = this.formBuilder.array(radio.choices)
       return this.formBuilder.group({
+        _id:step._id,
+        step:step.step,
         content:this.formBuilder.group(step.content)
       })
 

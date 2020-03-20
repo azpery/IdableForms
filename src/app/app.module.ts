@@ -14,6 +14,8 @@ import { RandomcolorModule } from 'angular-randomcolor';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilderComponent } from './components/form-builder/form-builder.component';
 import { FormBuilderItemComponent } from './components/form-builder-item/form-builder-item.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { FormBuilderItemComponent } from './components/form-builder-item/form-bu
     Ng5SliderModule,
     RandomcolorModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    CKEditorModule
   ],
   providers: [],
   bootstrap: [AppComponent, CarouselFormsComponent]

@@ -2,7 +2,7 @@
     <div formGroupName="content" class="item">
         <div class="form-group">
             <label for="type-{{stepGroup.value.step}}">Type de controle</label>
-            <select class="form-control" id="type-{{stepGroup.value.step}}" formControlName="type" value="{{stepGroup.value.content.type}}">
+            <select class="form-control" id="type-{{stepGroup.value.step}}" formControlName="type" value="{{stepGroup.value.content.type}}" (change)="onChange($event.target.value)">
                 <option value="media">Image ou vidéo youtube</option>
                 <option value="section">Groupement de question</option>
                 <option value="yesno">Oui/Non</option>
@@ -71,7 +71,7 @@
 </ng-template>
   
   <ng-template #jaugeTemplate let-stepGroup>
-    <div class="form-group row">
+    <div class="form-group">
       <label for="inputEmail3" class="col-sm-2 col-form-label">{{stepGroup.value.content.title}}</label>
       <!-- <div class="col-sm-10" >
         <ng5-slider formControlName="{{stepGroup._id}}" [(value)]="value" [options]="options"></ng5-slider>
@@ -80,10 +80,11 @@
   </ng-template>
   
   <ng-template #textTemplate let-stepGroup>
-    <div class="form-group row">
-      <label for="inputEmail3" class="col-sm-2 col-form-label">{{stepGroup.value.content.title}}</label>
-      <div class="col-sm-10" [innerHTML]="stepGroup.value.content.body">
-      </div>
+    <div class="form-group" [formGroup]="stepGroup" >
+        <label class="center-block">Url de la vidéo ou de l'image</label>
+        <ng-container formGroupName="content">
+            <ckeditor [editor]="Editor" formControlName="body" ></ckeditor>
+        </ng-container>
     </div>
   </ng-template>
   
