@@ -1,0 +1,96 @@
+<ng-container *ngIf="stepGroup != null" [formGroup]="stepGroup">
+    <div formGroupName="content" class="item">
+        <div class="form-group">
+            <label for="type-{{stepGroup.value.step}}">Type de controle</label>
+            <select class="form-control" id="type-{{stepGroup.value.step}}" formControlName="type" value="{{stepGroup.value.content.type}}">
+                <option value="media">Image ou vidéo youtube</option>
+                <option value="section">Groupement de question</option>
+                <option value="yesno">Oui/Non</option>
+                <option value="radio">Choix multiple / réponse unique</option>
+                <option value="jauge">Jauge</option>
+                <option value="text">Zone de texte</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="center-block">Titre de la question:</label>
+            <input class="form-control col-sm-12" formControlName="title" value="{{stepGroup.value.content.title}}">
+        </div>
+
+        <ng-container [ngSwitch]="stepGroup.value.content.type"class="card-text" >
+            <ng-container *ngSwitchCase="'yesno'">
+                <ng-container *ngTemplateOutlet="yesNoTemplate; context: {$implicit: stepGroup}"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'radio'">
+                <ng-container *ngTemplateOutlet="radioTemplate; context: {$implicit: stepGroup}"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'text'">
+                <ng-container *ngTemplateOutlet="textTemplate; context: {$implicit: stepGroup}"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'jauge'">
+                <ng-container *ngTemplateOutlet="jaugeTemplate; context: {$implicit: stepGroup}"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'section'">
+                <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: stepGroup}"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'media'">
+                <ng-container *ngTemplateOutlet="mediaTemplate; context: {$implicit: stepGroup}"></ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+</ng-container>
+
+<ng-template #mediaTemplate let-stepGroup>
+    <div class="form-group" [formGroup]="stepGroup" >
+        <label class="center-block">Url de la vidéo ou de l'image</label>
+        <ng-container formGroupName="content">
+            <input class="form-control" formControlName="url" value="{{stepGroup.value.content.url}}">
+        </ng-container>
+    </div>
+</ng-template>
+
+<ng-template #yesNoTemplate let-stepGroup>
+    
+</ng-template>
+  
+<ng-template #radioTemplate let-stepGroup>
+    <div class="form-group" [formGroup]="stepGroup" >
+        <label class="center-block">Liste des choix possibles :</label>
+        <div formGroupName="content">
+            <div formArrayName="choices">
+                <div class="form-group " *ngFor="let choice of choices.controls; index as i" >
+                    <div class="row">
+                        <input class="form-control col-sm-10" [formControlName]="i">
+                        <button type="button" (click)="removeChoice(i)" class="btn btn-danger col-sm-2">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" (click)="addChoice()" class="btn btn-success">Ajouter un choix</button>
+    </div>
+</ng-template>
+  
+  <ng-template #jaugeTemplate let-stepGroup>
+    <div class="form-group row">
+      <label for="inputEmail3" class="col-sm-2 col-form-label">{{stepGroup.value.content.title}}</label>
+      <!-- <div class="col-sm-10" >
+        <ng5-slider formControlName="{{stepGroup._id}}" [(value)]="value" [options]="options"></ng5-slider>
+      </div> -->
+    </div>
+  </ng-template>
+  
+  <ng-template #textTemplate let-stepGroup>
+    <div class="form-group row">
+      <label for="inputEmail3" class="col-sm-2 col-form-label">{{stepGroup.value.content.title}}</label>
+      <div class="col-sm-10" [innerHTML]="stepGroup.value.content.body">
+      </div>
+    </div>
+  </ng-template>
+  
+  <ng-template #sectionTemplate let-stepGroup>
+    <h1>{{stepGroup.value.content.title}}</h1>
+    <p>{{stepGroup.value.content.description}}</p>
+
+  </ng-template>
+  
+  

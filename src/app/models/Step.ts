@@ -43,11 +43,10 @@ export interface Radio extends MultipleChoice{
 
 
 export enum ContentType{
-  TextField,
-  Media,
-  Boolean,
-  MultipleChoice,
-  Radio,
-  Section,
-  Text
+  text,
+  media,
+  yesno,
+  multiple,
+  radio,
+  section
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Form } from 'src/app/models/Form';
-import { Step, Section, Radio } from 'src/app/models/Step';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { Step, Section, Radio, Content, ContentType } from 'src/app/models/Step';
+import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { StepService } from 'src/app/services/step.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -32,12 +32,14 @@ export class FormBuilderComponent implements OnInit {
   ngOnInit(): void {
     if(this.route.snapshot.params.id != undefined)
       this.stepService.getForm(this.route.snapshot.params.id).then(form => {
-        // console.log(form)
+
         this.form = form
         
+        //Data binds to form
         let steps = this.form.steps.map(this.createStepsControls, this)
 
         console.log(steps)
+
         let stepsArray = this.formBuilder.array(steps)
         this.FormIdable.setControl('steps', stepsArray)
       })
@@ -45,13 +47,12 @@ export class FormBuilderComponent implements OnInit {
 
   get steps(): FormArray {
     let steps = this.FormIdable.get('steps') as FormArray;
-    // console.log(steps.value)
     return steps;
   };
 
   subSteps(no): FormArray{
     let steps = this.FormIdable.get('steps') as FormArray;
-    console.log(no)
+    console.log(steps.at(no).get('content').get('steps'))
     return steps.at(no).get('content').get('steps') as FormArray;
   }
 
@@ -59,12 +60,36 @@ export class FormBuilderComponent implements OnInit {
     console.log(this.FormIdable.value)
   }
 
-  private createStepsControls(step) {
+  addStepAfter(index){
+    let steps = this.steps
+    this.insertNewStep(steps, index);
+  }
 
+  removeStepAt(index){
+    this.steps.removeAt(index)
+  }
+
+  addSubStepAfter(stepno,index){
+    let steps = this.subSteps(stepno)
+    this.insertNewStep(steps, index);
+  }
+
+  removeSubStepAt(stepno,index){
+    this.subSteps(stepno).removeAt(index)
+  }
+
+  private insertNewStep(steps: FormArray, index: any) {
+    steps.insert(index + 1, this.formBuilder.group({
+      step: index + 1,
+      content: this.formBuilder.group({ title: "", type: ContentType.yesno } as Content)
+    }));
+  }
+
+  private createStepsControls(step) {
 
     var section:Section = step.content as Section
     // console.log("section is " + section)
-    if(section.steps != undefined){
+    if(step.content.type == "section"){
       
       var stepsGroup = section.steps.map(this.createStepsControls, this);
 
@@ -77,10 +102,9 @@ export class FormBuilderComponent implements OnInit {
       })
 
     }else{
-      console.log(step.content)
       let radio = step.content as Radio
       if(radio.choices != undefined)
-        step.content.choices = [radio.choices]
+        step.content.choices = this.formBuilder.array(radio.choices)
       return this.formBuilder.group({
         content:this.formBuilder.group(step.content)
       })

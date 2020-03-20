@@ -13,6 +13,7 @@ import { BackgroundComponent } from './components/background/background.componen
 import { RandomcolorModule } from 'angular-randomcolor';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilderComponent } from './components/form-builder/form-builder.component';
+import { FormBuilderItemComponent } from './components/form-builder-item/form-builder-item.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { FormBuilderComponent } from './components/form-builder/form-builder.com
     QuestionComponent,
     SafePipe,
     BackgroundComponent,
-    FormBuilderComponent
+    FormBuilderComponent,
+    FormBuilderItemComponent
   ],
   imports: [ 
     BrowserModule,

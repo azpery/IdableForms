@@ -80,7 +80,7 @@ export class StepService {
                     type : json.type as unknown as ContentType,
                 } as Radio
                 break;
-            case "Boolean":
+            case "yesno":
                 content  =  {
                     title : json.title,
                     type : json.type as unknown as ContentType,
