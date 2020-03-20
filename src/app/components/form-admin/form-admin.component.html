@@ -1,0 +1,12 @@
+<div class="content">
+    <ul class="list-group">
+        <li *ngFor="let form of forms" class="list-group-item">
+            <span>{{form.title}}</span>
+            <a href="/form/edit/{{form._id}}" class="btn btn-primary">Modifier le formulaire</a>
+            <a href="/form/{{form._id}}" class="btn btn-primary">Visualiser le formulaire</a>
+            <a href="http://localhost/api/csv/get/{{form._id}}" class="btn btn-success">Télécharger le csv</a>
+        </li>
+    </ul>
+
+    <a href="/createNewForm" class="btn btn-primary">Créer un nouveau formulaire</a>
+</div>

@@ -15,6 +15,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilderComponent } from './components/form-builder/form-builder.component';
 import { FormBuilderItemComponent } from './components/form-builder-item/form-builder-item.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { FormAdminComponent } from './components/form-admin/form-admin.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     SafePipe,
     BackgroundComponent,
     FormBuilderComponent,
-    FormBuilderItemComponent
+    FormBuilderItemComponent,
+    FormAdminComponent
   ],
   imports: [ 
     BrowserModule,

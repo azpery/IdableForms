@@ -23,7 +23,7 @@ export class StepService {
         }.bind(this));
     }
 
-    getForm(id:String = "5e71f38263b2db71a816a5d3"): Promise<Form> {
+    getForm(id:String): Promise<Form> {
         let papa = this;
         return this.http.get<FormServer>('http://localhost/api/form/get/'+id).toPromise().then(function(data) {
             console.log(data)

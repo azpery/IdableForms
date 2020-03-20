@@ -20,4 +20,18 @@ export class FormService {
         }.bind(this));
     }
 
+    updateForm(form:Form): Promise<any> {
+        return this.http.put<any>('http://localhost/api/form/update/'+form._id,{form: form}).toPromise().then(function(data) {
+            console.log(data)
+            return data;
+        }.bind(this));
+    }
+
+    getForms(): Promise<any> {
+        return this.http.get<any>('http://localhost/api/form/get').toPromise().then(function(data) {
+            console.log(data)
+            return data;
+        }.bind(this));
+    }
+
 }

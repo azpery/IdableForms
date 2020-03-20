@@ -24,15 +24,15 @@
   <fieldset class="form-group">
     <div class="row">
       <legend class="col-form-label col-sm-2">{{step.content.title}}</legend>
-      <div class="col-sm-10">
-        <div class="form-check" [formGroup]="DataForm">
-            <input class="form-check-input" type="radio" formControlName="{{step._id}}" value="'Oui'" id="defaultCheck-{{step.step}}-Oui">
+      <div class="col-sm-10" [formGroup]="DataForm">
+        <div class="form-check" >
+            <input class="form-check-input" type="radio" formControlName="{{step._id}}" name="{{step._id}}" value="'Oui'" id="defaultCheck-{{step.step}}-Oui">
             <label class="form-check-label" for="defaultCheck-{{step.step}}-Oui">
               Oui
             </label>
         </div>
-        <div class="form-check" [formGroup]="DataForm">
-            <input class="form-check-input" type="radio" formControlName="{{step._id}}" value="'Non'" id="defaultCheck-{{step.step}}-Non">
+        <div class="form-check" >
+            <input class="form-check-input" type="radio" formControlName="{{step._id}}" name="{{step._id}}" value="'Non'" id="defaultCheck-{{step.step}}-Non">
             <label class="form-check-label" for="defaultCheck-{{step.step}}-Non">
               Non
             </label>
@@ -46,8 +46,8 @@
   <fieldset class="form-group">
     <div class="row">
       <legend class="col-form-label col-sm-2">{{step.content.title}}</legend>
-      <div class="col-sm-10" >
-        <div class="form-check" *ngFor="let choice of step.content.choices; index as i" [formGroup]="DataForm">
+      <div class="col-sm-10" [formGroup]="DataForm">
+        <div class="form-check" *ngFor="let choice of step.content.choices; index as i" >
             <input class="form-check-input" type="radio" formControlName="{{step._id}}" name="{{step._id}}" value="{{choice}}" id="defaultCheck-{{step.step}}{{i}}">
             <label class="form-check-label" for="defaultCheck-{{step.step}}{{i}}">
               {{choice}}

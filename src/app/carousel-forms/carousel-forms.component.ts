@@ -6,6 +6,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Form } from '../models/Form';
 import { Answer } from '../models/Answer';
 import { AnswerService } from '../services/answer.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-carousel-forms',
@@ -30,7 +31,7 @@ export class CarouselFormsComponent implements OnInit {
 
   @ViewChild('carousel', {static : true}) carousel: NgbCarousel;
 
-  constructor(config: NgbCarouselConfig, private stepService:StepService, private answerService:AnswerService) {
+  constructor(private route:ActivatedRoute, config: NgbCarouselConfig, private stepService:StepService, private answerService:AnswerService) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = this.showNavigationArrows;
     config.showNavigationIndicators = this.showNavigationIndicators;    
@@ -56,7 +57,7 @@ export class CarouselFormsComponent implements OnInit {
   }
 
   getSteps():void{
-    this.stepService.getForm().then(data => {
+    this.stepService.getForm(this.route.snapshot.params.id ).then(data => {
       console.log(data)
       this.steps = data.steps
       this.form = data

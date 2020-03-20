@@ -46,6 +46,13 @@
         <ng-container formGroupName="content">
             <input class="form-control" formControlName="url" value="{{stepGroup.value.content.url}}">
         </ng-container>
+        
+    </div>
+    <div class="form-check" [formGroup]="stepGroup">
+        <ng-container formGroupName="content">
+            <input type="checkbox" class="form-check-input" formControlName="isVideo" id="{{stepGroup.value.step}}">
+        </ng-container>
+        <label class="form-check-label" for="{{stepGroup.value.step}}">C'est une vidéo</label>
     </div>
 </ng-template>
 
@@ -81,9 +88,9 @@
   
   <ng-template #textTemplate let-stepGroup>
     <div class="form-group" [formGroup]="stepGroup" >
-        <label class="center-block">Url de la vidéo ou de l'image</label>
+        <label class="center-block">Contenu</label>
         <ng-container formGroupName="content">
-            <ckeditor [editor]="Editor" formControlName="body" ></ckeditor>
+            <ckeditor [editor]="Editor" formControlName="body" [value]="stepGroup.value.content.body" ></ckeditor>
         </ng-container>
     </div>
   </ng-template>

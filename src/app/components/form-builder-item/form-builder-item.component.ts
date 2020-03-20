@@ -42,6 +42,9 @@ export class FormBuilderItemComponent implements OnInit {
       case "section":
         this.content.addControl('steps', new FormArray([]))
       break;
+      case "text":
+        this.content.addControl('body', new FormControl(''))
+      break;
     
       default:
         break;

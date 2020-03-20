@@ -3,13 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { CarouselFormsComponent } from './carousel-forms/carousel-forms.component';
 import { AppComponent } from './app.component';
 import { FormBuilderComponent } from './components/form-builder/form-builder.component';
+import { FormAdminComponent } from './components/form-admin/form-admin.component';
 
 
 const routes: Routes = [
-  { path: 'form', component: CarouselFormsComponent },
+  { path: 'form/:id', component: CarouselFormsComponent },
   { path: '', component: AppComponent },
-  { path: 'form/new', component: FormBuilderComponent },
+  { path: 'createNewForm', component: FormBuilderComponent },
   { path: 'form/edit/:id', component: FormBuilderComponent },
+  { path: 'admin/forms', component: FormAdminComponent },
   { path: '**',   redirectTo: '', pathMatch: 'full' },
 ]; 
 

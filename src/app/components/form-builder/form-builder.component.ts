@@ -31,19 +31,32 @@ export class FormBuilderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.route.snapshot.params.id != undefined)
+    if(this.route.snapshot.params.id != undefined){
       this.stepService.getForm(this.route.snapshot.params.id).then(form => {
 
-        this.form = form
-        
-        //Data binds to form
-        let steps = this.form.steps.map(this.createStepsControls, this)
-
-
-
-        let stepsArray = this.formBuilder.array(steps)
-        this.FormIdable.setControl('steps', stepsArray)
+        this.bindDataToForm(form);
       })
+    }else{
+      let stepsArray = this.formBuilder.array([])
+        this.FormIdable = this.formBuilder.group(
+          {
+            title:this.form.title,
+            steps:stepsArray
+          }
+        )
+    }
+  }
+
+  private bindDataToForm(form: Form) {
+    this.form = form;
+    //Data binds to form
+    let steps = this.form.steps.map(this.createStepsControls, this);
+    let stepsArray = this.formBuilder.array(steps);
+    this.FormIdable = this.formBuilder.group({
+      _id: this.form._id,
+      title: this.form.title,
+      steps: stepsArray
+    });
   }
 
   get steps(): FormArray {
@@ -60,7 +73,13 @@ export class FormBuilderComponent implements OnInit {
     console.log("submit")
     console.log(this.FormIdable.value)
 
-    this.formService.sendForm(this.FormIdable.value)
+    if(this.form._id != ""){
+      this.formService.updateForm(this.FormIdable.value)
+    }else{
+      this.formService.sendForm(this.FormIdable.value).then(form=>{
+        this.bindDataToForm(form)
+      })
+    }
   }
 
   addStepAfter(index){
