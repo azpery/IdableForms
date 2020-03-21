@@ -16,6 +16,7 @@ import { FormBuilderComponent } from './components/form-builder/form-builder.com
 import { FormBuilderItemComponent } from './components/form-builder-item/form-builder-item.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FormAdminComponent } from './components/form-admin/form-admin.component';
+import { NgHttpLoaderModule } from 'ng-http-loader';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { FormAdminComponent } from './components/form-admin/form-admin.component
     RandomcolorModule,
     ReactiveFormsModule,
     FormsModule,
-    CKEditorModule
+    CKEditorModule,
+    NgHttpLoaderModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent, CarouselFormsComponent]

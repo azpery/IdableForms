@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { StepService } from '../services/step.service'
-import { Step, Media } from '../models/Step';
+import { Step, Media, Section } from '../models/Step';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Form } from '../models/Form';
 import { Answer } from '../models/Answer';
@@ -70,9 +70,12 @@ export class CarouselFormsComponent implements OnInit {
         let media = _step.content as Media
         media.media = media.medias[Math.floor(Math.random() * media.medias.length)]
         _step.content = media
+      }else if(_step.content.type.toString() == 'section'){
+        let section = _step.content as Section
+        section.steps = this.pickVideo(section.steps)
       }
       return _step
-    })
+    }, this)
   }
 
   next(){

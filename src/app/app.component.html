@@ -234,4 +234,11 @@
 <!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <router-outlet></router-outlet>
-
+<ng-http-loader 
+    [backgroundColor]="'#202b38'"
+    [debounceDelay]="100"
+    [extraDuration]="2000"
+    [minDuration]="300"
+    [opacity]="1"
+    [spinner]="spinkit.skCubeGrid">
+</ng-http-loader>
