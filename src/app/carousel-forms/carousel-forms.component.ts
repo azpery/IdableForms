@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { StepService } from '../services/step.service'
-import { Step } from '../models/Step';
+import { Step, Media } from '../models/Step';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Form } from '../models/Form';
 import { Answer } from '../models/Answer';
@@ -59,8 +59,19 @@ export class CarouselFormsComponent implements OnInit {
   getSteps():void{
     this.stepService.getForm(this.route.snapshot.params.id ).then(data => {
       console.log(data)
-      this.steps = data.steps
+      this.steps = this.pickVideo(data.steps)
       this.form = data
+    })
+  }
+
+  private pickVideo(steps){
+    return steps.map(_step => {
+      if(_step.content.type.toString() == 'media'){
+        let media = _step.content as Media
+        media.media = media.medias[Math.floor(Math.random() * media.medias.length)]
+        _step.content = media
+      }
+      return _step
     })
   }
 

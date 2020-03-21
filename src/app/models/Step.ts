@@ -10,13 +10,25 @@ export interface Content{
   type: ContentType;
 }
 
-export interface Media extends Content{
+export interface Video {
+    _id:String,
+    name:string,
     url:string,
     isVideo:boolean
 }
 
+export interface Media extends Content {
+  media: Video;
+  medias:[Video]
+}
+
 export interface Text extends Content{
   body:string
+}
+
+export interface Jauge extends Content{
+  borneHaute:string,
+  borneBasse:string
 }
 
 export interface Section extends Content{

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Form } from 'src/app/models/Form';
-import { Step, Section, Radio, Content, ContentType } from 'src/app/models/Step';
+import { Step, Section, Radio, Content, ContentType, Media } from 'src/app/models/Step';
 import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { StepService } from 'src/app/services/step.service';
 import { ActivatedRoute } from '@angular/router';
@@ -124,6 +124,20 @@ export class FormBuilderComponent implements OnInit {
           type:step.content.type,
           steps:this.formBuilder.array(stepsGroup)
         })
+      })
+
+    }else if(step.content.type == "media"){
+      let media = step.content as Media
+      let medias = media.medias.map(media =>{
+        return this.formBuilder.group(media)
+      } ,this)
+
+      step.content.medias = this.formBuilder.array(medias)
+
+      return this.formBuilder.group({
+        _id:step._id,
+        step:step.step,
+        content:this.formBuilder.group(step.content)
       })
 
     }else{

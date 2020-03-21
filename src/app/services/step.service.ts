@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Step,Content,Media, MultipleChoice, Radio, TextField,Boolean, ContentType, Section,Text } from '../models/Step';
+import { Step,Content,Media, MultipleChoice, Radio, TextField,Boolean, ContentType, Section,Text, Video, Jauge } from '../models/Step';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as steps from '../../bouchon.json';
 import { FormServer, StepJSON } from '../models/Step.md';
@@ -35,29 +35,19 @@ export class StepService {
         }.bind(this));
     }
 
-    // getSteps(): Step[]{
-        
-    //     let s = steps as [StepJSON] 
-    //     console.log(s)
-    //     return [];
-    // }
-    
-
     decodeStep(json: StepJSON): any {
         var content:Content =  {
             title : json.title,
             steps:[] as unknown as [Step],
             type : json.type as unknown as ContentType,
         }
-        console.log("coucou")
         switch (json.type) {
             case "media":
                 content  =  {
                     title : json.title,
                     type : json.type as unknown as ContentType,
-                    url : json.url,
+                    medias: json.medias,
                     steps: [] as unknown as [Step],
-                    isVideo : json.isVideo
                 } as Media
                 break;
             case "textField":
@@ -100,6 +90,14 @@ export class StepService {
                     body : json.content,
                     type : json.type as unknown as ContentType
                 } as Text
+                break;
+            case "jauge":
+                content = {
+                    title : json.title,
+                    type : json.type as unknown as ContentType,
+                    borneBasse : json.borneBasse,
+                    borneHaute : json.borneHaute
+                } as Jauge
                 break;
             default:
                 

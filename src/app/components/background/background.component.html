@@ -1,14 +1,14 @@
 <ng-container *ngIf="step.content != undefined;else color">
-    <a href="{{step.content.url}}" target="_blank" rel="nofollow noopener noreferrer" *ngIf="(step.content.type == 'media')">
+    <a href="{{media.url}}" target="_blank" rel="nofollow noopener noreferrer" *ngIf="(step.content.type.toString() == 'media')">
         <div class="picsum-img-wrapper">
-        <img [src]="step.content.url" alt="My image {{step.content.title}} description" *ngIf="!step.content.isVideo">
+        <img [src]="media.url" alt="My image {{step.content.title}} description" *ngIf="!media.isVideo">
         </div>
     </a>
-    <ng-container *ngIf="(step.content.type != 'media')"> 
+    <ng-container *ngIf="(step.content.type.toString() != 'media')"> 
         <ng-container *ngTemplateOutlet="color"></ng-container>
     </ng-container>
     <iframe frameborder="0" allowfullscreen
-        style="width:100%;height:100%;position: absolute; top:0" [src]="step.content.url | safe" *ngIf="step.content.isVideo"></iframe>
+        style="width:100%;height:100%;position: absolute; top:0" [src]="media.url | safe" *ngIf="step.content.type.toString() == 'media' && media.isVideo"></iframe>
 </ng-container>
 
 <ng-template #color>

@@ -1,3 +1,5 @@
+import { Video } from './Step';
+
 export interface StepJSON {
     _id : String;
     step: number;
@@ -9,7 +11,10 @@ export interface StepJSON {
     content:string;
     description:string;
     section:string;
-    steps:[StepJSON]
+    steps:[StepJSON];
+    medias:[Video];
+    borneHaute:string;
+    borneBasse:string;
   }
 
 export interface Form {
@@ -17,6 +22,7 @@ export interface Form {
     title: String,
     _id : String
 }
+
 
 export interface FormServer{
     form:Form

@@ -23,6 +23,8 @@ export class FormBuilderItemComponent implements OnInit {
   get choices(): FormArray { return this.stepGroup.get('content').get('choices') as FormArray; }
 
   get content():FormGroup{ return this.stepGroup.get('content') as FormGroup}
+
+  get medias(): FormArray { return this.stepGroup.get('content').get('medias') as FormArray; }
   
   addChoice(){
     let choices = this.choices
@@ -32,6 +34,21 @@ export class FormBuilderItemComponent implements OnInit {
   removeChoice(index){
     let choices = this.choices
     choices.removeAt(index)
+  }
+
+  addMedia(){
+    let medias = this.medias
+    medias.insert(medias.length, new FormGroup(
+      {
+        name: new FormControl(''),
+        url: new FormControl(''),
+        isVideo : new FormControl(true)
+      }
+    ))
+  }
+
+  removeMedia(index){
+    this.medias.removeAt(index)
   }
 
   onChange(value){
@@ -44,6 +61,13 @@ export class FormBuilderItemComponent implements OnInit {
       break;
       case "text":
         this.content.addControl('body', new FormControl(''))
+      break;
+      case "media":
+        this.content.addControl('medias', new FormArray([]))
+      break;
+      case "jauge":
+        this.content.addControl('borneHaute', new FormControl(''))
+        this.content.addControl('borneBasse', new FormControl(''))
       break;
     
       default:

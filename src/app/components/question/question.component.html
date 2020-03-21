@@ -16,9 +16,15 @@
         <ng-container *ngSwitchCase="'section'">
           <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: step}"></ng-container>
         </ng-container>
+        <ng-container *ngSwitchCase="'media'">
+          <ng-container *ngTemplateOutlet="mediaTemplate; context: {$implicit: step}"></ng-container>
+        </ng-container>
       </ng-container>
 </ng-container>
 
+<ng-template #mediaTemplate let-step>
+  <h1></h1>
+</ng-template>
 
 <ng-template #yesNoTemplate let-step>
   <fieldset class="form-group">

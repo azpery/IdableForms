@@ -42,17 +42,23 @@
 
 <ng-template #mediaTemplate let-stepGroup>
     <div class="form-group" [formGroup]="stepGroup" >
-        <label class="center-block">Url de la vidéo ou de l'image</label>
-        <ng-container formGroupName="content">
-            <input class="form-control" formControlName="url" value="{{stepGroup.value.content.url}}">
-        </ng-container>
-        
-    </div>
-    <div class="form-check" [formGroup]="stepGroup">
-        <ng-container formGroupName="content">
-            <input type="checkbox" class="form-check-input" formControlName="isVideo" id="{{stepGroup.value.step}}">
-        </ng-container>
-        <label class="form-check-label" for="{{stepGroup.value.step}}">C'est une vidéo</label>
+        <label class="center-block">Liste des choix possibles :</label>
+        <div formGroupName="content">
+            <div formArrayName="medias">
+                <div class="form-group " *ngFor="let media of medias.controls; index as i" [formGroupName]="i">
+                    <div class="row">
+                        <input class="form-control col-sm-4" formControlName="name" placeholder="Nom du média">
+                        <input class="form-control col-sm-4" formControlName="url" placeholder="Url du media">
+                        <button type="button" (click)="removeMedia(i)" class="btn btn-danger col-sm-4">Supprimer</button>
+                    </div>
+                    <div class="form-check" >
+                        <input type="checkbox" class="form-check-input" formControlName="isVideo" id="{{stepGroup.value.step}}">
+                        <label class="form-check-label" for="{{stepGroup.value.step}}">C'est une vidéo</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" (click)="addMedia()" class="btn btn-success">Ajouter un média</button>
     </div>
 </ng-template>
 
@@ -77,20 +83,26 @@
     </div>
 </ng-template>
   
-  <ng-template #jaugeTemplate let-stepGroup>
-    <div class="form-group">
-      <label for="inputEmail3" class="col-sm-2 col-form-label">{{stepGroup.value.content.title}}</label>
-      <!-- <div class="col-sm-10" >
-        <ng5-slider formControlName="{{stepGroup._id}}" [(value)]="value" [options]="options"></ng5-slider>
-      </div> -->
-    </div>
-  </ng-template>
+<ng-template #jaugeTemplate let-stepGroup>
+    <ng-container [formGroup]="stepGroup" >
+        <ng-container formGroupName="content" class="item">
+            <div class="form-group">
+                <label class="center-block">Borne Basse :</label>
+                <input class="form-control col-sm-12" formControlName="borneBasse" value="{{stepGroup.value.content.borneBasse}}">
+            </div>
+            <div class="form-group">
+                <label class="center-block">Borne Haute : </label>
+                <input class="form-control col-sm-12" formControlName="borneHaute" value="{{stepGroup.value.content.borneHaute}}">
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-template>
   
   <ng-template #textTemplate let-stepGroup>
     <div class="form-group" [formGroup]="stepGroup" >
         <label class="center-block">Contenu</label>
         <ng-container formGroupName="content">
-            <ckeditor [editor]="Editor" formControlName="body" [value]="stepGroup.value.content.body" ></ckeditor>
+            <ckeditor [editor]="Editor" formControlName="body" ></ckeditor>
         </ng-container>
     </div>
   </ng-template>
