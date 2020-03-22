@@ -7,12 +7,13 @@ import { Form } from '../models/Form';
 import { Answer } from '../models/Answer';
 import { AnswerService } from '../services/answer.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SwiperComponent, SwiperConfigInterface, SwiperPaginationInterface } from 'ngx-swiper-wrapper';
+
 
 @Component({
   selector: 'app-carousel-forms',
   templateUrl: './carousel-forms.component.html',
-  styleUrls: ['./carousel-forms.component.scss'],
-  providers: [NgbCarouselConfig]
+  styleUrls: ['./carousel-forms.component.scss']
 })
 export class CarouselFormsComponent implements OnInit {
   showNavigationArrows = false;
@@ -20,6 +21,16 @@ export class CarouselFormsComponent implements OnInit {
   paused = true;
   pauseOnHover = false;
   showEndButton = false;
+
+  private pagination: SwiperPaginationInterface = {
+    el: '.swiper-pagination',
+    clickable: true,
+    hideOnClick: false
+  };
+  public config: SwiperConfigInterface ;
+  
+
+  @ViewChild(SwiperComponent) carousel: SwiperComponent;
 
   DataForm: FormGroup = new FormGroup({});
 
@@ -29,31 +40,22 @@ export class CarouselFormsComponent implements OnInit {
   steps:Step[];
   form: Form;
 
-  @ViewChild('carousel', {static : true}) carousel: NgbCarousel;
 
-  constructor(private route:ActivatedRoute, config: NgbCarouselConfig, private stepService:StepService, private answerService:AnswerService, private router:Router) {
+
+  constructor(private route:ActivatedRoute,  private stepService:StepService, private answerService:AnswerService, private router:Router) {
     // customize default values of carousels used by this component tree
-    config.showNavigationArrows = this.showNavigationArrows;
-    config.showNavigationIndicators = this.showNavigationIndicators;    
-    config.wrap = false
+
     this.stepService = stepService
   }
 
   ngOnInit(): void {
     this.getSteps();
     console.log(this.steps);
-    this.carousel.pause();
+
   }
 
   onSlide($event){
-    console.log("ngb-slide-" + this.steps.length)
-    this.carousel
-    if($event.current == "ngb-slide-" + (this.steps.length - 1)){
-      this.showEndButton = true;
-    }else{
-      this.showEndButton = false;
-    }
-    $event
+    this.showEndButton = $event == this.steps.length - 1
   }
 
   getSteps():void{
@@ -61,6 +63,18 @@ export class CarouselFormsComponent implements OnInit {
       console.log(data)
       this.steps = this.pickVideo(data.steps)
       this.form = data
+      this.config = {
+      a11y: true,
+      direction: 'horizontal',
+      loop: true,
+      slidesPerView: 1,
+      keyboard: false,
+      mousewheel: false,
+      scrollbar: false,
+      navigation: false,
+      pagination: this.pagination
+  }
+      // this.carousel.directiveRef.setIndex(0);
     })
   }
 
@@ -79,7 +93,8 @@ export class CarouselFormsComponent implements OnInit {
   }
 
   next(){
-    this.carousel.next();
+    this.carousel.directiveRef.nextSlide()
+    // this.carousel.next();
   }
 
   submit(){

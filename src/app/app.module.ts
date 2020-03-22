@@ -18,6 +18,14 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FormAdminComponent } from './components/form-admin/form-admin.component';
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { ThankYouComponent } from './components/thank-you/thank-you.component';
+import { SwiperModule } from 'ngx-swiper-wrapper';
+import { SWIPER_CONFIG } from 'ngx-swiper-wrapper';
+import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
+ 
+const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
+  direction: 'horizontal',
+  slidesPerView: 'auto'
+};
 
 
 @NgModule({
@@ -42,9 +50,13 @@ import { ThankYouComponent } from './components/thank-you/thank-you.component';
     ReactiveFormsModule,
     FormsModule,
     CKEditorModule,
-    NgHttpLoaderModule.forRoot()
+    NgHttpLoaderModule.forRoot(),
+    SwiperModule
   ],
-  providers: [],
+  providers: [{
+    provide: SWIPER_CONFIG,
+    useValue: DEFAULT_SWIPER_CONFIG
+  }],
   bootstrap: [AppComponent, CarouselFormsComponent]
 })
 export class AppModule { }
