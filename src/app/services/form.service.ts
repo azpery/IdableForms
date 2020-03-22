@@ -14,21 +14,21 @@ export class FormService {
         ) { }
 
     sendForm(form:Form): Promise<any> {
-        return this.http.post<any>('http://localhost/api/form/create',{form: form}).toPromise().then(function(data) {
+        return this.http.post<any>('https://idableformserver.robin-delaporte.fr/api/form/create',{form: form}).toPromise().then(function(data) {
             console.log(data)
             return data;
         }.bind(this));
     }
 
     updateForm(form:Form): Promise<any> {
-        return this.http.put<any>('http://localhost/api/form/update/'+form._id,{form: form}).toPromise().then(function(data) {
+        return this.http.put<any>('https://idableformserver.robin-delaporte.fr/api/form/update/'+form._id,{form: form}).toPromise().then(function(data) {
             console.log(data)
             return data;
         }.bind(this));
     }
 
     getForms(): Promise<any> {
-        return this.http.get<any>('http://localhost/api/form/get').toPromise().then(function(data) {
+        return this.http.get<any>('https://idableformserver.robin-delaporte.fr/api/form/get').toPromise().then(function(data) {
             console.log(data)
             return data;
         }.bind(this));

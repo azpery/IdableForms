@@ -17,7 +17,7 @@ export class StepService {
 
     getSteps(): Promise<Step[]> {
         let papa = this;
-        return this.http.get<FormServer>('http://localhost/api/form/get/5e71f38263b2db71a816a5d3').toPromise().then(function(data) {
+        return this.http.get<FormServer>('https://idableformserver.robin-delaporte.fr/api/form/get/5e71f38263b2db71a816a5d3').toPromise().then(function(data) {
             console.log(data)
             return data.form.questions.map(papa.decodeStep, this);
         }.bind(this));
@@ -25,7 +25,7 @@ export class StepService {
 
     getForm(id:String): Promise<Form> {
         let papa = this;
-        return this.http.get<FormServer>('http://localhost/api/form/get/'+id).toPromise().then(function(data) {
+        return this.http.get<FormServer>('https://idableformserver.robin-delaporte.fr/api/form/get/'+id).toPromise().then(function(data) {
             console.log(data)
             return {
                 _id : data.form._id,
