@@ -1,0 +1,37 @@
+
+
+::ng-deep .carousel-indicators {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 40px;
+    left: 0;
+    z-index: 15;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding-left: 0;
+    margin-right: 15%;
+    margin-left: 15%;
+    list-style: none;
+}
+
+::ng-deep .carousel-indicators li {
+    box-sizing: content-box;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    width: 15px;
+    height: 15px;
+    margin-right: 3px;
+    margin-left: 3px;
+    text-indent: -999px;
+    cursor: pointer;
+    background-color: #455a64;
+    background-clip: padding-box;
+    border-radius: 9px;
+    opacity: .5;
+    border-bottom: 0;
+    border-top:0;
+    transition: opacity .6s ease;
+}

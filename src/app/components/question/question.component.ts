@@ -20,24 +20,19 @@ export class QuestionComponent implements OnInit{
     ceil: 10,
     animate:false,
     enforceStep : false,
-    translate: (value: number, label: LabelType): string => {
-      let jauge = this.step.content as Jauge
-      switch (label) {
-        case LabelType.Ceil:
-          return '<b>'+jauge.borneHaute+'</b>' ;
-        case LabelType.Floor:
-          return '<b>'+jauge.borneBasse+'</b>' ;
-        case LabelType.High:
-          return value == 10 ? '<b>'+jauge.borneHaute+'</b>' : (value == 0 ? '<b>'+jauge.borneBasse+'</b>': (value < 5 ? '<b>Plutôt '+jauge.borneBasse+'</b>' : '<b>Plutôt '+jauge.borneHaute+'</b>'))
-        case LabelType.TickValue:
-          return value == 10 ? '<b>'+jauge.borneHaute+'</b>' : (value == 0 ? '<b>'+jauge.borneBasse+'</b>': (value < 5 ? '<b>Plutôt '+jauge.borneBasse+'</b>' : '<b>Plutôt '+jauge.borneHaute+'</b>'))
-        case LabelType.Low:
-          return value == 10 ? '<b>'+jauge.borneHaute+'</b>' : (value == 0 ? '<b>'+jauge.borneBasse+'</b>': (value < 5 ? '<b>Plutôt '+jauge.borneBasse+'</b>' : '<b>Plutôt '+jauge.borneHaute+'</b>'))
-  
-          default:
-          return '' + value;
-      }
-    }
+    showTicks: true,
+    showTicksValues: true,
+    stepsArray: [
+      {value: 1, legend: 'Very poor'},
+      {value: 2},
+      {value: 3, legend: 'Fair'},
+      {value: 4},
+      {value: 5, legend: 'Average'},
+      {value: 6},
+      {value: 7, legend: 'Good'},
+      {value: 8},
+      {value: 9, legend: 'Excellent'}
+    ]
     };
 
     ngOnInit() {

@@ -17,6 +17,7 @@ import { FormBuilderItemComponent } from './components/form-builder-item/form-bu
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FormAdminComponent } from './components/form-admin/form-admin.component';
 import { NgHttpLoaderModule } from 'ng-http-loader';
+import { ThankYouComponent } from './components/thank-you/thank-you.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { NgHttpLoaderModule } from 'ng-http-loader';
     BackgroundComponent,
     FormBuilderComponent,
     FormBuilderItemComponent,
-    FormAdminComponent
+    FormAdminComponent,
+    ThankYouComponent
   ],
   imports: [ 
     BrowserModule,

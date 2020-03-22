@@ -16,7 +16,7 @@
     </ng-container>
   </ngb-carousel>
   <div class="bottom-center">
-    <a role="button" class="btn btn-lg btn-success" (click)="next()"><span aria-hidden="true" class="carousel-control-next-icon"></span><span class="font-white">Passer à la section suivante</span><span class="sr-only">Next</span></a>
+    <a role="button" class="btn btn-lg btn-success" (click)="next()" *ngIf="!showEndButton"><span class="font-white">Passer à la section suivante</span><span class="sr-only">Next</span></a>
     <br><br>
     <a role="button" class="btn btn-lg btn-primary" (click)="submit()" *ngIf="showEndButton"><span class="font-white">Envoyer les résultats</span></a>
   </div>

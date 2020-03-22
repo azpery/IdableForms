@@ -4,6 +4,7 @@ import { CarouselFormsComponent } from './carousel-forms/carousel-forms.componen
 import { AppComponent } from './app.component';
 import { FormBuilderComponent } from './components/form-builder/form-builder.component';
 import { FormAdminComponent } from './components/form-admin/form-admin.component';
+import { ThankYouComponent } from './components/thank-you/thank-you.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'createNewForm', component: FormBuilderComponent },
   { path: 'form/edit/:id', component: FormBuilderComponent },
   { path: 'admin/forms', component: FormAdminComponent },
+  { path: 'thankyou', component: ThankYouComponent },
   { path: '**',   redirectTo: '', pathMatch: 'full' },
 ]; 
 
