@@ -64,9 +64,9 @@ export class CarouselFormsComponent implements OnInit {
       this.steps = this.pickVideo(data.steps)
       this.form = data
       this.config = {
-      a11y: true,
+      a11y: false,
       direction: 'horizontal',
-      loop: true,
+      loop: false,
       slidesPerView: 1,
       keyboard: false,
       mousewheel: false,

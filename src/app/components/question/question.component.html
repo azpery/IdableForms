@@ -82,8 +82,9 @@
 </ng-template>
 
 <ng-template #sectionTemplate let-step>
-  <h1>{{step.content.title}}</h1>
+  <h1 class="text-center">{{step.content.title}}</h1>
   <p>{{step.content.description}}</p>
+  <hr>
   <ng-container  *ngFor="let subStep of step.content.steps; index as j">
     <question-view
     [type]="subStep.content.type"
