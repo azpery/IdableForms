@@ -25,7 +25,7 @@ export class FormAdminComponent implements OnInit {
   }
 
   getCsv(form){
-    this.formService.getCsv(form._id)
+    this.formService.getCsv(form._id, form.title)
   }
 
 }
