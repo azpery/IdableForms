@@ -36,12 +36,13 @@ export class FormService extends GenericService {
         }.bind(this));
     }
 
-    getCsv(id:string ): void{
-         this.http.get(this.url+'/api/csv/get/s'+id)
+    getCsv(id:string ){
+        this.http.get(this.url+'/api/csv/get/'+id)
          .subscribe((res:Response)=>{
            var a = document.createElement("a");
            a.href = URL.createObjectURL(res.blob());
            a.download = "test.csv";
+           a.target = "_blank"
            // start download
            a.click();
          })

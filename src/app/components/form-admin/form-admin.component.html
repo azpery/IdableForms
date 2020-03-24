@@ -4,7 +4,7 @@
             <span>{{form.title}}</span>
             <a href="/form/edit/{{form._id}}" class="btn btn-primary">Modifier le formulaire</a>
             <a href="/form/{{form._id}}" class="btn btn-primary">Visualiser le formulaire</a>
-            <a href="/csv/{{form._id}}" class="btn btn-success">Télécharger le csv</a>
+            <button (click)="getCsv(form)" class="btn btn-success">Télécharger le csv</button>
         </li>
     </ul>
 

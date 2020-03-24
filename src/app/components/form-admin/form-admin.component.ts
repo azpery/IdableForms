@@ -15,13 +15,17 @@ export class FormAdminComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.route.snapshot.params.id != undefined){
-      this.formService.getCsv(this.route.snapshot.params.id)
+      
     }else{
       this.formService.getForms().then(forms=>{
         this.forms = forms.forms
         console.log(forms.forms)
       })
     }
+  }
+
+  getCsv(form){
+    this.formService.getCsv(form._id)
   }
 
 }

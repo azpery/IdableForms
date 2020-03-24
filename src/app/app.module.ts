@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CarouselFormsComponent } from './carousel-forms/carousel-forms.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap'; 
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; 
 import {SafePipe} from './safePipe'
 import { QuestionComponent } from './components/question/question.component';
 import { Ng5SliderModule } from 'ng5-slider';
@@ -21,6 +21,13 @@ import { ThankYouComponent } from './components/thank-you/thank-you.component';
 import { SwiperModule } from 'ngx-swiper-wrapper';
 import { SWIPER_CONFIG } from 'ngx-swiper-wrapper';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
+import { ErrorDialogService } from './services/errorDialog.service';
+import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
+import { HttpConfigInterceptor } from './interceptor/httpconfig.interceptor';
+import { MatDialogModule } from '@angular/material/dialog';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+
  
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -38,7 +45,8 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     FormBuilderComponent,
     FormBuilderItemComponent,
     FormAdminComponent,
-    ThankYouComponent
+    ThankYouComponent,
+    ErrorDialogComponent
   ],
   imports: [ 
     BrowserModule,
@@ -51,12 +59,17 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     FormsModule,
     CKEditorModule,
     NgHttpLoaderModule.forRoot(),
-    SwiperModule
+    SwiperModule,
+    MatDialogModule,
+    BrowserAnimationsModule
+    
   ],
   providers: [{
     provide: SWIPER_CONFIG,
     useValue: DEFAULT_SWIPER_CONFIG
-  }],
+  },
+  ErrorDialogService,
+  { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }],
   bootstrap: [AppComponent, CarouselFormsComponent]
 })
 export class AppModule { }
