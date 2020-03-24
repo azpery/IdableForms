@@ -72,6 +72,7 @@ export class CarouselFormsComponent implements OnInit {
       mousewheel: false,
       scrollbar: false,
       navigation: false,
+      allowTouchMove:false,
       pagination: this.pagination
   }
       // this.carousel.directiveRef.setIndex(0);

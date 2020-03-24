@@ -7,6 +7,7 @@
                 <option value="section">Groupement de question</option>
                 <option value="yesno">Oui/Non</option>
                 <option value="radio">Choix multiple / réponse unique</option>
+                <option value="multiple">Choix multiple</option>
                 <option value="jauge">Jauge</option>
                 <option value="text">Zone de texte</option>
             </select>
@@ -22,7 +23,7 @@
                 <ng-container *ngTemplateOutlet="yesNoTemplate; context: {$implicit: stepGroup}"></ng-container>
             </ng-container>
             <ng-container *ngSwitchCase="'radio'">
-                <ng-container *ngTemplateOutlet="radioTemplate; context: {$implicit: stepGroup}"></ng-container>
+                <ng-container *ngTemplateOutlet="multipleTemplate; context: {$implicit: stepGroup}"></ng-container>
             </ng-container>
             <ng-container *ngSwitchCase="'text'">
                 <ng-container *ngTemplateOutlet="textTemplate; context: {$implicit: stepGroup}"></ng-container>
@@ -35,6 +36,9 @@
             </ng-container>
             <ng-container *ngSwitchCase="'media'">
                 <ng-container *ngTemplateOutlet="mediaTemplate; context: {$implicit: stepGroup}"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'multiple'">
+                <ng-container *ngTemplateOutlet="multipleTemplate; context: {$implicit: stepGroup}"></ng-container>
             </ng-container>
         </ng-container>
     </div>
@@ -65,8 +69,8 @@
 <ng-template #yesNoTemplate let-stepGroup>
     
 </ng-template>
-  
-<ng-template #radioTemplate let-stepGroup>
+
+<ng-template #multipleTemplate let-stepGroup>
     <div class="form-group" [formGroup]="stepGroup" >
         <label class="center-block">Liste des choix possibles :</label>
         <div formGroupName="content">

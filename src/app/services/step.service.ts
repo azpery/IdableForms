@@ -4,20 +4,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as steps from '../../bouchon.json';
 import { FormServer, StepJSON } from '../models/Step.md';
 import { Form } from '../models/Form';
+import { GenericService } from './generic.service';
 
 @Injectable({
   providedIn: 'root',
 })
 
-export class StepService {
-
-    constructor(
-        private http: HttpClient
-        ) { }
-
+export class StepService extends GenericService{
+    constructor(httpClient:HttpClient){
+        super(httpClient);
+    }
     getSteps(): Promise<Step[]> {
         let papa = this;
-        return this.http.get<FormServer>('https://idableformserver.robin-delaporte.fr/api/form/get/5e71f38263b2db71a816a5d3').toPromise().then(function(data) {
+        return this.http.get<FormServer>(this.url + '/api/form/get/5e71f38263b2db71a816a5d3').toPromise().then(function(data) {
             console.log(data)
             return data.form.questions.map(papa.decodeStep, this);
         }.bind(this));
@@ -25,7 +24,7 @@ export class StepService {
 
     getForm(id:String): Promise<Form> {
         let papa = this;
-        return this.http.get<FormServer>('https://idableformserver.robin-delaporte.fr/api/form/get/'+id).toPromise().then(function(data) {
+        return this.http.get<FormServer>(this.url + '/api/form/get/'+id).toPromise().then(function(data) {
             console.log(data)
             return {
                 _id : data.form._id,
@@ -64,6 +63,7 @@ export class StepService {
                 } as MultipleChoice
                 break;
             case "radio":
+            case "multiple":
                 content  =  {
                     title : json.title,
                     choices : json.choices as string[],

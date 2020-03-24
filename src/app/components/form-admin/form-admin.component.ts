@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
 import { Form } from 'src/app/models/Form';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-form-admin',
@@ -10,13 +11,17 @@ import { Form } from 'src/app/models/Form';
 export class FormAdminComponent implements OnInit {
   forms:[Form]
 
-  constructor(private formService:FormService) { }
+  constructor(private formService:FormService,private route:ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.formService.getForms().then(forms=>{
-      this.forms = forms.forms
-      console.log(forms.forms)
-    })
+    if(this.route.snapshot.params.id != undefined){
+      this.formService.getCsv(this.route.snapshot.params.id)
+    }else{
+      this.formService.getForms().then(forms=>{
+        this.forms = forms.forms
+        console.log(forms.forms)
+      })
+    }
   }
 
 }

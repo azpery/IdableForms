@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: 'createNewForm', component: FormBuilderComponent },
   { path: 'form/edit/:id', component: FormBuilderComponent },
   { path: 'admin/forms', component: FormAdminComponent },
+  { path: 'csv/:id', component: FormAdminComponent },
   { path: 'thankyou', component: ThankYouComponent },
   { path: '**',   redirectTo: '', pathMatch: 'full' },
 ]; 

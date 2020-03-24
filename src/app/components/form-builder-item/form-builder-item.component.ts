@@ -54,6 +54,7 @@ export class FormBuilderItemComponent implements OnInit {
   onChange(value){
     switch (value) {
       case "radio":
+      case "multiple":
         this.content.addControl('choices', new FormArray([]))
         break;
       case "section":
