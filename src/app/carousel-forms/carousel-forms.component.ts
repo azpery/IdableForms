@@ -102,6 +102,7 @@ export class CarouselFormsComponent implements OnInit {
     let formInstance = Date.now();
     var result = new Array<Answer>();
     let obj = this.DataForm.value;
+    console.log(obj)
     for (var answer in obj) if (obj.hasOwnProperty(answer)) {
       let ans = {
         form : this.form._id,
@@ -109,13 +110,10 @@ export class CarouselFormsComponent implements OnInit {
         question: answer,
         answer:obj[answer]
       } as Answer
-      console.log(answer);
-      console.log(obj)
       result.push(ans);
     }
-    console.log(result)
     this.answerService.sendAnswers(result).then(data => {
-      this.router.navigate(['/thankyou'])
+      // this.router.navigate(['/thankyou'])
     })
   }
   

@@ -1,8 +1,8 @@
 import { Component, ContentChild, Input, TemplateRef, OnInit } from '@angular/core';
 
 import { Options, LabelType } from 'ng5-slider';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Step, Media, Jauge } from 'src/app/models/Step';
+import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms';
+import { Step, Media, Jauge, MultipleChoice } from 'src/app/models/Step';
 
 @Component({
     selector: 'question-view',
@@ -17,11 +17,18 @@ export class QuestionComponent implements OnInit{
     value: number = 5;
     options: Options;
 
+    constructor(private formBuilder:FormBuilder){}
+
     ngOnInit() {
-      if (this.type == 'radio' || this.type == 'yesno' || this.type == 'jauge' || 'multiple'){
+      if (this.type == 'radio' || this.type == 'yesno' || this.type == 'jauge'){
       let inputName = this.step._id
       console.log(inputName)
       this.DataForm.addControl(inputName.toString(), new FormControl(''))
+      }
+      if( this.type == 'multiple'){
+        let inputName = this.step._id
+        console.log(inputName)
+        this.DataForm.addControl(inputName.toString(), this.formBuilder.array((this.step.content as MultipleChoice).choices.map(V=>{return false})))
       }
       if(this.type == 'media' ){
         let mediaInputName = this.step._id

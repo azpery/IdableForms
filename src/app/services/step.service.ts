@@ -68,7 +68,7 @@ export class StepService extends GenericService{
                     title : json.title,
                     choices : json.choices as string[],
                     type : json.type as unknown as ContentType,
-                } as Radio
+                } as MultipleChoice
                 break;
             case "yesno":
                 content  =  {
