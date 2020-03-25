@@ -113,7 +113,7 @@ export class CarouselFormsComponent implements OnInit {
       result.push(ans);
     }
     this.answerService.sendAnswers(result).then(data => {
-      // this.router.navigate(['/thankyou'])
+      this.router.navigate(['/thankyou'])
     })
   }
   

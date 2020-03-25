@@ -7,7 +7,7 @@
     #swiperGallery
   >
     <div *ngFor="let step of steps;let i = index"  class="swiper-slide d-flex justify-content-center " rcRandomColor [bgColor]='["#0277bd","#00838f","#00695c","#455a64","#e64a19","#f57c00","#fbc02d","#558b2f"]'>
-        <div class="caption col-sm-12 col-md-9 row">
+        <div class="caption col-sm-10 col-md-9 row">
           <div fxLayout="column" fxLayoutAlign="center center" fxFlexFill *ngIf="step.length == undefined" class="col-sm-12">
             <question-view
             [type]="step.content.type"
