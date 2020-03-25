@@ -8,6 +8,7 @@ import { Answer } from '../models/Answer';
 import { AnswerService } from '../services/answer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwiperComponent, SwiperConfigInterface, SwiperPaginationInterface } from 'ngx-swiper-wrapper';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class CarouselFormsComponent implements OnInit {
 
 
 
-  constructor(private route:ActivatedRoute,  private stepService:StepService, private answerService:AnswerService, private router:Router) {
+  constructor(private route:ActivatedRoute,  private stepService:StepService, private answerService:AnswerService, private router:Router, private titleService: Title ) {
     // customize default values of carousels used by this component tree
 
     this.stepService = stepService
@@ -64,17 +65,19 @@ export class CarouselFormsComponent implements OnInit {
       this.steps = this.pickVideo(data.steps)
       this.form = data
       this.config = {
-      a11y: false,
-      direction: 'horizontal',
-      loop: false,
-      slidesPerView: 1,
-      keyboard: false,
-      mousewheel: false,
-      scrollbar: false,
-      navigation: false,
-      allowTouchMove:false,
-      pagination: this.pagination
-  }
+        a11y: false,
+        direction: 'horizontal',
+        loop: false,
+        slidesPerView: 1,
+        keyboard: false,
+        mousewheel: false,
+        scrollbar: false,
+        navigation: false,
+        allowTouchMove:false,
+        pagination: this.pagination
+      }
+      this.titleService.setTitle( data.title.toString() );
+
       // this.carousel.directiveRef.setIndex(0);
     })
   }
