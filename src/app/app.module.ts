@@ -25,6 +25,9 @@ import { ErrorDialogService } from './services/errorDialog.service';
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { HttpConfigInterceptor } from './interceptor/httpconfig.interceptor';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatRadioModule} from '@angular/material/radio';
+
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
@@ -48,6 +51,9 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     ThankYouComponent,
     ErrorDialogComponent
   ],
+  exports: [
+
+  ],
   imports: [ 
     BrowserModule,
     AppRoutingModule,
@@ -61,6 +67,8 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     NgHttpLoaderModule.forRoot(),
     SwiperModule,
     MatDialogModule,
+    MatCheckboxModule,
+    MatRadioModule,
     BrowserAnimationsModule
     
   ],

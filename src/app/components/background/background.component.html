@@ -8,7 +8,7 @@
         <ng-container *ngTemplateOutlet="color"></ng-container>
     </ng-container> -->
     <iframe frameborder="0" allowfullscreen
-        style="width:100%;height:100%;position: absolute; top:0" [src]="media.url | safe" *ngIf="step.content.type.toString() == 'media' && media.isVideo"></iframe>
+        style="width:100%;height:100%;position: absolute; top:0;left: 0;" [src]="media.url | safe" *ngIf="step.content.type.toString() == 'media' && media.isVideo"></iframe>
 </ng-container>
 
 <!-- <ng-template #color>

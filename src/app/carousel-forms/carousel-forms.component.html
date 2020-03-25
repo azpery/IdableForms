@@ -6,8 +6,8 @@
     (indexChange)="onSlide($event)"
     #swiperGallery
   >
-    <div *ngFor="let step of steps;let i = index"  class="swiper-slide" rcRandomColor [bgColor]='["#0277bd","#00838f","#00695c","#455a64","#e64a19","#f57c00","#fbc02d","#558b2f"]'>
-        <div class="caption col-sm-9 row">
+    <div *ngFor="let step of steps;let i = index"  class="swiper-slide d-flex justify-content-center " rcRandomColor [bgColor]='["#0277bd","#00838f","#00695c","#455a64","#e64a19","#f57c00","#fbc02d","#558b2f"]'>
+        <div class="caption col-sm-12 col-md-9 row">
           <div fxLayout="column" fxLayoutAlign="center center" fxFlexFill *ngIf="step.length == undefined" class="col-sm-12">
             <question-view
             [type]="step.content.type"
@@ -22,6 +22,11 @@
           </div>
         </div>
         <background [step]="step"></background>
+        <div *ngIf="step.content.type == 'media'" class="bottom-center fix" >
+          <a role="button" class="btn btn-lg btn-success" (click)="next()" *ngIf="!showEndButton"><span class="font-white">Passer à la section suivante</span><span class="sr-only">Next</span></a>
+          <br><br>
+          <a role="button" class="btn btn-lg btn-primary" (click)="submit()" *ngIf="showEndButton"><span class="font-white">Envoyer les résultats</span></a>
+        </div>
     </div>
   </swiper>
   

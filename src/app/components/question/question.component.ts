@@ -20,10 +20,15 @@ export class QuestionComponent implements OnInit{
     constructor(private formBuilder:FormBuilder){}
 
     ngOnInit() {
-      if (this.type == 'radio' || this.type == 'yesno' || this.type == 'jauge'){
+      if (this.type == 'radio' || this.type == 'yesno'){
       let inputName = this.step._id
       console.log(inputName)
       this.DataForm.addControl(inputName.toString(), new FormControl(''))
+      }
+      if( this.type == 'jauge'){
+        let inputName = this.step._id
+        console.log(inputName)
+        this.DataForm.addControl(inputName.toString(), new FormControl(0))
       }
       if( this.type == 'multiple'){
         let inputName = this.step._id

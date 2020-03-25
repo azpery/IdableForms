@@ -39,20 +39,12 @@
 <ng-template #yesNoTemplate let-step>
   <fieldset class="form-group">
     <div class="row">
-      <legend class="col-form-label col-sm-2">{{step.content.title}}</legend>
-      <div class="col-sm-10" [formGroup]="DataForm">
-        <div class="form-check" >
-            <input class="form-check-input" type="radio" formControlName="{{step._id}}" name="{{step._id}}" value="'Oui'" id="defaultCheck-{{step.step}}-Oui">
-            <label class="form-check-label" for="defaultCheck-{{step.step}}-Oui">
-              Oui
-            </label>
-        </div>
-        <div class="form-check" >
-            <input class="form-check-input" type="radio" formControlName="{{step._id}}" name="{{step._id}}" value="'Non'" id="defaultCheck-{{step.step}}-Non">
-            <label class="form-check-label" for="defaultCheck-{{step.step}}-Non">
-              Non
-            </label>
-        </div>
+      <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
+      <div class="col-sm-6" [formGroup]="DataForm">
+        <mat-radio-group class="radio-group" formControlName="{{step._id}}">
+          <mat-radio-button [value]="'Oui'">Oui</mat-radio-button>
+          <mat-radio-button [value]="'Non'">Non</mat-radio-button>
+        </mat-radio-group>
       </div>
     </div>
   </fieldset>
@@ -61,14 +53,11 @@
 <ng-template #radioTemplate let-step>
   <fieldset class="form-group">
     <div class="row">
-      <legend class="col-form-label col-sm-2">{{step.content.title}}</legend>
-      <div class="col-sm-10" [formGroup]="DataForm">
-        <div class="form-check" *ngFor="let choice of step.content.choices; index as i" >
-            <input class="form-check-input" type="radio" formControlName="{{step._id}}" name="{{step._id}}" value="{{choice}}" id="defaultCheck-{{step._id}}{{i}}">
-            <label class="form-check-label" for="defaultCheck-{{step._id}}{{i}}">
-              {{choice}}
-            </label>
-        </div>
+      <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
+      <div class="col-sm-6" [formGroup]="DataForm">
+        <mat-radio-group class="radio-group" formControlName="{{step._id}}">
+            <mat-radio-button  *ngFor="let choice of step.content.choices; index as i" [value]="choice">{{choice}}</mat-radio-button>
+        </mat-radio-group>
       </div>
     </div>
   </fieldset>
@@ -77,14 +66,9 @@
 <ng-template #multipleTemplate let-step>
   <fieldset class="form-group">
     <div class="row" [formGroup]="DataForm">
-      <legend class="col-form-label col-sm-2">{{step.content.title}}</legend>
-      <div class="col-sm-10" [formArrayName]="step._id" >
-        <div class="form-check" *ngFor="let choice of step.content.choices; index as i" >
-            <input class="form-check-input" type="checkbox" formControlName="{{i}}" name="{{i}}" value="false" id="defaultCheck-{{step._id}}{{i}}" checked="false">
-            <label class="form-check-label" for="defaultCheck-{{step._id}}{{i}}">
-              {{choice}}
-            </label>
-        </div>
+      <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
+      <div class="col-sm-6 radio-group" [formArrayName]="step._id" >
+        <mat-checkbox *ngFor="let choice of step.content.choices; index as i" formControlName="{{i}}">{{choice}}</mat-checkbox>
       </div>
     </div>
   </fieldset>
@@ -92,8 +76,8 @@
 
 <ng-template #jaugeTemplate let-step>
   <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-2 col-form-label">{{step.content.title}}</label>
-    <div class="col-sm-10" [formGroup]="DataForm" >
+    <label for="inputEmail3" class="col-sm-4 col-form-label">{{step.content.title}}</label>
+    <div class="col-sm-6" [formGroup]="DataForm" >
       <ng5-slider formControlName="{{step._id}}" [(value)]="value" [options]="options"></ng5-slider>
     </div>
   </div>
