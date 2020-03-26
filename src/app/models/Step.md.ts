@@ -20,6 +20,8 @@ export interface StepJSON {
 export interface Form {
     questions: [StepJSON],
     title: String,
+    description:String,
+    imgUrl:String,
     _id : String
 }
 

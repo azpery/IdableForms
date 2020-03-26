@@ -5,11 +5,12 @@ import { AppComponent } from './app.component';
 import { FormBuilderComponent } from './components/form-builder/form-builder.component';
 import { FormAdminComponent } from './components/form-admin/form-admin.component';
 import { ThankYouComponent } from './components/thank-you/thank-you.component';
+import { HomeComponent } from './home/home.component';
 
 
 const routes: Routes = [
   { path: 'form/:id', component: CarouselFormsComponent },
-  { path: '', component: AppComponent },
+  { path: '', component: HomeComponent },
   { path: 'createNewForm', component: FormBuilderComponent },
   { path: 'form/edit/:id', component: FormBuilderComponent },
   { path: 'admin/forms', component: FormAdminComponent },

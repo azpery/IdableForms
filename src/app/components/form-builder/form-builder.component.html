@@ -5,6 +5,8 @@
         <div class="form-group" >
             <label for="formTitle">Titre du formulaire</label>
             <input type="text" class="form-control" id="formTitle" formControlName="title" value="{{form.title}}" placeholder="Entrer le titre du formulaire">
+            <input type="text" class="form-control" id="desc" formControlName="description" value="{{form.description}}" placeholder="Entrer la description du formulaire">
+            <input type="text" class="form-control" id="desc" formControlName="imgUrl" value="{{form.imgUrl}}" placeholder="Entrer l'url de l'illustration">
             <button type="button" (click)="saveForm()" class="btn btn-success">Sauvegarder mes changements</button>
             <a [attr.href]="'/form/'+form._id" *ngIf="form._id != ''" class="btn btn-info">Visualiser le formulaire ici</a>
         </div>

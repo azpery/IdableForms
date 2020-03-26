@@ -26,9 +26,12 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
 import { HttpConfigInterceptor } from './interceptor/httpconfig.interceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatRadioModule} from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { HomeComponent } from './home/home.component';
 
 
  
@@ -49,7 +52,8 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     FormBuilderItemComponent,
     FormAdminComponent,
     ThankYouComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    HomeComponent
   ],
   exports: [
 
@@ -69,7 +73,9 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     MatDialogModule,
     MatCheckboxModule,
     MatRadioModule,
-    BrowserAnimationsModule
+    MatCardModule,
+    BrowserAnimationsModule,
+    MatButtonModule
     
   ],
   providers: [{

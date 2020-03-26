@@ -16,6 +16,8 @@ export class FormBuilderComponent implements OnInit {
   form: Form = {
     _id: "",
     title:"Nouveau formulaire",
+    description:"",
+    imgUrl:"",
     steps:new Array<Step>()
   } as Form
 
@@ -25,6 +27,8 @@ export class FormBuilderComponent implements OnInit {
     this.FormIdable = this.formBuilder.group(
       {
         title:[],
+        description:"",
+        imgUrl:"",
         steps:this.formBuilder.array([])
       }
     )
@@ -41,6 +45,8 @@ export class FormBuilderComponent implements OnInit {
         this.FormIdable = this.formBuilder.group(
           {
             title:this.form.title,
+            description:this.form.description,
+            imgUrl:this.form.imgUrl,
             steps:stepsArray
           }
         )
@@ -55,6 +61,8 @@ export class FormBuilderComponent implements OnInit {
     this.FormIdable = this.formBuilder.group({
       _id: this.form._id,
       title: this.form.title,
+      description:this.form.description,
+      imgUrl:this.form.imgUrl,
       steps: stepsArray
     });
   }

@@ -29,6 +29,8 @@ export class StepService extends GenericService{
             return {
                 _id : data.form._id,
                 title: data.form.title,
+                description: data.form.description,
+                imgUrl:data.form.imgUrl,
                 steps:data.form.questions.map(papa.decodeStep, this) as [Step]
             } as Form
         }.bind(this));
