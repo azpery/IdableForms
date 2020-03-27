@@ -21,7 +21,7 @@
             </div>
           </div>
         </div>
-        <background [step]="step"></background>
+        <background [step]="step" class="background"></background>
         <div *ngIf="step.content.type == 'media'" class="bottom-center fix" >
           <a role="button" class="btn btn-lg btn-success" (click)="next()" *ngIf="!showEndButton"><span class="font-white">Passer à la section suivante</span><span class="sr-only">Next</span></a>
           <br><br>

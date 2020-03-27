@@ -1,9 +1,5 @@
-<ng-container *ngIf="step.content != undefined">
-    <a href="{{media.url}}" target="_blank" rel="nofollow noopener noreferrer" *ngIf="(step.content.type.toString() == 'media')">
-        <div class="picsum-img-wrapper">
-        <img [src]="media.url" alt="My image {{step.content.title}} description" *ngIf="!media.isVideo">
-        </div>
-    </a>
+<ng-container class="background" *ngIf="step.content != undefined">
+    <img [src]="media.url" alt="My image {{step.content.title}} description" class="background_img" *ngIf="step.content.type.toString() == 'media' && !media.isVideo">
     <!-- <ng-container *ngIf="(step.content.type.toString() != 'media')"> 
         <ng-container *ngTemplateOutlet="color"></ng-container>
     </ng-container> -->
