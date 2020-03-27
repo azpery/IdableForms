@@ -9,9 +9,9 @@
   </div>
 </div>
 <div class="content row col-sm-12 d-flex justify-content-center">
-  <div class="col-sm-10">
-    <div class="d-flex justify-content-center">
-      <mat-card class="col-sm-12 col-md-3 card" *ngFor="let form of forms" rcRandomColor [bgColor]='["#0277bd","#00838f","#00695c","#455a64","#e64a19"]'>
+  <div class="col-sm-10 cards">
+    <div class=" d-flex flex-column flex-md-row justify-content-left">
+      <mat-card class="col-sm-9 col-md-3 p-12 card" *ngFor="let form of forms" rcRandomColor [bgColor]='["#e7e9ea"]'>
         <mat-card-header>
           <div mat-card-avatar class="example-header-image"></div>
           <mat-card-title>{{form.title}}</mat-card-title>

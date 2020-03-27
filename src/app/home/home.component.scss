@@ -1,14 +1,15 @@
 .content{
     max-width: 100%;
     flex-direction: row;
-    background: #384348;
+    background: #111321;
     margin: 0;
     border-top: dotted 4Px #757575;
 }
 
 .card{
     margin: 10px;
-    color : white;
+    border: black;
+    box-shadow: 0px 4px 12px grey;
 }
 
 .presentation{
@@ -25,3 +26,7 @@
     background: #fb8c00;
 }
 
+.cards{
+    max-width: 98%;
+    overflow-x: scroll;
+}
