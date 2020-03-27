@@ -55,8 +55,9 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     ErrorDialogComponent,
     HomeComponent
   ],
+  entryComponents: [ErrorDialogComponent],
   exports: [
-
+    ErrorDialogComponent
   ],
   imports: [ 
     BrowserModule,
