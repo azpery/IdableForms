@@ -1,8 +1,27 @@
 .content{
     max-width: 100%;
     flex-direction: row;
+    background: #384348;
+    margin: 0;
+    border-top: dotted 4Px #757575;
 }
 
 .card{
     margin: 10px;
+    color : white;
 }
+
+.presentation{
+    background: url("https://hdwallpapers.imgix.net/freestockphotos-36301559625652qjob8vlgvi.jpg?auto=compress&cs=tinysrgb&dpr=1");
+    background-size: 100%;
+    width: 100%;
+    padding-top: 85px;
+    z-index: -1;
+    min-height: 400px;
+    color: white;
+}
+
+.launch{
+    background: #fb8c00;
+}
+

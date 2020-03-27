@@ -1,12 +1,17 @@
-<div class="content row col-sm-12 d-flex justify-content-center">
-    <div class="col-sm-10" >
-        <h1>Liste des questionnaires</h1>
-        
-            <p>Vous retrouverez ici l'intégralité des questionnaires qui vous sont proposés. Ces questionnaires sont entièrement configurables par un administrateur.</p>
-            <p>Les données récupérées par ces questionnaires sont stockées uniquement dans un but universitaire ou de formations. Elles ne sont en aucun cas commercialisées.</p>
-        
+<div class="col-sm-12 presentation d-flex justify-content-center" >
+  <div class="col-sm-10" >
+    <h1>Liste des questionnaires</h1>
+    <p>Vous retrouverez ici l'intégralité des questionnaires qui vous sont proposés. Ces questionnaires sont entièrement configurables par un administrateur.</p>
+    <p>Les données récupérées par ces questionnaires sont stockées uniquement dans un but universitaire ou de formations. Elles ne sont en aucun cas commercialisées.</p>
+    <div class="col-sm-12 d-flex justify-content-center">
+      <button mat-button class="launch"><span></span>Participer à l'aventure.</button>
     </div>
-    <mat-card class="col-sm-12 col-md-5 card" *ngFor="let form of forms">
+  </div>
+</div>
+<div class="content row col-sm-12 d-flex justify-content-center">
+  <div class="col-sm-10">
+    <div class="d-flex justify-content-center">
+      <mat-card class="col-sm-12 col-md-3 card" *ngFor="let form of forms" rcRandomColor [bgColor]='["#0277bd","#00838f","#00695c","#455a64","#e64a19"]'>
         <mat-card-header>
           <div mat-card-avatar class="example-header-image"></div>
           <mat-card-title>{{form.title}}</mat-card-title>
@@ -22,4 +27,6 @@
           <a mat-button href="/form/{{form._id}}">Participez à ce sondage et sauvez le monde</a>
         </mat-card-actions>
       </mat-card>
+    </div>
+  </div>
 </div>
