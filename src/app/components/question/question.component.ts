@@ -28,7 +28,7 @@ export class QuestionComponent implements OnInit{
       if( this.type == 'jauge'){
         let inputName = this.step._id
         console.log(inputName)
-        this.DataForm.addControl(inputName.toString(), new FormControl(0))
+        this.DataForm.addControl(inputName.toString(), new FormControl(1))
       }
       if( this.type == 'multiple'){
         let inputName = this.step._id
