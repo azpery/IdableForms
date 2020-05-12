@@ -11,7 +11,7 @@ import { Step, Media, Jauge, MultipleChoice } from 'src/app/models/Step';
   })
 export class QuestionComponent implements OnInit{ 
     @Input() step:Step;
-    @Input() type: 'radio' | 'yesno' | 'text' | 'else' | 'jauge' | 'section' | 'media' | 'multiple' = 'else';
+    @Input() type: 'radio' | 'yesno' | 'text' | 'else' | 'jauge' | 'section' | 'media' | 'multiple' | 'open' = 'else';
     @Input() DataForm:FormGroup;
 
     value: number = 5;
@@ -20,7 +20,7 @@ export class QuestionComponent implements OnInit{
     constructor(private formBuilder:FormBuilder){}
 
     ngOnInit() {
-      if (this.type == 'radio' || this.type == 'yesno'){
+      if (this.type == 'radio' || this.type == 'yesno' || this.type == 'open'){
       let inputName = this.step._id
       console.log(inputName)
       this.DataForm.addControl(inputName.toString(), new FormControl(''))

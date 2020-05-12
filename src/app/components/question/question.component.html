@@ -4,6 +4,9 @@
         <ng-container *ngSwitchCase="'yesno'">
             <ng-container *ngTemplateOutlet="yesNoTemplate; context: {$implicit: step}"></ng-container>
         </ng-container>
+        <ng-container *ngSwitchCase="'open'">
+          <ng-container *ngTemplateOutlet="openTemplate; context: {$implicit: step}"></ng-container>
+      </ng-container>
         <ng-container *ngSwitchCase="'radio'">
             <ng-container *ngTemplateOutlet="radioTemplate; context: {$implicit: step}"></ng-container>
         </ng-container>
@@ -46,6 +49,17 @@
           <mat-radio-button [value]="'Non'">Non</mat-radio-button>
         </mat-radio-group>
       </div>
+    </div>
+  </fieldset>
+</ng-template>
+
+<ng-template #openTemplate let-step>
+  <fieldset class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
+      <mat-form-field class="col-sm-6" [formGroup]="DataForm">
+        <input matInput placeholder="Votre réponse ici." formControlName="{{step._id}}">
+      </mat-form-field>
     </div>
   </fieldset>
 </ng-template>

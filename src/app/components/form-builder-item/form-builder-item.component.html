@@ -10,6 +10,7 @@
                 <option value="multiple">Choix multiple</option>
                 <option value="jauge">Jauge</option>
                 <option value="text">Zone de texte</option>
+                <option value="open">Réponse libre</option>
             </select>
         </div>
 
@@ -40,6 +41,9 @@
             <ng-container *ngSwitchCase="'multiple'">
                 <ng-container *ngTemplateOutlet="multipleTemplate; context: {$implicit: stepGroup}"></ng-container>
             </ng-container>
+            <ng-container *ngSwitchCase="'open'">
+                <ng-container *ngTemplateOutlet="openTemplate; context: {$implicit: stepGroup}"></ng-container>
+            </ng-container>
         </ng-container>
     </div>
 </ng-container>
@@ -67,6 +71,10 @@
 </ng-template>
 
 <ng-template #yesNoTemplate let-stepGroup>
+    
+</ng-template>
+
+<ng-template #openTemplate let-stepGroup>
     
 </ng-template>
 
