@@ -67,7 +67,7 @@ export class QuestionComponent implements OnInit {
       this.options = {
         floor: 0,
         ceil: 10,
-        animate: false,
+        animate: true,
         enforceStep: false,
         showTicks: true,
         showTicksValues: true,

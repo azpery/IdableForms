@@ -119,12 +119,10 @@ label {
 
 
 @keyframes enabledtodisabled {
-  from {background-color: #ffc107;}
   to {background-color: #bdbdbd;}
 }
 
 @keyframes disabledtodisabled {
-    from {background-color: #bdbdbd;}
     to {background-color: #ffc107;}
   }
 
