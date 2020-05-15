@@ -9,6 +9,7 @@ import { AnswerService } from '../services/answer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwiperComponent, SwiperConfigInterface, SwiperPaginationInterface } from 'ngx-swiper-wrapper';
 import { Title } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class CarouselFormsComponent implements OnInit {
 
   private pagination: SwiperPaginationInterface = {
     el: '.swiper-pagination',
-    clickable: true,
+    clickable: !environment.production,
     hideOnClick: false
   };
   public config: SwiperConfigInterface ;
@@ -74,7 +75,13 @@ export class CarouselFormsComponent implements OnInit {
         scrollbar: false,
         navigation: false,
         allowTouchMove:false,
-        pagination: this.pagination
+        touchStartForcePreventDefault:true,
+        touchStartPreventDefault:true,
+        touchMoveStopPropagation:false,
+        simulateTouch : false, 
+        pagination: this.pagination,
+        touchRatio:0,
+        slideToClickedSlide: true,
       }
       this.titleService.setTitle( data.title.toString() );
 

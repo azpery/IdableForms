@@ -61,6 +61,11 @@ opacity: 1;
     bottom: 25px;
 }
 
+.top{
+    top: 53px;
+    bottom: inherit;
+}
+
 iframe{
     z-index: 99;
 }
@@ -84,3 +89,20 @@ label {
 .ng5-slider-tick-legend {
     font-size: 12px;
 }
+
+.hide-pointer .ng5-slider-pointer{
+    opacity: 0 !important;
+  }
+
+  .hide-pointer .ng5-slider-span.ng5-slider-bar {
+    background: #ffc107 !important;
+}
+
+.hide-pointer .ng5-slider-tick {
+   background: #ffc107 !important;
+}
+
+form {
+    margin-bottom: 50px;
+}
+

@@ -25,6 +25,7 @@
       <ng-container *ngTemplateOutlet="multipleTemplate; context: {$implicit: step}"></ng-container>
     </ng-container>
   </ng-container>
+  <ng-container *ngTemplateOutlet="controls"></ng-container>
 </ng-container>
 
 <ng-template #mediaTemplate let-step>
@@ -68,8 +69,8 @@
     <div class="row">
       <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
       <div class="col-sm-6" [formGroup]="DataForm">
-        <mat-radio-group class="radio-group" formControlName="{{step._id}}">
-          <mat-radio-button *ngFor="let choice of step.content.choices; index as i" [value]="choice" required>{{choice}}
+        <mat-radio-group class="radio-group" formControlName="{{step._id}}" required>
+          <mat-radio-button *ngFor="let choice of step.content.choices; index as i" [value]="choice" >{{choice}}
           </mat-radio-button>
         </mat-radio-group>
       </div>
@@ -82,7 +83,7 @@
     <div class="row" [formGroup]="DataForm">
       <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
       <div class="col-sm-6 radio-group" [formArrayName]="step._id">
-        <mat-checkbox *ngFor="let choice of step.content.choices; index as i" formControlName="{{i}}" required>
+        <mat-checkbox *ngFor="let choice of step.content.choices; index as i" formControlName="{{i}}" >
           {{choice}}</mat-checkbox>
       </div>
     </div>
@@ -92,8 +93,8 @@
 <ng-template #jaugeTemplate let-step>
   <div class="form-group row jauge">
     <label for="inputEmail3" class="col-sm-4 col-form-label">{{step.content.title}}</label>
-    <div class="col-sm-6 jauge_only" [formGroup]="DataForm">
-      <ng5-slider formControlName="{{step._id}}" [(value)]="value" [options]="options"></ng5-slider>
+    <div class="col-sm-6 jauge_only {{class}}" [formGroup]="DataForm">
+      <ng5-slider formControlName="{{step._id}}" (valueChange)="class=''"[(value)]="value" [options]="options"></ng5-slider>
     </div>
   </div>
 </ng-template>
@@ -116,4 +117,13 @@
       </question-view>
     </ng-container>
   </form>
+</ng-template>
+
+<ng-template  #controls>
+  <div class="bottom-center" *ngIf="isSection" (click)="showErrorMessage = true">
+    <p *ngIf="showErrorMessage && !subForm.valid">Vous devez répondre à toutes les questions pour passer à la section suivante.</p>
+    <button class="btn btn-lg btn-success" *ngIf="!lastSection" [disabled]="!subForm.valid" (click)="next.emit()"><span class="font-white">Passer à la section suivante</span><span class="sr-only">Valider</span></button>
+    <br><br>
+    <button class="btn btn-lg btn-primary" *ngIf="lastSection" [disabled]="!subForm.valid" (click)="next.emit()"><span class="font-white">Envoyer les résultats</span><span class="sr-only">Valider</span></button>
+  </div>
 </ng-template>
