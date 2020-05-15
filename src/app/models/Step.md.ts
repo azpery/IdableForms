@@ -1,6 +1,7 @@
 import { Video } from './Step';
 
 export interface StepJSON {
+    disablable: boolean;
     _id : String;
     step: number;
     type: string;

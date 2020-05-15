@@ -69,6 +69,7 @@ export class FormBuilderItemComponent implements OnInit {
       case "jauge":
         this.content.addControl('borneHaute', new FormControl(''))
         this.content.addControl('borneBasse', new FormControl(''))
+        this.content.addControl('disablable', new FormControl(false))
       break;
     
       default:

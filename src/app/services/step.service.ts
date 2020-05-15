@@ -98,7 +98,8 @@ export class StepService extends GenericService{
                     title : json.title,
                     type : json.type as unknown as ContentType,
                     borneBasse : json.borneBasse,
-                    borneHaute : json.borneHaute
+                    borneHaute : json.borneHaute,
+                    disablable: json.disablable
                 } as Jauge
                 break;
             default:

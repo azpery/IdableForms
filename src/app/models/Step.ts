@@ -28,7 +28,8 @@ export interface Text extends Content{
 
 export interface Jauge extends Content{
   borneHaute:string,
-  borneBasse:string
+  borneBasse:string,
+  disablable:boolean
 }
 
 export interface Section extends Content{

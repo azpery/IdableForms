@@ -93,9 +93,11 @@
 <ng-template #jaugeTemplate let-step>
   <div class="form-group row jauge">
     <label for="inputEmail3" class="col-sm-4 col-form-label">{{step.content.title}}</label>
-    <mat-checkbox class="col-sm-1" (change)="notConcerned($event)" >Non concerné</mat-checkbox>
     <div class="col-sm-6 jauge_only {{class}}" [formGroup]="DataForm">
       <ng5-slider formControlName="{{step._id}}" (userChangeEnd)="sliderChanged()" [(value)]="value" [options]="options"></ng5-slider>
+    </div>
+    <div class="col-sm-2 col-form-label" >
+      <mat-checkbox *ngIf="step.content.disablable" (change)="notConcerned($event)" >Non concerné</mat-checkbox>
     </div>
   </div>
 </ng-template>
