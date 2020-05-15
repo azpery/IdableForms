@@ -1,47 +1,129 @@
 <div class="content">
-    <form [formGroup]="FormIdable">
-
-        <h1>{{form.title}}</h1>
-        <div class="form-group" >
-            <label for="formTitle">Titre du formulaire</label>
-            <input type="text" class="form-control" id="formTitle" formControlName="title" value="{{form.title}}" placeholder="Entrer le titre du formulaire">
-            <input type="text" class="form-control" id="desc" formControlName="description" value="{{form.description}}" placeholder="Entrer la description du formulaire">
-            <input type="text" class="form-control" id="desc" formControlName="imgUrl" value="{{form.imgUrl}}" placeholder="Entrer l'url de l'illustration">
-            <button type="button" (click)="saveForm()" class="btn btn-success">Sauvegarder mes changements</button>
-            <a [attr.href]="'/form/'+form._id" *ngIf="form._id != ''" class="btn btn-info">Visualiser le formulaire ici</a>
-        </div>
-        <div formArrayName="steps" class="well well-lg">
-            <button type="button" *ngIf="steps.controls.length == 0"  (click)="addStepAfter(0)" class="btn btn-primary">Ajouter une étape ici</button>
-            <div *ngFor="let step of steps.controls; let i=index" [formGroupName]="i" >
-                <button type="button" (click)="addStepAfter(i-1)" class="btn btn-primary">Ajouter une étape ici</button>
-                <h4>Etape #{{i + 1}}</h4>
-                <div class="step" style="margin-left: 1em;" formGroupName="content">
-                    <form-builder-item [stepGroup]="step" ></form-builder-item>
-                    <div class="section" *ngIf="step.value.content.type == 'section'" >
-                        <div  formArrayName="steps" class="well well-lg">
-                            <button type="button" *ngIf="subSteps(i).controls.length == 0" (click)="addSubStepAfter(i, 0)" class="btn btn-primary">Ajouter une sous-étape ici</button>
-                            <div class="" *ngFor="let step of subSteps(i).controls; let j=index" [formGroupName]="j" >
-                                <h4>Sous-Etape #{{j + 1}}</h4>
-                                <div style="margin-left: 1em;"formGroupName="content">
-                                    <button type="button" (click)="addSubStepAfter(i, j-1)" class="btn btn-primary">Ajouter une sous-étape ici</button>
-                                    <form-builder-item [stepGroup]="step" ></form-builder-item>
-                                    <button type="button" *ngIf="j == subSteps(i).controls.length - 1" (click)="addSubStepAfter(i,j)" class="btn btn-primary">Ajouter une étape ici</button>
-                                </div>
-                                <br>
-                                <button type="button" (click)="removeSubStepAt(i,j)" class="btn btn-danger">Supprimer la sous-étape</button>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" (click)="removeStepAt(i)" class="btn btn-danger">Supprimer l'étape</button>
+  <form [formGroup]="FormIdable">
+    <h1>{{ form.title }}</h1>
+    <div class="form-group">
+      <label for="formTitle">Titre du formulaire</label>
+      <input
+        type="text"
+        class="form-control"
+        id="formTitle"
+        formControlName="title"
+        value="{{ form.title }}"
+        placeholder="Entrer le titre du formulaire"
+      />
+      <input
+        type="text"
+        class="form-control"
+        id="desc"
+        formControlName="description"
+        value="{{ form.description }}"
+        placeholder="Entrer la description du formulaire"
+      />
+      <input
+        type="text"
+        class="form-control"
+        id="desc"
+        formControlName="imgUrl"
+        value="{{ form.imgUrl }}"
+        placeholder="Entrer l'url de l'illustration"
+      />
+      <button type="button" (click)="saveForm()" class="btn btn-success">
+        Sauvegarder mes changements
+      </button>
+      <a
+        [attr.href]="'/form/' + form._id"
+        *ngIf="form._id != ''"
+        class="btn btn-info"
+        >Visualiser le formulaire ici</a
+      >
+    </div>
+    <div formArrayName="steps" class="well well-lg">
+      <button
+        type="button"
+        *ngIf="steps.controls.length == 0"
+        (click)="addStepAfter(0)"
+        class="btn btn-primary"
+      >
+        Ajouter une étape ici
+      </button>
+      <div
+        *ngFor="let step of steps.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <button
+          type="button"
+          (click)="addStepAfter(i - 1)"
+          class="btn btn-primary"
+        >
+          Ajouter une étape ici
+        </button>
+        <h4>Etape #{{ i + 1 }}</h4>
+        <div class="step" style="margin-left: 1em;" formGroupName="content">
+          <form-builder-item [stepGroup]="step"></form-builder-item>
+          <div class="section" *ngIf="step.value.content.type == 'section'">
+            <div formArrayName="steps" class="well well-lg">
+              <button
+                type="button"
+                *ngIf="subSteps(i).controls.length == 0"
+                (click)="addSubStepAfter(i, 0)"
+                class="btn btn-primary"
+              >
+                Ajouter une sous-étape ici
+              </button>
+              <div
+                class=""
+                *ngFor="let step of subSteps(i).controls; let j = index"
+                [formGroupName]="j"
+              >
+                <h4>Sous-Etape #{{ j + 1 }}</h4>
+                <div style="margin-left: 1em;" formGroupName="content">
+                  <button
+                    type="button"
+                    (click)="addSubStepAfter(i, j - 1)"
+                    class="btn btn-primary"
+                  >
+                    Ajouter une sous-étape ici
+                  </button>
+                  <form-builder-item [stepGroup]="step"></form-builder-item>
+                  <button
+                    type="button"
+                    *ngIf="j == subSteps(i).controls.length - 1"
+                    (click)="addSubStepAfter(i, j)"
+                    class="btn btn-primary"
+                  >
+                    Ajouter une étape ici
+                  </button>
                 </div>
-                <br>
-                <button type="button" *ngIf="i == steps.controls.length - 1" (click)="addStepAfter(i)" class="btn btn-primary">Ajouter une étape ici</button>
-                
+                <br />
+                <button
+                  type="button"
+                  (click)="removeSubStepAt(i, j)"
+                  class="btn btn-danger"
+                >
+                  Supprimer la sous-étape
+                </button>
+              </div>
             </div>
-            <br><br>
-            
+          </div>
+          <button
+            type="button"
+            (click)="removeStepAt(i)"
+            class="btn btn-danger"
+          >
+            Supprimer l'étape
+          </button>
         </div>
-        
-        
-    </form>
+        <br />
+        <button
+          type="button"
+          *ngIf="i == steps.controls.length - 1"
+          (click)="addStepAfter(i)"
+          class="btn btn-primary"
+        >
+          Ajouter une étape ici
+        </button>
+      </div>
+      <br /><br />
+    </div>
+  </form>
 </div>

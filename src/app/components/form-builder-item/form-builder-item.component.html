@@ -107,8 +107,8 @@
                 <input class="form-control col-sm-12" formControlName="borneHaute" value="{{stepGroup.value.content.borneHaute}}">
             </div>
             <div class="form-check" >
-                <input type="checkbox" class="form-check-input" formControlName="disablable" id="{{stepGroup.value.step}}">
-                <label class="form-check-label" for="{{stepGroup.value.step}}">Possibilité de ne pas répondre</label>
+                <input type="checkbox" class="form-check-input" formControlName="disablable" id="jauge-{{stepGroup.value.content.title}}-{{stepGroup.value.step}}">
+                <label class="form-check-label" for="jauge-{{stepGroup.value.content.title}}-{{stepGroup.value.step}}">Possibilité de ne pas répondre</label>
             </div>
         </ng-container>
     </ng-container>
