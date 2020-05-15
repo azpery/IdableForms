@@ -1,108 +1,133 @@
-@import url('https://fonts.googleapis.com/css?family=Baloo+Da+2&display=swap');
-@import '~bootstrap/dist/css/bootstrap.min.css';
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import url("https://fonts.googleapis.com/css?family=Baloo+Da+2&display=swap");
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-*{
-    font-family: 'Baloo Da 2', cursive;
-    font-size: 16px;
-
+* {
+  font-family: "Baloo Da 2", cursive;
+  font-size: 16px;
 }
 
 .caption {
-    position: absolute;
-    /* right: 15%; */
-    top: 20px;
-    /* left: 15%; */
-    margin: auto;
-    z-index: 10;
-    padding-top: 20px;
-    box-shadow: 0px 0px 10px #333;
-    border-radius: 8px;
-    background: #efebe9;
-    padding-bottom: 20px;
-    color: #000;
-    text-align: left;
-    margin-bottom: 18px;
+  position: absolute;
+  /* right: 15%; */
+  top: 20px;
+  /* left: 15%; */
+  margin: auto;
+  z-index: 10;
+  padding-top: 20px;
+  box-shadow: 0px 0px 10px #333;
+  border-radius: 8px;
+  background: #efebe9;
+  padding-bottom: 20px;
+  color: #000;
+  text-align: left;
+  margin-bottom: 18px;
 }
 
 .carousel-item {
-    /* Force to always be block */
-    display: block !important;
-    z-index: 1;
-    position: absolute;
-    transform: translateX(100%);
-    opacity: 0;
-    transition:all  0.2s;
-    visibility: hidden;
-  }
-  
+  /* Force to always be block */
+  display: block !important;
+  z-index: 1;
+  position: absolute;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.2s;
+  visibility: hidden;
+}
+
 .carousel-item.active {
-position: relative;
-transform: translateX(0);
-visibility: visible ;
-opacity: 1;
+  position: relative;
+  transform: translateX(0);
+  visibility: visible;
+  opacity: 1;
 }
 
 .bottom-center {
-    position: relative;
-    left: 50%;
-    bottom: 50px;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    margin: 0 auto;
-    color: white;
-    text-align: center;
-    z-index: 999;
-    bottom: -20px;
+  position: relative;
+  left: 50%;
+  bottom: 50px;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  color: white;
+  text-align: center;
+  z-index: 999;
+  bottom: -20px;
 }
 
-.fix{
-    position: fixed;
-    bottom: 25px;
+.fix {
+  position: fixed;
+  bottom: 25px;
 }
 
-.top{
-    top: 53px;
-    bottom: inherit;
+.top {
+  top: 53px;
+  bottom: inherit;
 }
 
-iframe{
-    z-index: 99;
+iframe {
+  z-index: 99;
 }
 .content {
-    display: flex;
-    margin: 60px auto 32px;
-    padding: 10px 16px;
-    max-width: 960px;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  margin: 60px auto 32px;
+  padding: 10px 16px;
+  max-width: 960px;
+  flex-direction: column;
+  align-items: center;
 }
 
-img{
-    max-width: 100%;
+img {
+  max-width: 100%;
 }
 
 label {
-    white-space: normal !important;
-  }
-
-.ng5-slider-tick-legend {
-    font-size: 12px;
+  white-space: normal !important;
 }
 
-.hide-pointer .ng5-slider-pointer{
-    opacity: 0 !important;
-  }
+.ng5-slider-tick-legend {
+  font-size: 12px;
+}
 
-  .hide-pointer .ng5-slider-span.ng5-slider-bar {
-    background: #ffc107 !important;
+.hide-pointer .ng5-slider-pointer {
+  opacity: 0 !important;
+}
+
+.hide-pointer .ng5-slider-span.ng5-slider-bar,.disabled  .ng5-slider-span.ng5-slider-bar {
+  background: #ffc107 !important;
+  animation-name: disabledtodisabled;
+  animation-duration: 0.5s;
 }
 
 .hide-pointer .ng5-slider-tick {
-   background: #ffc107 !important;
+  background: #ffc107 !important;
+  animation-name: disabledtodisabled;
+  animation-duration: 0.5s;
 }
+
+.disabled .ng5-slider-span.ng5-slider-bar {
+  background: #bdbdbd !important;
+  animation-name: enabledtodisabled;
+  animation-duration: 0.5s;
+}
+
+.disabled .ng5-slider-tick {
+  background: #bdbdbd !important;
+  animation-name: enabledtodisabled;
+  animation-duration: 0.5s;
+}
+
+
+@keyframes enabledtodisabled {
+  from {background-color: #ffc107;}
+  to {background-color: #bdbdbd;}
+}
+
+@keyframes disabledtodisabled {
+    from {background-color: #bdbdbd;}
+    to {background-color: #ffc107;}
+  }
 
 form {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
-

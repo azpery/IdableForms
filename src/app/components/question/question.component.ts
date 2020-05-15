@@ -20,13 +20,15 @@ export class QuestionComponent implements OnInit {
   @Input() isSection = false;
   @Output() next = new EventEmitter<void>();
   subForm = new FormGroup({});
+  formControl:FormControl;
 
   value: number = 0;
   options: Options;
   formSubmitSubject$: Subject<unknown>;
   valid = false;
   showErrorMessage = false;
-  class= this.value>0?"":"hide-pointer"
+  class= "hide-pointer"
+  disabled=false;
 
 
   constructor(private formBuilder: FormBuilder) { }
@@ -37,7 +39,8 @@ export class QuestionComponent implements OnInit {
     if (this.type == 'radio' || this.type == 'yesno' || this.type == 'open') {
       let inputName = this.step._id
       console.log(inputName)
-      this.DataForm.addControl(inputName.toString(), new FormControl('', Validators.required))
+      this.formControl = new FormControl('', Validators.required)
+      this.DataForm.addControl(inputName.toString(), this.formControl)
     }
     if (this.type == 'section') {
       this.subForm = new FormGroup({})
@@ -46,7 +49,8 @@ export class QuestionComponent implements OnInit {
     if (this.type == 'jauge') {
       let inputName = this.step._id
       console.log(inputName)
-      this.DataForm.addControl(inputName.toString(), new FormControl(null, Validators.required))
+      this.formControl = new FormControl(null, Validators.required)
+      this.DataForm.addControl(inputName.toString(), this.formControl)
     }
     if (this.type == 'multiple') {
       let inputName = this.step._id
@@ -67,6 +71,7 @@ export class QuestionComponent implements OnInit {
         enforceStep: false,
         showTicks: true,
         showTicksValues: true,
+        disabled: this.disabled,
         stepsArray: [
           { value: 1, legend: (this.step.content as Jauge).borneBasse },
           { value: 2 },
@@ -90,6 +95,30 @@ export class QuestionComponent implements OnInit {
     });
     if (this.subForm.valid) {
       console.log(this.subForm.valid)
+    }
+  }
+
+  notConcerned($event){
+    if($event.checked){
+      
+      this.formControl.setValue(0)
+      this.class = "disabled"
+      this.disabled = this.options.disabled = true
+      
+    }else{
+      
+      this.formControl.setValue(null)
+      this.class = "hide-pointer"
+      this.disabled = this.options.disabled = false
+    }
+
+    const newOptions: Options = Object.assign({}, this.options);
+    this.options = newOptions;
+  }
+
+  sliderChanged(){
+    if(this.value > 0){
+      this.class = ''
     }
   }
 
