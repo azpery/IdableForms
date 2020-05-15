@@ -13,6 +13,7 @@ export class QuestionComponent implements OnInit{
     @Input() step:Step;
     @Input() type: 'radio' | 'yesno' | 'text' | 'else' | 'jauge' | 'section' | 'media' | 'multiple' | 'open' = 'else';
     @Input() DataForm:FormGroup;
+    subForm:FormGroup;
 
     value: number = 5;
     options: Options;
@@ -20,15 +21,21 @@ export class QuestionComponent implements OnInit{
     constructor(private formBuilder:FormBuilder){}
 
     ngOnInit() {
+      
+
       if (this.type == 'radio' || this.type == 'yesno' || this.type == 'open'){
       let inputName = this.step._id
       console.log(inputName)
       this.DataForm.addControl(inputName.toString(), new FormControl(''))
       }
+      if( this.type == 'section'){
+        this.subForm = new FormGroup({})
+        this.DataForm.addControl(this.step._id.toString(), this.subForm)
+      }
       if( this.type == 'jauge'){
         let inputName = this.step._id
         console.log(inputName)
-        this.DataForm.addControl(inputName.toString(), new FormControl(1))
+        this.DataForm.addControl(inputName.toString(), new FormControl(3))
       }
       if( this.type == 'multiple'){
         let inputName = this.step._id

@@ -1,39 +1,38 @@
-
 <ng-container *ngIf="step != null">
-      <ng-container [ngSwitch]="type"class="card-text" >
-        <ng-container *ngSwitchCase="'yesno'">
-            <ng-container *ngTemplateOutlet="yesNoTemplate; context: {$implicit: step}"></ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="'open'">
-          <ng-container *ngTemplateOutlet="openTemplate; context: {$implicit: step}"></ng-container>
-      </ng-container>
-        <ng-container *ngSwitchCase="'radio'">
-            <ng-container *ngTemplateOutlet="radioTemplate; context: {$implicit: step}"></ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="'text'">
-            <ng-container *ngTemplateOutlet="textTemplate; context: {$implicit: step}"></ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="'jauge'">
-            <ng-container *ngTemplateOutlet="jaugeTemplate; context: {$implicit: step}"></ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="'section'">
-          <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: step}"></ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="'media'">
-          <ng-container *ngTemplateOutlet="mediaTemplate; context: {$implicit: step}"></ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="'multiple'">
-          <ng-container *ngTemplateOutlet="multipleTemplate; context: {$implicit: step}"></ng-container>
-        </ng-container>
-      </ng-container>
+  <ng-container [ngSwitch]="type" class="card-text">
+    <ng-container *ngSwitchCase="'yesno'">
+      <ng-container *ngTemplateOutlet="yesNoTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'open'">
+      <ng-container *ngTemplateOutlet="openTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'radio'">
+      <ng-container *ngTemplateOutlet="radioTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'text'">
+      <ng-container *ngTemplateOutlet="textTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'jauge'">
+      <ng-container *ngTemplateOutlet="jaugeTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'section'">
+      <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'media'">
+      <ng-container *ngTemplateOutlet="mediaTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'multiple'">
+      <ng-container *ngTemplateOutlet="multipleTemplate; context: {$implicit: step}"></ng-container>
+    </ng-container>
+  </ng-container>
 </ng-container>
 
 <ng-template #mediaTemplate let-step>
-  
+
   <div class="form-group" [formGroup]="DataForm">
     <h3 for="inputEmail3" class="col-sm-12 text-center">{{step.content.media.name}}</h3>
-    <div class="col-sm-12" >
-      <input class="form-check-input" type="text"  value="{{step.content.media.name}}">
+    <div class="col-sm-12">
+      <input class="form-check-input" type="text" value="{{step.content.media.name}}" required>
     </div>
     <h3 for="inputEmail3" class="col-sm-12 text-center">{{step.content.media.name}}</h3>
   </div>
@@ -44,7 +43,7 @@
     <div class="row">
       <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
       <div class="col-sm-6" [formGroup]="DataForm">
-        <mat-radio-group class="radio-group" formControlName="{{step._id}}">
+        <mat-radio-group class="radio-group" formControlName="{{step._id}}" required>
           <mat-radio-button [value]="'Oui'">Oui</mat-radio-button>
           <mat-radio-button [value]="'Non'">Non</mat-radio-button>
         </mat-radio-group>
@@ -58,7 +57,7 @@
     <div class="row">
       <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
       <mat-form-field class="col-sm-6" [formGroup]="DataForm">
-        <input matInput placeholder="Votre réponse ici." formControlName="{{step._id}}">
+        <input matInput placeholder="Votre réponse ici." formControlName="{{step._id}}" required>
       </mat-form-field>
     </div>
   </fieldset>
@@ -70,7 +69,8 @@
       <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
       <div class="col-sm-6" [formGroup]="DataForm">
         <mat-radio-group class="radio-group" formControlName="{{step._id}}">
-            <mat-radio-button  *ngFor="let choice of step.content.choices; index as i" [value]="choice">{{choice}}</mat-radio-button>
+          <mat-radio-button *ngFor="let choice of step.content.choices; index as i" [value]="choice" required>{{choice}}
+          </mat-radio-button>
         </mat-radio-group>
       </div>
     </div>
@@ -81,8 +81,9 @@
   <fieldset class="form-group">
     <div class="row" [formGroup]="DataForm">
       <legend class="col-form-label col-sm-4">{{step.content.title}}</legend>
-      <div class="col-sm-6 radio-group" [formArrayName]="step._id" >
-        <mat-checkbox *ngFor="let choice of step.content.choices; index as i" formControlName="{{i}}">{{choice}}</mat-checkbox>
+      <div class="col-sm-6 radio-group" [formArrayName]="step._id">
+        <mat-checkbox *ngFor="let choice of step.content.choices; index as i" formControlName="{{i}}" required>
+          {{choice}}</mat-checkbox>
       </div>
     </div>
   </fieldset>
@@ -91,7 +92,7 @@
 <ng-template #jaugeTemplate let-step>
   <div class="form-group row jauge">
     <label for="inputEmail3" class="col-sm-4 col-form-label">{{step.content.title}}</label>
-    <div class="col-sm-6 jauge_only" [formGroup]="DataForm" >
+    <div class="col-sm-6 jauge_only" [formGroup]="DataForm">
       <ng5-slider formControlName="{{step._id}}" [(value)]="value" [options]="options"></ng5-slider>
     </div>
   </div>
@@ -99,7 +100,7 @@
 
 <ng-template #textTemplate let-step>
   <div class="form-group">
-    <h3 for="inputEmail3" class="col-sm-12 text-center">{{step.content.title}}</h3>
+    <h3 for="inputEmail3" class="col-sm-12 text-center" style="display: none;">{{step.content.title}}</h3>
     <div class="col-sm-12" [innerHTML]="step.content.body">
     </div>
   </div>
@@ -108,13 +109,11 @@
 <ng-template #sectionTemplate let-step>
   <h1 class="text-center">{{step.content.title}}</h1>
   <p>{{step.content.description}}</p>
-  <ng-container  *ngFor="let subStep of step.content.steps; index as j">
-    <hr>
-    <question-view
-    [type]="subStep.content.type"
-    [step]="subStep"
-    [DataForm]="DataForm">
-    </question-view>
-  </ng-container>
+  <form [formGroup]="subForm">
+    <ng-container *ngFor="let subStep of step.content.steps; index as j">
+      <hr>
+      <question-view [type]="subStep.content.type" [step]="subStep" [DataForm]="subForm">
+      </question-view>
+    </ng-container>
+  </form>
 </ng-template>
-

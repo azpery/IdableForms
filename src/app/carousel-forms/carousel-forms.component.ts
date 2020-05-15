@@ -106,18 +106,35 @@ export class CarouselFormsComponent implements OnInit {
     var result = new Array<Answer>();
     let obj = this.DataForm.value;
     console.log(obj)
-    for (var answer in obj) if (obj.hasOwnProperty(answer)) {
-      let ans = {
-        form : this.form._id,
-        formInstance: formInstance.toString(),
-        question: answer,
-        answer:obj[answer]
-      } as Answer
-      result.push(ans);
-    }
+    this.getFlatAnswers(obj, formInstance, result);
     this.answerService.sendAnswers(result).then(data => {
       this.router.navigate(['/thankyou'])
     })
   }
   
+
+  private getFlatAnswers(obj: any, formInstance: number, result: Answer[]) {
+    for (var answer in obj)
+      if (obj.hasOwnProperty(answer)) {
+        if (typeof obj[answer] === 'object') {
+          Object.keys(obj[answer]).forEach(key => {
+            let ans = {
+              form: this.form._id,
+              formInstance: formInstance.toString(),
+              question: key,
+              answer: obj[answer][key]
+            } as Answer;
+            result.push(ans);
+          }); 
+        }else{
+          let ans = {
+            form: this.form._id,
+            formInstance: formInstance.toString(),
+            question: answer,
+            answer: obj[answer]
+          } as Answer;
+          result.push(ans);
+        }
+      }
+  }
 }
