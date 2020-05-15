@@ -26,7 +26,7 @@ export class CarouselFormsComponent implements OnInit {
 
   private pagination: SwiperPaginationInterface = {
     el: '.swiper-pagination',
-    clickable: true,
+    clickable: !environment.production,
     hideOnClick: false
   };
   public config: SwiperConfigInterface ;
