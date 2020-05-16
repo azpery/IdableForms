@@ -16,7 +16,7 @@
             [DataForm]="DataForm"
             (next)="!showEndButton? next():submit()"
             [lastSection]="showEndButton"
-            [isSection]="true">
+            [isSection]="step.content.type != 'media'">
             </question-view>
           </div>
         </div>
