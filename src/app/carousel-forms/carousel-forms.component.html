@@ -16,16 +16,16 @@
             [DataForm]="DataForm"
             (next)="!showEndButton? next():submit()"
             [lastSection]="showEndButton"
-            [isSection]="step.content.type != 'media'">
+            [isSection]="true">
             </question-view>
           </div>
         </div>
         <background [step]="step" class="background"></background>
-        <div *ngIf="step.content.type == 'media'" class="bottom-center fix top" >
+        <!-- <div *ngIf="step.content.type == 'media'" class="bottom-center fix top" >
           <a role="button" class="btn btn-lg btn-success" (click)="next()" *ngIf="!showEndButton"><span class="font-white">Passer à la section suivante</span><span class="sr-only">Next</span></a>
           <br><br>
           <a role="button" class="btn btn-lg btn-primary" (click)="submit()" *ngIf="showEndButton"><span class="font-white">Envoyer les résultats</span></a>
-        </div>
+        </div> -->
     </div>
   </swiper>
   
