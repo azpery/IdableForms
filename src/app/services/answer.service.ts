@@ -15,7 +15,6 @@ export class AnswerService extends GenericService {
     sendAnswers(answers:Answer[]): Promise<any> {
         let papa = this;
         return this.http.post<any>(this.url + '/api/answers/create',{answers: answers}).toPromise().then(function(data) {
-            console.log(data)
             return data;
         }.bind(this));
     }

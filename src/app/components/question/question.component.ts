@@ -23,7 +23,7 @@ export class QuestionComponent implements OnInit {
   formControl:FormControl;
   controlClass='bottom-center';
 
-  value: number = null;
+  value: number = 0;
   options: Options;
   formSubmitSubject$: Subject<unknown>;
   valid = false;
@@ -39,7 +39,6 @@ export class QuestionComponent implements OnInit {
 
     if (this.type == 'radio' || this.type == 'yesno' || this.type == 'open') {
       let inputName = this.step._id
-      console.log(inputName)
       this.formControl = new FormControl('', Validators.required)
       this.DataForm.addControl(inputName.toString(), this.formControl)
     }
@@ -49,19 +48,16 @@ export class QuestionComponent implements OnInit {
     }
     if (this.type == 'jauge') {
       let inputName = this.step._id
-      console.log(inputName)
       this.formControl = new FormControl(null, Validators.required)
       this.DataForm.addControl(inputName.toString(), this.formControl)
     }
     if (this.type == 'multiple') {
       let inputName = this.step._id
-      console.log(inputName)
       this.DataForm.addControl(inputName.toString(), this.formBuilder.array((this.step.content as MultipleChoice).choices.map(V => { return false })))
     }
     if (this.type == 'media') {
       let mediaInputName = this.step._id
       let media = this.step.content as Media
-      console.log(mediaInputName + '-' + media.media.name)
       this.DataForm.addControl(mediaInputName.toString(), new FormControl(media.media.name))
       this.controlClass = 'right_sided'
       this.isSection = false
@@ -69,6 +65,7 @@ export class QuestionComponent implements OnInit {
     if (this.type == 'jauge') {
       this.options = {
         animate: true,
+        enforceStep: false,
         showTicks: true,
         showTicksValues: true,
         disabled: this.disabled,
@@ -94,9 +91,6 @@ export class QuestionComponent implements OnInit {
         //this.validateAllFormFields(control);            //{6}
       }     // {3}
     });
-    if (this.subForm.valid) {
-      console.log(this.subForm.valid)
-    }
   }
 
   notConcerned($event){

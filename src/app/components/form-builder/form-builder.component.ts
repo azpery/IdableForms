@@ -78,8 +78,6 @@ export class FormBuilderComponent implements OnInit {
   }
 
   saveForm(){
-    console.log("submit")
-    console.log(this.FormIdable.value)
 
     if(this.form._id != ""){
       this.formService.updateForm(this.FormIdable.value)
@@ -91,7 +89,6 @@ export class FormBuilderComponent implements OnInit {
   }
 
   addStepAfter(index){
-    console.log(this.FormIdable.value)
     let steps = this.steps
     this.insertNewStep(steps, index);
   }
@@ -119,7 +116,6 @@ export class FormBuilderComponent implements OnInit {
   private createStepsControls(step) {
 
     var section:Section = step.content as Section
-    // console.log("section is " + section)
     if(step.content.type == "section"){
       
       var stepsGroup = section.steps.map(this.createStepsControls, this);

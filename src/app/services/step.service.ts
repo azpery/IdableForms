@@ -17,7 +17,6 @@ export class StepService extends GenericService{
     getSteps(): Promise<Step[]> {
         let papa = this;
         return this.http.get<FormServer>(this.url + '/api/form/get/5e71f38263b2db71a816a5d3').toPromise().then(function(data) {
-            console.log(data)
             return data.form.questions.map(papa.decodeStep, this);
         }.bind(this));
     }
@@ -25,7 +24,6 @@ export class StepService extends GenericService{
     getForm(id:String): Promise<Form> {
         let papa = this;
         return this.http.get<FormServer>(this.url + '/api/form/get/'+id).toPromise().then(function(data) {
-            console.log(data)
             return {
                 _id : data.form._id,
                 title: data.form.title,

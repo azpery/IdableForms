@@ -17,21 +17,18 @@ export class FormService extends GenericService {
 
     sendForm(form:Form): Promise<any> {
         return this.http.post<any>(this.url+'/api/form/create',{form: form}).toPromise().then(function(data) {
-            console.log(data)
             return data;
         }.bind(this));
     }
 
     updateForm(form:Form): Promise<any> {
         return this.http.put<any>(this.url+'/api/form/update/'+form._id,{form: form}).toPromise().then(function(data) {
-            console.log(data)
             return data;
         }.bind(this));
     }
 
     getForms(): Promise<any> {
         return this.http.get<any>(this.url+'/api/form/get').toPromise().then(function(data) {
-            console.log(data)
             return data;
         }.bind(this));
     }

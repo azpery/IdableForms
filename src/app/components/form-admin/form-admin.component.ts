@@ -19,7 +19,6 @@ export class FormAdminComponent implements OnInit {
     }else{
       this.formService.getForms().then(forms=>{
         this.forms = forms.forms
-        console.log(forms.forms)
       })
     }
   }

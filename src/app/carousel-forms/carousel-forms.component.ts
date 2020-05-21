@@ -52,7 +52,6 @@ export class CarouselFormsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSteps();
-    console.log(this.steps);
 
   }
 
@@ -62,7 +61,6 @@ export class CarouselFormsComponent implements OnInit {
 
   getSteps():void{
     this.stepService.getForm(this.route.snapshot.params.id ).then(data => {
-      console.log(data)
       this.steps = this.pickVideo(data.steps)
       this.form = data
       this.config = {
@@ -112,7 +110,6 @@ export class CarouselFormsComponent implements OnInit {
     let formInstance = Date.now();
     var result = new Array<Answer>();
     let obj = this.DataForm.value;
-    console.log(obj)
     this.getFlatAnswers(obj, formInstance, result);
     this.answerService.sendAnswers(result).then(data => {
       this.router.navigate(['/thankyou'])

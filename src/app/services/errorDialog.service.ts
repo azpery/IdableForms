@@ -21,7 +21,6 @@ export class ErrorDialogService{
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
             this.isDialogOpen = false;
             let animal;
             animal = result;
