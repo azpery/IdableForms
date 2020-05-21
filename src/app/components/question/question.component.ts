@@ -23,7 +23,7 @@ export class QuestionComponent implements OnInit {
   formControl:FormControl;
   controlClass='bottom-center';
 
-  value: number = 0;
+  value: number = null;
   options: Options;
   formSubmitSubject$: Subject<unknown>;
   valid = false;
@@ -68,10 +68,7 @@ export class QuestionComponent implements OnInit {
     }
     if (this.type == 'jauge') {
       this.options = {
-        floor: 0,
-        ceil: 10,
         animate: true,
-        enforceStep: false,
         showTicks: true,
         showTicksValues: true,
         disabled: this.disabled,
@@ -123,6 +120,9 @@ export class QuestionComponent implements OnInit {
   sliderChanged(){
     if(this.value > 0){
       this.class = ''
+    }else{
+      this.class = ''
+      this.value = 1
     }
   }
 
