@@ -1,0 +1,48 @@
+.bottom-center {
+  position: relative;
+  left: 50%;
+  bottom: 50px;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  color: white;
+  text-align: center;
+  z-index: 999;
+  bottom: -20px;
+}
+
+.right_sided {
+  @media screen and (orientation: landscape) {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    color: #fff;
+    transform: rotateZ(-90deg);
+    text-align: right;
+    z-index: 999;
+    height: 0;
+  }
+  @media (min-width: 961px) {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    color: #fff;
+    transform: rotateZ(-90deg);
+    text-align: right;
+    z-index: 999;
+    height: 0;
+  }
+  @media (max-width: 961px) and (orientation: portrait) {
+    position: absolute;
+    bottom: 50px;
+    color: #fff;
+    left: 50%;
+    bottom: 136px;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+    text-align: center;
+    z-index: 999;
+    height: 0;
+  }
+}

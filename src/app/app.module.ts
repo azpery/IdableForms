@@ -32,6 +32,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
+import { ControlComponent } from './components/control/control.component';
 
 
  
@@ -53,7 +54,8 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     FormAdminComponent,
     ThankYouComponent,
     ErrorDialogComponent,
-    HomeComponent
+    HomeComponent,
+    ControlComponent
   ],
   entryComponents: [ErrorDialogComponent],
   exports: [

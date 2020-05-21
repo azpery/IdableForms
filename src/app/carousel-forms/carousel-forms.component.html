@@ -26,6 +26,7 @@
           <br><br>
           <a role="button" class="btn btn-lg btn-primary" (click)="submit()" *ngIf="showEndButton"><span class="font-white">Envoyer les résultats</span></a>
         </div> -->
+        <app-control [controlClass]="'right_sided'" *ngIf="step.content.type == 'media'" [disabled]="false" (next)="!showEndButton? next():submit()" [lastSection]="showEndButton"></app-control>
     </div>
   </swiper>
   

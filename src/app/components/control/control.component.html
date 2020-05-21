@@ -1,0 +1,28 @@
+<div
+  class="{{ controlClass }}"
+  (click)="showErrorMessage = true"
+>
+  <p *ngIf="showErrorMessage && disabled">
+    Vous devez répondre à toutes les questions pour passer à la section
+    suivante.
+  </p>
+  <button
+    class="btn btn-lg btn-success"
+    *ngIf="!lastSection"
+    [disabled]="disabled"
+    (click)="next.emit()"
+  >
+    <span class="font-white">Passer à la section suivante</span
+    ><span class="sr-only">Valider</span>
+  </button>
+  <br /><br />
+  <button
+    class="btn btn-lg btn-primary"
+    *ngIf="lastSection"
+    [disabled]="disabled"
+    (click)="next.emit()"
+  >
+    <span class="font-white">Envoyer les résultats</span
+    ><span class="sr-only">Valider</span>
+  </button>
+</div>

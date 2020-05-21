@@ -21,6 +21,7 @@ export class QuestionComponent implements OnInit {
   @Output() next = new EventEmitter<void>();
   subForm = new FormGroup({});
   formControl:FormControl;
+  controlClass='bottom-center';
 
   value: number = 0;
   options: Options;
@@ -62,6 +63,8 @@ export class QuestionComponent implements OnInit {
       let media = this.step.content as Media
       console.log(mediaInputName + '-' + media.media.name)
       this.DataForm.addControl(mediaInputName.toString(), new FormControl(media.media.name))
+      this.controlClass = 'right_sided'
+      this.isSection = false
     }
     if (this.type == 'jauge') {
       this.options = {
@@ -72,6 +75,7 @@ export class QuestionComponent implements OnInit {
         showTicks: true,
         showTicksValues: true,
         disabled: this.disabled,
+        keyboardSupport: false,
         stepsArray: [
           { value: 1, legend: (this.step.content as Jauge).borneBasse },
           { value: 2 },
