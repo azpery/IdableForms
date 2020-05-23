@@ -2,6 +2,10 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+.avatar{
+  display: none;
+}
+
 * {
   font-family: "Baloo Da 2", cursive;
   font-size: 16px;
