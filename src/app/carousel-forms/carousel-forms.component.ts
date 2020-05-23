@@ -61,6 +61,7 @@ export class CarouselFormsComponent implements OnInit {
       content: "https://idableform.robin-delaporte.fr/assets/tree.jpg"
     }
     this.meta.addTags([keywords, description, img]);
+    this.titleService.setTitle( "Evolution du climat." );
   }
 
   ngOnInit(): void {
