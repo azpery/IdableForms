@@ -12,7 +12,7 @@ export class AppComponent {
   title = 'IdablesForms';
   public spinkit = Spinkit;
 
-  constructor(public meta: Meta,public router: Router){
+  constructor(public meta: Meta,public router: Router, private titleService:Title){
     
     const keywords: MetaDefinition = {
       name: "keywords",
@@ -27,6 +27,8 @@ export class AppComponent {
       content: "https://idableform.robin-delaporte.fr/assets/tree.jpg"
     }
     this.meta.addTags([keywords, description, img]);
+
+    this.titleService.setTitle( "Evolution du climat." );
   }
   
 }
