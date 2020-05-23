@@ -8,7 +8,7 @@ import { Answer } from '../models/Answer';
 import { AnswerService } from '../services/answer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwiperComponent, SwiperConfigInterface, SwiperPaginationInterface } from 'ngx-swiper-wrapper';
-import { Title } from '@angular/platform-browser';
+import { Title, MetaDefinition, Meta } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 
 
@@ -44,10 +44,23 @@ export class CarouselFormsComponent implements OnInit {
 
 
 
-  constructor(private route:ActivatedRoute,  private stepService:StepService, private answerService:AnswerService, private router:Router, private titleService: Title ) {
+  constructor(private meta:Meta,private route:ActivatedRoute,  private stepService:StepService, private answerService:AnswerService, private router:Router, private titleService: Title ) {
     // customize default values of carousels used by this component tree
 
     this.stepService = stepService
+    const keywords: MetaDefinition = {
+      name: "keywords",
+      content: "Climat, évolution, vidéo, questionnaire"
+    }
+    const description: MetaDefinition = {
+      name: "description",
+      content: "Ce questionnaire est une étude universitaire portant sur l'évolution du climat, une petite vidéo est à regarder, ne loupez pas l'occasion de pouvoir la visionner ! "
+    }
+    const img: MetaDefinition = {
+      property: "og:image",
+      content: "https://idableform.robin-delaporte.fr/assets/tree.jpg"
+    }
+    this.meta.addTags([keywords, description, img]);
   }
 
   ngOnInit(): void {
