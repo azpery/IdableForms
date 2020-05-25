@@ -96,7 +96,7 @@ export class QuestionComponent implements OnInit {
   notConcerned($event){
     if($event.checked){
       
-      this.formControl.setValue(0)
+      this.formControl.setValue(-1)
       this.class = "disabled"
       this.disabled = this.options.disabled = true
       

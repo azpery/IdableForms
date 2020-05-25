@@ -97,7 +97,7 @@
       <ng5-slider formControlName="{{step._id}}" [(value)]="value" [options]="options"></ng5-slider>
     </div>
     <div class="col-sm-2 col-form-label" >
-      <mat-checkbox *ngIf="step.content.disablable" (change)="notConcerned($event)" >Non concerné(e)</mat-checkbox>
+      <mat-checkbox *ngIf="step.content.disablable" (change)="notConcerned($event)" >Je le fais déjà.</mat-checkbox>
     </div>
   </div>
 </ng-template>
