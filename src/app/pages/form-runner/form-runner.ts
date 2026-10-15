@@ -1,0 +1,175 @@
+import { Component, computed, effect, inject, input, resource, signal } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
+import { Router, RouterLink } from '@angular/router';
+import { AnswerService } from '../../core/answer.service';
+import { FormService } from '../../core/form.service';
+import { toEmbedUrl } from '../../core/media';
+import { Answer, AnswerValue, Form, MediaItem, Step } from '../../core/models';
+import { QuestionInput } from './question-input';
+
+/** Un écran du parcours : un média, l'introduction d'une partie, un texte ou une question. */
+interface Screen {
+  key: string;
+  kind: 'media' | 'intro' | 'info' | 'question';
+  step: Step;
+  section?: Step;
+  media?: MediaItem;
+  embedUrl?: SafeResourceUrl;
+  number?: number;
+}
+
+@Component({
+  selector: 'app-form-runner',
+  imports: [QuestionInput, RouterLink],
+  templateUrl: './form-runner.html',
+  host: { '(document:keydown.enter)': 'onEnter($event)' },
+})
+export class FormRunner {
+  private readonly formService = inject(FormService);
+  private readonly answerService = inject(AnswerService);
+  private readonly router = inject(Router);
+  private readonly title = inject(Title);
+  private readonly sanitizer = inject(DomSanitizer);
+
+  readonly id = input.required<string>();
+
+  protected readonly form = resource({
+    params: () => this.id(),
+    loader: ({ params }) => this.formService.get(params),
+  });
+  protected readonly screens = computed(() => (this.form.hasValue() ? this.buildScreens(this.form.value()) : []));
+  protected readonly index = signal(0);
+  protected readonly answers = signal<Record<string, AnswerValue | undefined>>({});
+  protected readonly submitting = signal(false);
+
+  protected readonly current = computed<Screen | undefined>(() => this.screens()[this.index()]);
+  protected readonly isLast = computed(() => this.index() === this.screens().length - 1);
+  protected readonly progress = computed(() => {
+    const total = this.screens().length;
+    return total ? ((this.index() + 1) / total) * 100 : 0;
+  });
+  protected readonly canContinue = computed(() => {
+    const screen = this.current();
+    if (!screen || this.submitting()) return false;
+    return screen.kind !== 'question' || isAnswered(screen.step, this.answers()[screen.step._id!]);
+  });
+
+  constructor() {
+    effect(() => {
+      if (this.form.hasValue()) this.title.setTitle(`${this.form.value().title} · IdableForms`);
+    });
+  }
+
+  protected setAnswer(step: Step, value: AnswerValue | undefined) {
+    this.answers.update((answers) => ({ ...answers, [step._id!]: value }));
+
+    // Comme sur Typeform : un choix unique fait passer automatiquement à l'écran suivant.
+    if ((step.content.type === 'yesno' || step.content.type === 'radio') && !this.isLast()) {
+      const key = this.current()?.key;
+      setTimeout(() => {
+        if (this.current()?.key === key) this.next();
+      }, 350);
+    }
+  }
+
+  protected next() {
+    if (!this.canContinue()) return;
+    if (this.isLast()) {
+      this.submit();
+    } else {
+      this.index.update((i) => i + 1);
+    }
+  }
+
+  protected previous() {
+    this.index.update((i) => Math.max(0, i - 1));
+  }
+
+  protected onEnter(event: Event) {
+    const target = event.target as HTMLElement;
+    if (target.closest('a, textarea')) return;
+    const option = target.closest('[role=radio], [role=checkbox]');
+    // Les autres boutons (Continuer, navigation) gardent leur comportement natif.
+    if (target.closest('button') && !option) return;
+    // Entrée sur une option pas encore choisie la sélectionne ; sur l'option choisie, elle valide.
+    if (option?.getAttribute('role') === 'radio' && option.getAttribute('aria-checked') !== 'true') return;
+    event.preventDefault();
+    this.next();
+  }
+
+  private async submit() {
+    const form = this.form.value();
+    if (!form?._id) return;
+
+    const formInstance = Date.now().toString();
+    const answers: Answer[] = [];
+    for (const screen of this.screens()) {
+      const question = screen.step._id!;
+      if (screen.kind === 'media' && screen.media) {
+        // On enregistre quel média a été montré (choisi au hasard parmi les variantes).
+        answers.push({ form: form._id, formInstance, question, answer: screen.media.name });
+      } else if (screen.kind === 'question') {
+        const value = this.answers()[question] ?? defaultAnswer(screen.step);
+        if (value !== undefined) answers.push({ form: form._id, formInstance, question, answer: value });
+      }
+    }
+
+    this.submitting.set(true);
+    try {
+      await this.answerService.send(answers);
+      this.router.navigate(['/thankyou'], { queryParams: { form: form._id } });
+    } catch {
+      this.submitting.set(false);
+    }
+  }
+
+  private buildScreens(form: Form): Screen[] {
+    const screens: Screen[] = [];
+    let number = 0;
+
+    const add = (step: Step, section?: Step) => {
+      const key = step._id!;
+      switch (step.content.type) {
+        case 'media': {
+          const medias = step.content.medias ?? [];
+          const media = medias[Math.floor(Math.random() * medias.length)];
+          if (!media) return;
+          const embedUrl = media.isVideo
+            ? this.sanitizer.bypassSecurityTrustResourceUrl(toEmbedUrl(media.url))
+            : undefined;
+          screens.push({ key, kind: 'media', step, section, media, embedUrl });
+          return;
+        }
+        case 'section':
+          screens.push({ key, kind: 'intro', step });
+          (step.content.steps ?? []).forEach((child) => add(child, step));
+          return;
+        case 'text':
+          screens.push({ key, kind: 'info', step, section });
+          return;
+        default:
+          screens.push({ key, kind: 'question', step, section, number: ++number });
+      }
+    };
+
+    form.steps.forEach((step) => add(step));
+    return screens;
+  }
+}
+
+function isAnswered(step: Step, value: AnswerValue | undefined): boolean {
+  switch (step.content.type) {
+    case 'multiple':
+      return true;
+    case 'jauge':
+      return typeof value === 'number';
+    case 'open':
+      return typeof value === 'string' && value.trim() !== '';
+    default:
+      return typeof value === 'string' && value !== '';
+  }
+}
+
+function defaultAnswer(step: Step): AnswerValue | undefined {
+  return step.content.type === 'multiple' ? (step.content.choices ?? []).map(() => false) : undefined;
+}

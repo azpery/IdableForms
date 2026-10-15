@@ -1,0 +1,111 @@
+@let c = content();
+
+<h2 class="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">{{ c.title }}</h2>
+
+@switch (c.type) {
+  @case ('yesno') {
+    <div class="mt-8 grid max-w-md grid-cols-2 gap-3" role="radiogroup" [attr.aria-label]="c.title">
+      @for (choice of ['Oui', 'Non']; track choice; let i = $index) {
+        <button
+          type="button"
+          role="radio"
+          [attr.aria-checked]="value() === choice"
+          class="flex items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 font-medium transition"
+          [class]="optionClass(value() === choice)"
+          (click)="valueChange.emit(choice)"
+        >
+          <span class="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs font-semibold" [class]="badgeClass(value() === choice)">{{ letters[i] }}</span>
+          {{ choice }}
+        </button>
+      }
+    </div>
+  }
+
+  @case ('radio') {
+    <div class="mt-8 flex max-w-xl flex-col gap-2.5" role="radiogroup" [attr.aria-label]="c.title">
+      @for (choice of c.choices; track $index; let i = $index) {
+        <button
+          type="button"
+          role="radio"
+          [attr.aria-checked]="value() === choice"
+          class="flex items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 transition"
+          [class]="optionClass(value() === choice)"
+          (click)="valueChange.emit(choice)"
+        >
+          <span class="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs font-semibold" [class]="badgeClass(value() === choice)">{{ letters[i] }}</span>
+          {{ choice }}
+        </button>
+      }
+    </div>
+  }
+
+  @case ('multiple') {
+    <p class="mt-2 text-stone-500">Plusieurs réponses possibles.</p>
+    <div class="mt-6 flex max-w-xl flex-col gap-2.5">
+      @for (choice of c.choices; track $index; let i = $index) {
+        <button
+          type="button"
+          role="checkbox"
+          [attr.aria-checked]="isChecked(i)"
+          class="flex items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 transition"
+          [class]="optionClass(isChecked(i))"
+          (click)="toggle(i)"
+        >
+          <span class="flex size-6 shrink-0 items-center justify-center rounded-md border" [class]="badgeClass(isChecked(i))">
+            @if (isChecked(i)) {
+              <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
+            }
+          </span>
+          {{ choice }}
+        </button>
+      }
+    </div>
+  }
+
+  @case ('jauge') {
+    <div class="mt-8 max-w-xl">
+      <div class="grid grid-cols-5 gap-2 transition sm:gap-3" [class.opacity-40]="alreadyDoing()" role="radiogroup" [attr.aria-label]="c.title">
+        @for (n of scale; track n) {
+          <button
+            type="button"
+            role="radio"
+            [attr.aria-checked]="value() === n"
+            [disabled]="alreadyDoing()"
+            class="h-14 rounded-xl border text-lg font-semibold tabular-nums transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 disabled:cursor-not-allowed"
+            [class]="value() === n ? 'border-brand-600 bg-brand-600 text-white shadow-sm' : 'border-stone-200 bg-white hover:border-brand-300 hover:bg-brand-50'"
+            (click)="valueChange.emit(n)"
+          >
+            {{ n }}
+          </button>
+        }
+      </div>
+      <div class="mt-3 flex justify-between gap-6 text-sm text-stone-500">
+        <span>{{ c.borneBasse }}</span>
+        <span class="text-right">{{ c.borneHaute }}</span>
+      </div>
+      @if (c.disablable) {
+        <label class="mt-6 inline-flex cursor-pointer items-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-3 transition hover:bg-stone-50">
+          <input
+            type="checkbox"
+            class="size-5 rounded accent-brand-600"
+            [checked]="alreadyDoing()"
+            (change)="setAlreadyDoing($any($event.target).checked)"
+          />
+          <span class="font-medium">Je le fais déjà</span>
+        </label>
+      }
+    </div>
+  }
+
+  @case ('open') {
+    <input
+      #openInput
+      type="text"
+      class="mt-8 w-full border-0 border-b-2 border-stone-200 bg-transparent px-0 py-3 text-2xl transition placeholder:text-stone-300 focus:border-brand-500 focus:outline-none"
+      placeholder="Votre réponse…"
+      [attr.aria-label]="c.title"
+      [value]="value() ?? ''"
+      (input)="valueChange.emit($any($event.target).value)"
+    />
+  }
+}

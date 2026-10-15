@@ -1,0 +1,56 @@
+<app-site-header />
+
+<main class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight">Formulaires</h1>
+    </div>
+    <a routerLink="/createNewForm" class="btn btn-primary">
+      <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" /></svg>
+      Nouveau formulaire
+    </a>
+  </div>
+
+  @if (forms.isLoading() && !forms.hasValue()) {
+    <div class="mt-8 space-y-3">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="h-24 animate-pulse rounded-2xl bg-stone-200/60"></div>
+      }
+    </div>
+  } @else if (forms.hasValue()) {
+    <ul class="mt-8 divide-y divide-stone-100 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-xs">
+      @for (form of forms.value(); track form._id) {
+        <li class="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
+          <div class="flex min-w-0 flex-1 items-center gap-4">
+            <div class="size-14 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-brand-100 to-brand-300">
+              @if (form.imgUrl) {
+                <img [src]="form.imgUrl" alt="" class="size-full object-cover" loading="lazy" />
+              }
+            </div>
+            <div class="min-w-0">
+              <p class="truncate font-semibold">{{ form.title }}</p>
+              <p class="mt-0.5 text-sm text-stone-500">
+                {{ form.steps.length }} étapes · {{ countQuestions(form.steps) }} questions
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-1">
+            <a [routerLink]="['/form', form._id]" class="btn btn-ghost">Voir</a>
+            <a [routerLink]="['/form/edit', form._id]" class="btn btn-ghost">Modifier</a>
+            <button type="button" class="btn btn-ghost" (click)="downloadCsv(form)">
+              <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" /><path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" /></svg>
+              CSV
+            </button>
+            <button type="button" class="btn btn-danger" (click)="remove(form)">Supprimer</button>
+          </div>
+        </li>
+      } @empty {
+        <li class="px-6 py-16 text-center">
+          <p class="font-medium">Aucun formulaire.</p>
+          <p class="mt-1 text-sm text-stone-500">Créez votre premier questionnaire pour commencer.</p>
+        </li>
+      }
+    </ul>
+  }
+</main>

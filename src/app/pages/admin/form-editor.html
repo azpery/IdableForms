@@ -1,0 +1,56 @@
+<app-site-header />
+
+<div class="sticky top-16 z-20 border-b border-stone-200/70 bg-stone-50/90 backdrop-blur-md">
+  <div class="mx-auto flex max-w-4xl items-center gap-3 px-4 py-3 sm:px-6">
+    <a routerLink="/admin/forms" class="btn btn-ghost -ml-2 px-2" aria-label="Retour aux formulaires">
+      <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" /></svg>
+      <span class="hidden sm:inline">Formulaires</span>
+    </a>
+    <p class="min-w-0 flex-1 truncate font-semibold">{{ form.title || 'Sans titre' }}</p>
+    @if (form._id) {
+      <a [routerLink]="['/form', form._id]" target="_blank" class="btn btn-secondary">Aperçu</a>
+    }
+    <button type="button" class="btn btn-primary" [disabled]="saving() || loading()" (click)="save()">
+      {{ saving() ? 'Enregistrement…' : 'Enregistrer' }}
+    </button>
+  </div>
+</div>
+
+<main class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+  @if (loading()) {
+    <div class="space-y-4">
+      <div class="h-56 animate-pulse rounded-2xl bg-stone-200/60"></div>
+      <div class="h-40 animate-pulse rounded-2xl bg-stone-200/60"></div>
+    </div>
+  } @else {
+    <section class="rounded-2xl border border-stone-200 bg-white p-5 shadow-xs sm:p-6">
+      <h2 class="text-lg font-semibold tracking-tight">Informations générales</h2>
+      <div class="mt-5 grid gap-5 sm:grid-cols-[1fr_10rem]">
+        <div class="space-y-5">
+          <label class="block">
+            <span class="label">Titre</span>
+            <input class="input" [(ngModel)]="form.title" placeholder="Titre du formulaire" />
+          </label>
+          <label class="block">
+            <span class="label">Description</span>
+            <textarea class="input min-h-24" [(ngModel)]="form.description" placeholder="Affichée sur la page d'accueil"></textarea>
+          </label>
+          <label class="block">
+            <span class="label">Image d'illustration</span>
+            <input class="input" type="url" [(ngModel)]="form.imgUrl" placeholder="https://…" />
+          </label>
+        </div>
+        <div class="aspect-[16/9] overflow-hidden rounded-xl bg-gradient-to-br from-brand-100 to-brand-300 sm:mt-7 sm:aspect-square">
+          @if (form.imgUrl) {
+            <img [src]="form.imgUrl" alt="Aperçu de l'illustration" class="size-full object-cover" />
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="mb-4 text-lg font-semibold tracking-tight">Étapes</h2>
+      <app-step-list [steps]="form.steps" />
+    </section>
+  }
+</main>

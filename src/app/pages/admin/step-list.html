@@ -1,0 +1,130 @@
+<div class="space-y-2">
+  @for (step of steps(); track uid(step); let i = $index, first = $first, last = $last) {
+    <article class="overflow-hidden rounded-2xl border border-stone-200 shadow-xs" [class]="nested() ? 'bg-stone-50/60' : 'bg-white'">
+      <div class="flex flex-wrap items-center gap-3 border-b border-stone-100 px-4 py-3 sm:px-5">
+        <span class="flex size-7 items-center justify-center rounded-lg text-xs font-semibold tabular-nums" [class]="nested() ? 'bg-stone-200 text-stone-700' : 'bg-stone-900 text-white'">{{ i + 1 }}</span>
+        <select class="input w-auto py-1.5" [ngModel]="step.content.type" (ngModelChange)="changeType(step, $event)" aria-label="Type d'étape">
+          @for (type of types(); track type.value) {
+            <option [value]="type.value">{{ type.label }}</option>
+          }
+        </select>
+        <div class="ml-auto flex items-center gap-0.5">
+          <button type="button" class="btn-icon" [disabled]="first" (click)="move(i, -1)" title="Monter" aria-label="Monter">
+            <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 17a.75.75 0 0 1-.75-.75V5.612L5.29 9.77a.75.75 0 0 1-1.08-1.04l5.25-5.5a.75.75 0 0 1 1.08 0l5.25 5.5a.75.75 0 1 1-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0 1 10 17Z" clip-rule="evenodd" /></svg>
+          </button>
+          <button type="button" class="btn-icon" [disabled]="last" (click)="move(i, 1)" title="Descendre" aria-label="Descendre">
+            <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 3a.75.75 0 0 1 .75.75v10.638l3.96-4.158a.75.75 0 1 1 1.08 1.04l-5.25 5.5a.75.75 0 0 1-1.08 0l-5.25-5.5a.75.75 0 1 1 1.08-1.04l3.96 4.158V3.75A.75.75 0 0 1 10 3Z" clip-rule="evenodd" /></svg>
+          </button>
+          <button type="button" class="btn-icon hover:!bg-red-50 hover:!text-red-600" (click)="remove(i)" title="Supprimer" aria-label="Supprimer l'étape">
+            <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" /></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-5 p-4 sm:p-5">
+        <label class="block">
+          <span class="label">{{ step.content.type === 'section' ? 'Titre de la partie' : 'Titre' }}</span>
+          <input class="input" [(ngModel)]="step.content.title" [placeholder]="titlePlaceholder(step)" />
+        </label>
+
+        @if (hasChoices(step)) {
+          <div>
+            <span class="label">Choix proposés</span>
+            <div class="space-y-2">
+              @for (choice of step.content.choices; track $index; let c = $index) {
+                <div class="flex items-center gap-2">
+                  <input class="input" [(ngModel)]="step.content.choices![c]" [placeholder]="'Choix ' + (c + 1)" />
+                  <button type="button" class="btn-icon shrink-0" (click)="step.content.choices!.splice(c, 1)" aria-label="Retirer ce choix">
+                    <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" /></svg>
+                  </button>
+                </div>
+              }
+            </div>
+            <button type="button" class="btn btn-ghost mt-2 -ml-2 text-brand-700" (click)="step.content.choices!.push('')">+ Ajouter un choix</button>
+          </div>
+        }
+
+        @switch (step.content.type) {
+          @case ('jauge') {
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="block">
+                <span class="label">Libellé du 1</span>
+                <input class="input" [(ngModel)]="step.content.borneBasse" placeholder="Ex. : Pas du tout" />
+              </label>
+              <label class="block">
+                <span class="label">Libellé du 5</span>
+                <input class="input" [(ngModel)]="step.content.borneHaute" placeholder="Ex. : Tout à fait" />
+              </label>
+            </div>
+            <label class="flex items-center gap-3 text-sm">
+              <input type="checkbox" class="size-4 rounded accent-brand-600" [(ngModel)]="step.content.disablable" />
+              Proposer la réponse « Je le fais déjà »
+            </label>
+          }
+
+          @case ('media') {
+            <div>
+              <span class="label">Médias</span>
+              <p class="mb-3 text-sm text-stone-500">
+                Si vous ajoutez plusieurs médias, l'un d'eux est montré au hasard à chaque participant (et enregistré avec ses réponses).
+              </p>
+              <div class="space-y-3">
+                @for (media of step.content.medias; track uid(media); let m = $index) {
+                  <div class="grid gap-2 rounded-xl border border-stone-200 bg-stone-50 p-3 sm:grid-cols-[1fr_2fr_auto] sm:items-center">
+                    <input class="input" [(ngModel)]="media.name" placeholder="Nom affiché" aria-label="Nom du média" />
+                    <input class="input" [(ngModel)]="media.url" [placeholder]="media.isVideo ? 'Lien YouTube' : 'URL de l’image'" aria-label="URL du média" />
+                    <div class="flex items-center justify-between gap-3 sm:justify-end">
+                      <label class="flex items-center gap-2 text-sm whitespace-nowrap">
+                        <input type="checkbox" class="size-4 rounded accent-brand-600" [(ngModel)]="media.isVideo" />
+                        Vidéo
+                      </label>
+                      <button type="button" class="btn-icon" (click)="step.content.medias!.splice(m, 1)" aria-label="Retirer ce média">
+                        <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" /></svg>
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+              <button type="button" class="btn btn-ghost mt-2 -ml-2 text-brand-700" (click)="step.content.medias!.push({ name: '', url: '', isVideo: true })">+ Ajouter un média</button>
+            </div>
+          }
+
+          @case ('text') {
+            <div>
+              <span class="label">Contenu</span>
+              <ckeditor [editor]="Editor" [config]="editorConfig" [(ngModel)]="step.content.body" />
+            </div>
+          }
+
+          @case ('section') {
+            <label class="block">
+              <span class="label">Description</span>
+              <textarea class="input min-h-20" [(ngModel)]="step.content.description" placeholder="Affichée en introduction de la partie"></textarea>
+            </label>
+            <div>
+              <span class="label">Questions de la partie</span>
+              <app-step-list [steps]="step.content.steps!" [nested]="true" />
+            </div>
+          }
+        }
+      </div>
+    </article>
+
+    @if (!last) {
+      <div class="group flex h-8 items-center justify-center">
+        <button type="button" class="rounded-full border border-dashed border-stone-300 bg-white px-3 py-0.5 text-xs font-medium text-stone-500 opacity-60 transition group-hover:opacity-100 hover:border-brand-400 hover:text-brand-700 sm:opacity-0 focus-visible:opacity-100" (click)="add(i + 1)">
+          + Insérer ici
+        </button>
+      </div>
+    }
+  } @empty {
+    <div class="rounded-2xl border border-dashed border-stone-300 px-6 py-10 text-center text-sm text-stone-500">
+      {{ nested() ? 'Cette partie ne contient encore aucune question.' : 'Ce formulaire ne contient encore aucune étape.' }}
+    </div>
+  }
+
+  <button type="button" class="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-stone-200 py-4 text-sm font-semibold text-stone-500 transition hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700" (click)="add(steps().length)">
+    <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" /></svg>
+    {{ nested() ? 'Ajouter une question à la partie' : 'Ajouter une étape' }}
+  </button>
+</div>
