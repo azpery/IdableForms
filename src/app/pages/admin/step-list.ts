@@ -92,6 +92,11 @@ export class StepList {
     prepareContent(step.content, type);
   }
 
+  /** Questions qui peuvent être rendues facultatives (les choix multiples le sont déjà). */
+  protected canBeOptional(step: Step): boolean {
+    return ['yesno', 'radio', 'jauge', 'open'].includes(step.content.type);
+  }
+
   protected hasChoices(step: Step): boolean {
     return step.content.type === 'radio' || step.content.type === 'multiple';
   }

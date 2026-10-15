@@ -44,6 +44,13 @@
           </div>
         }
 
+        @if (canBeOptional(step)) {
+          <label class="flex items-center gap-3 text-sm">
+            <input type="checkbox" class="size-4 rounded accent-brand-600" [(ngModel)]="step.content.optional" />
+            Réponse facultative (le participant peut passer la question)
+          </label>
+        }
+
         @switch (step.content.type) {
           @case ('jauge') {
             <div class="grid gap-4 sm:grid-cols-2">

@@ -17,6 +17,20 @@
 
   --animate-screen-in: screen-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   --animate-loading: loading 1.1s ease-in-out infinite;
+  --animate-grow-x: grow-x 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-grow-y: grow-y 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+  @keyframes grow-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes grow-y {
+    from {
+      transform: scaleY(0);
+    }
+  }
 
   @keyframes screen-in {
     from {

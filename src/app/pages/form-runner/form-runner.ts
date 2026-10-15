@@ -51,7 +51,16 @@ export class FormRunner {
   protected readonly canContinue = computed(() => {
     const screen = this.current();
     if (!screen || this.submitting()) return false;
-    return screen.kind !== 'question' || isAnswered(screen.step, this.answers()[screen.step._id!]);
+    return screen.kind !== 'question' || screen.step.content.optional || isAnswered(screen.step, this.answers()[screen.step._id!]);
+  });
+  /** Question facultative laissée vide : le bouton propose de la passer. */
+  protected readonly canSkip = computed(() => {
+    const screen = this.current();
+    return (
+      screen?.kind === 'question' &&
+      !!screen.step.content.optional &&
+      !isAnswered(screen.step, this.answers()[screen.step._id!])
+    );
   });
 
   constructor() {
@@ -109,8 +118,10 @@ export class FormRunner {
         // On enregistre quel média a été montré (choisi au hasard parmi les variantes).
         answers.push({ form: form._id, formInstance, question, answer: screen.media.name });
       } else if (screen.kind === 'question') {
-        const value = this.answers()[question] ?? defaultAnswer(screen.step);
-        if (value !== undefined) answers.push({ form: form._id, formInstance, question, answer: value });
+        // Une question passée (facultative, ou choix multiples sans case cochée) n'est pas enregistrée :
+        // les résultats ne comptent ainsi que les personnes concernées.
+        const value = this.answers()[question];
+        if (value !== undefined && hasContent(value)) answers.push({ form: form._id, formInstance, question, answer: value });
       }
     }
 
@@ -170,6 +181,7 @@ function isAnswered(step: Step, value: AnswerValue | undefined): boolean {
   }
 }
 
-function defaultAnswer(step: Step): AnswerValue | undefined {
-  return step.content.type === 'multiple' ? (step.content.choices ?? []).map(() => false) : undefined;
+function hasContent(value: AnswerValue): boolean {
+  if (Array.isArray(value)) return value.some(Boolean);
+  return typeof value === 'number' || value.trim() !== '';
 }

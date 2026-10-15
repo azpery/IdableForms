@@ -20,9 +20,13 @@ npm start       # http://localhost:4200
 | `/`                  | Liste des questionnaires                     |
 | `/form/:id`          | Répondre à un questionnaire                  |
 | `/thankyou`          | Remerciements après l'envoi                  |
+| `/admin/login`       | Connexion à l'administration (mot de passe `ADMIN_PASSWORD` du serveur) |
 | `/admin/forms`       | Administration : liste, export CSV, suppression |
+| `/admin/forms/:id/results` | Résultats d'un formulaire : participations par jour et graphique par question |
 | `/createNewForm`     | Créer un formulaire                          |
 | `/form/edit/:id`     | Modifier un formulaire                       |
+
+Les pages d'administration (`/admin/forms…`, `/createNewForm`, `/form/edit/:id`) demandent le mot de passe.
 
 ## Build
 

@@ -17,6 +17,8 @@ export interface StepContent {
   borneBasse?: string;
   borneHaute?: string;
   disablable?: boolean;
+  /** Le participant peut passer la question sans répondre. */
+  optional?: boolean;
   steps?: Step[];
 }
 

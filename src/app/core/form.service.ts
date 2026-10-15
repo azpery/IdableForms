@@ -17,6 +17,7 @@ interface QuestionJson {
   borneBasse?: string;
   borneHaute?: string;
   disablable?: boolean;
+  optional?: boolean;
   steps?: (QuestionJson | string)[];
 }
 
@@ -89,6 +90,7 @@ function decodeStep(json: QuestionJson): Step {
       borneBasse: json.borneBasse ?? '',
       borneHaute: json.borneHaute ?? '',
       disablable: !!json.disablable,
+      optional: !!json.optional,
       steps: (json.steps ?? []).filter((s): s is QuestionJson => typeof s === 'object').map(decodeStep),
     },
   };
