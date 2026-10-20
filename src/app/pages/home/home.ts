@@ -1,5 +1,6 @@
 import { Component, inject, resource } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../core/auth.service';
 import { FormService } from '../../core/form.service';
 import { countQuestions } from '../../core/models';
 import { SiteHeader } from '../../shared/site-header';
@@ -11,11 +12,14 @@ import { SiteHeader } from '../../shared/site-header';
 })
 export class Home {
   private readonly formService = inject(FormService);
+  protected readonly auth = inject(AuthService);
 
-  protected readonly forms = resource({ loader: () => this.formService.list() });
+  protected readonly forms = resource({ loader: () => this.formService.listPublic() });
   protected readonly countQuestions = countQuestions;
 
-  protected scrollToForms() {
-    document.getElementById('questionnaires')?.scrollIntoView({ behavior: 'smooth' });
-  }
+  protected readonly features = [
+    { title: '8 types d\'étapes', text: 'Oui / non, choix, échelles, réponses libres, textes, images et vidéos.' },
+    { title: 'Résultats en direct', text: 'Graphiques par question, évolution des participations, export CSV.' },
+    { title: 'Vos données à vous', text: 'Chaque compte ne voit que ses propres questionnaires et réponses.' },
+  ];
 }

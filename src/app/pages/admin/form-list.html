@@ -3,8 +3,8 @@
 <main class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
   <div class="flex flex-wrap items-end justify-between gap-4">
     <div>
-      <p class="eyebrow">Administration</p>
-      <h1 class="mt-2 text-3xl font-semibold tracking-tight">Formulaires</h1>
+      <p class="eyebrow">{{ auth.user()?.isAdmin ? 'Administration' : 'Espace personnel' }}</p>
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight">{{ auth.user()?.isAdmin ? 'Tous les formulaires' : 'Mes formulaires' }}</h1>
     </div>
     <a routerLink="/createNewForm" class="btn btn-primary">
       <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" /></svg>
@@ -29,14 +29,22 @@
               }
             </div>
             <div class="min-w-0">
-              <p class="truncate font-semibold">{{ form.title }}</p>
+              <p class="flex items-center gap-2">
+                <span class="truncate font-semibold">{{ form.title }}</span>
+                @if (form.featured) {
+                  <span class="shrink-0 rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-800">À la une</span>
+                }
+              </p>
               <p class="mt-0.5 text-sm text-stone-500">
                 {{ form.steps.length }} étapes · {{ countQuestions(form.steps) }} questions
+                @if (form.owner && form.owner._id !== auth.user()?._id) {
+                  · par {{ form.owner.name }} <span class="text-stone-400">({{ form.owner.email }})</span>
+                }
               </p>
             </div>
           </div>
           <div class="flex flex-wrap items-center gap-1">
-            <a [routerLink]="['/admin/forms', form._id, 'results']" class="btn btn-secondary">
+            <a [routerLink]="['/forms', form._id, 'results']" class="btn btn-secondary">
               <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M15.5 2A1.5 1.5 0 0 0 14 3.5v13a1.5 1.5 0 0 0 1.5 1.5h1a1.5 1.5 0 0 0 1.5-1.5v-13A1.5 1.5 0 0 0 16.5 2h-1ZM9.5 6A1.5 1.5 0 0 0 8 7.5v9A1.5 1.5 0 0 0 9.5 18h1a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 10.5 6h-1ZM3.5 10A1.5 1.5 0 0 0 2 11.5v5A1.5 1.5 0 0 0 3.5 18h1A1.5 1.5 0 0 0 6 16.5v-5A1.5 1.5 0 0 0 4.5 10h-1Z" /></svg>
               Résultats
             </a>
@@ -51,8 +59,10 @@
         </li>
       } @empty {
         <li class="px-6 py-16 text-center">
-          <p class="font-medium">Aucun formulaire.</p>
-          <p class="mt-1 text-sm text-stone-500">Créez votre premier questionnaire pour commencer.</p>
+          <img src="assets/logo.svg" alt="" class="mx-auto size-12" />
+          <p class="mt-4 font-medium">Vous n'avez pas encore de questionnaire.</p>
+          <p class="mt-1 text-sm text-stone-500">Créez le premier : il sera prêt à partager en quelques minutes.</p>
+          <a routerLink="/createNewForm" class="btn btn-primary mt-6">Créer un questionnaire</a>
         </li>
       }
     </ul>

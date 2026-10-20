@@ -21,6 +21,10 @@ import { UiState } from '../../core/ui-state';
           <button type="button" class="btn btn-primary btn-lg" (click)="share()">Partager le questionnaire</button>
           <a routerLink="/" class="btn btn-secondary btn-lg">Voir les autres questionnaires</a>
         </div>
+        <p class="mt-12 text-sm text-stone-500">
+          Envie de lancer votre propre enquête ?
+          <a routerLink="/signup" class="font-semibold text-brand-700 hover:underline">Créez votre questionnaire gratuitement</a>
+        </p>
       </div>
     </main>
   `,

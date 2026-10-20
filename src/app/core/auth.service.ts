@@ -3,16 +3,25 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-const STORAGE_KEY = 'idable-admin-token';
-
-/** Jeton de la forme `<expiration en ms>.<signature>`, délivré par l'API. */
-function isUnexpired(token: string | null): token is string {
-  return !!token && Number(token.split('.')[0]) > Date.now();
+export interface User {
+  _id: string;
+  email: string;
+  name: string;
+  isAdmin: boolean;
 }
 
-function readStoredToken(): string | null {
+interface Session {
+  token: string;
+  expiresAt: string;
+  user: User;
+}
+
+const STORAGE_KEY = 'idable-session';
+
+function readStoredSession(): Session | null {
   try {
-    return localStorage.getItem(STORAGE_KEY);
+    const session = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null') as Session | null;
+    return session && new Date(session.expiresAt).getTime() > Date.now() ? session : null;
   } catch {
     return null;
   }
@@ -21,47 +30,68 @@ function readStoredToken(): string | null {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly token = signal(readStoredToken());
+  private readonly session = signal(readStoredSession());
   /** Dernier jeton confirmé par le serveur, pour ne le vérifier qu'une fois. */
   private verifiedToken: string | null = null;
 
-  readonly loginUrl = `${environment.apiUrl}/api/admin/login`;
-  readonly checkUrl = `${environment.apiUrl}/api/admin/check`;
-  readonly isLoggedIn = computed(() => isUnexpired(this.token()));
+  private readonly url = `${environment.apiUrl}/api/auth`;
+  /** Requêtes dont le 401 est géré par l'appelant (mauvais identifiants, session refusée). */
+  readonly silentUrls = [`${this.url}/login`, `${this.url}/signup`, `${this.url}/me`, `${this.url}/logout`];
+
+  readonly user = computed(() => this.session()?.user ?? null);
+  readonly isLoggedIn = computed(() => !!this.session());
 
   getToken(): string | null {
-    const token = this.token();
-    return isUnexpired(token) ? token : null;
+    return this.session()?.token ?? null;
   }
 
-  /** Vérifie auprès du serveur que le jeton est toujours accepté (mot de passe inchangé, signature valide). */
+  /** Vérifie auprès du serveur que la session est toujours valide, et rafraîchit le profil. */
   async verify(): Promise<boolean> {
-    const token = this.getToken();
-    if (!token) return false;
-    if (token === this.verifiedToken) return true;
+    const session = this.session();
+    if (!session) return false;
+    if (session.token === this.verifiedToken) return true;
     try {
-      await firstValueFrom(this.http.get(this.checkUrl));
-      this.verifiedToken = token;
+      const { user } = await firstValueFrom(this.http.get<{ user: User }>(`${this.url}/me`));
+      this.store({ ...session, user });
+      this.verifiedToken = session.token;
       return true;
     } catch {
       return false;
     }
   }
 
-  async login(password: string): Promise<void> {
-    const { token } = await firstValueFrom(this.http.post<{ token: string }>(this.loginUrl, { password }));
-    this.setToken(token);
-    this.verifiedToken = token;
+  async login(email: string, password: string): Promise<void> {
+    this.open(await firstValueFrom(this.http.post<Session>(`${this.url}/login`, { email, password })));
   }
 
+  async signup(name: string, email: string, password: string): Promise<void> {
+    this.open(await firstValueFrom(this.http.post<Session>(`${this.url}/signup`, { name, email, password })));
+  }
+
+  /** Révoque la session côté serveur (sans attendre) et l'oublie localement. */
   logout() {
-    this.setToken(null);
+    const token = this.getToken();
+    if (token) {
+      const headers = { Authorization: `Bearer ${token}` };
+      firstValueFrom(this.http.post(`${this.url}/logout`, {}, { headers })).catch(() => undefined);
+    }
+    this.store(null);
   }
 
-  private setToken(token: string | null) {
-    this.token.set(token);
+  /** Oublie la session locale sans prévenir le serveur (jeton déjà refusé). */
+  forget() {
+    this.store(null);
+  }
+
+  private open(session: Session) {
+    this.store(session);
+    this.verifiedToken = session.token;
+  }
+
+  private store(session: Session | null) {
+    this.session.set(session);
     try {
-      if (token) localStorage.setItem(STORAGE_KEY, token);
+      if (session) localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
       else localStorage.removeItem(STORAGE_KEY);
     } catch {
       // Stockage indisponible (navigation privée) : la session ne durera que le temps de l'onglet.

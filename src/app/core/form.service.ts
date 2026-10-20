@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Form, MediaItem, Step, StepType } from './models';
+import { Form, FormOwner, MediaItem, Step, StepType } from './models';
 
 /** Question telle que renvoyée par l'API (sous-étapes et médias peuplés). */
 interface QuestionJson {
@@ -26,6 +26,8 @@ interface FormJson {
   title: string;
   description?: string;
   imgUrl?: string;
+  featured?: boolean;
+  owner?: FormOwner | null;
   questions: QuestionJson[];
 }
 
@@ -34,8 +36,15 @@ export class FormService {
   private readonly http = inject(HttpClient);
   private readonly url = `${environment.apiUrl}/api`;
 
+  /** Formulaires de l'utilisateur connecté (tous pour un administrateur). */
   async list(): Promise<Form[]> {
     const { forms } = await firstValueFrom(this.http.get<{ forms: FormJson[] }>(`${this.url}/form/get`));
+    return forms.map(decodeForm);
+  }
+
+  /** Formulaires mis en avant sur la page d'accueil. */
+  async listPublic(): Promise<Form[]> {
+    const { forms } = await firstValueFrom(this.http.get<{ forms: FormJson[] }>(`${this.url}/form/public`));
     return forms.map(decodeForm);
   }
 
@@ -45,7 +54,8 @@ export class FormService {
   }
 
   async save(form: Form): Promise<Form> {
-    const body = { form: { ...form, steps: encodeSteps(form.steps) } };
+    const { owner, ...fields } = form;
+    const body = { form: { ...fields, steps: encodeSteps(form.steps) } };
     const request = form._id
       ? this.http.put<{ form: FormJson }>(`${this.url}/form/update/${form._id}`, body)
       : this.http.post<{ form: FormJson }>(`${this.url}/form/create`, body);
@@ -72,6 +82,8 @@ function decodeForm(json: FormJson): Form {
     title: json.title,
     description: json.description ?? '',
     imgUrl: json.imgUrl ?? '',
+    featured: !!json.featured,
+    owner: json.owner,
     steps: json.questions.map(decodeStep),
   };
 }

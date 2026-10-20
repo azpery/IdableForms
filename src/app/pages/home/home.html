@@ -6,23 +6,43 @@
     aria-hidden="true"
   ></div>
   <div class="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-    <p class="eyebrow">Comportements &amp; psychosociologie</p>
+    <p class="eyebrow">Questionnaires en ligne</p>
     <h1 class="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-      Des questionnaires pour mieux comprendre nos comportements.
+      Créez vos questionnaires, partagez&#8209;les, analysez les réponses.
     </h1>
     <p class="mt-6 max-w-2xl text-lg leading-relaxed text-stone-600 text-pretty">
-      Retrouvez ici l'ensemble des questionnaires qui vous sont proposés. Les données recueillies servent
-      uniquement à des fins universitaires ou de formation et ne sont jamais commercialisées.
+      Choix multiples, échelles, réponses libres, vidéos et images : composez un questionnaire en quelques minutes,
+      envoyez le lien et suivez les résultats en direct, avec un export CSV quand vous en avez besoin.
     </p>
-    <button type="button" class="btn btn-primary btn-lg mt-10" (click)="scrollToForms()">
-      Participer à l'aventure
-      <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 3a.75.75 0 0 1 .75.75v10.638l3.96-4.158a.75.75 0 1 1 1.08 1.04l-5.25 5.5a.75.75 0 0 1-1.08 0l-5.25-5.5a.75.75 0 1 1 1.08-1.04l3.96 4.158V3.75A.75.75 0 0 1 10 3Z" clip-rule="evenodd" /></svg>
-    </button>
+    <div class="mt-10 flex flex-wrap gap-3">
+      @if (auth.isLoggedIn()) {
+        <a routerLink="/createNewForm" class="btn btn-primary btn-lg">Nouveau questionnaire</a>
+        <a routerLink="/forms" class="btn btn-secondary btn-lg">Mes formulaires</a>
+      } @else {
+        <a routerLink="/signup" class="btn btn-primary btn-lg">Créer un compte gratuit</a>
+        <a routerLink="/login" class="btn btn-secondary btn-lg">Se connecter</a>
+      }
+    </div>
+
+    <ul class="mt-16 grid max-w-4xl gap-6 text-sm sm:grid-cols-3">
+      @for (feature of features; track feature.title) {
+        <li class="flex gap-3">
+          <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
+            <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
+          </span>
+          <span>
+            <span class="block font-semibold text-stone-900">{{ feature.title }}</span>
+            <span class="mt-0.5 block leading-relaxed text-stone-500">{{ feature.text }}</span>
+          </span>
+        </li>
+      }
+    </ul>
   </div>
 </section>
 
 <main id="questionnaires" class="mx-auto max-w-6xl scroll-mt-16 px-4 py-16 sm:px-6">
-  <h2 class="text-2xl font-semibold tracking-tight">Questionnaires disponibles</h2>
+  <h2 class="text-2xl font-semibold tracking-tight">Questionnaires à la une</h2>
+  <p class="mt-2 text-stone-500">Participez aux études en cours.</p>
 
   @if (forms.isLoading()) {
     <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -63,8 +83,8 @@
         </a>
       } @empty {
         <div class="col-span-full rounded-2xl border border-dashed border-stone-300 bg-white px-6 py-16 text-center">
-          <p class="font-medium">Aucun questionnaire pour le moment.</p>
-          <p class="mt-1 text-sm text-stone-500">Revenez bientôt, de nouvelles études arrivent.</p>
+          <p class="font-medium">Aucun questionnaire à la une pour le moment.</p>
+          <p class="mt-1 text-sm text-stone-500">Revenez bientôt, ou créez le vôtre.</p>
         </div>
       }
     </div>

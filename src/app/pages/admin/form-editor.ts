@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/auth.service';
 import { FormService } from '../../core/form.service';
 import { Form, Step } from '../../core/models';
 import { UiState } from '../../core/ui-state';
@@ -18,6 +19,7 @@ export class FormEditor implements OnInit {
   private readonly formService = inject(FormService);
   private readonly router = inject(Router);
   private readonly ui = inject(UiState);
+  protected readonly auth = inject(AuthService);
 
   /** Absent pour un nouveau formulaire. */
   readonly id = input<string>();

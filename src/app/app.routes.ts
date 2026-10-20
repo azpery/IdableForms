@@ -1,15 +1,22 @@
 import { Routes } from '@angular/router';
-import { adminGuard } from './core/admin.guard';
+import { authGuard } from './core/auth.guard';
+
+const authPage = () => import('./pages/auth/auth-page').then((m) => m.AuthPage);
 
 export const routes: Routes = [
   { path: '', loadComponent: () => import('./pages/home/home').then((m) => m.Home), title: 'IdableForms' },
-  { path: 'form/edit/:id', canActivate: [adminGuard], loadComponent: () => import('./pages/admin/form-editor').then((m) => m.FormEditor), title: 'Modifier le formulaire · IdableForms' },
+  { path: 'login', loadComponent: authPage, data: { mode: 'login' }, title: 'Connexion · IdableForms' },
+  { path: 'signup', loadComponent: authPage, data: { mode: 'signup' }, title: 'Créer un compte · IdableForms' },
+  { path: 'forms', canActivate: [authGuard], loadComponent: () => import('./pages/admin/form-list').then((m) => m.FormList), title: 'Mes formulaires · IdableForms' },
+  { path: 'forms/:id/results', canActivate: [authGuard], loadComponent: () => import('./pages/admin/form-results').then((m) => m.FormResults), title: 'Résultats · IdableForms' },
+  { path: 'form/edit/:id', canActivate: [authGuard], loadComponent: () => import('./pages/admin/form-editor').then((m) => m.FormEditor), title: 'Modifier le formulaire · IdableForms' },
   { path: 'form/:id', loadComponent: () => import('./pages/form-runner/form-runner').then((m) => m.FormRunner) },
-  { path: 'createNewForm', canActivate: [adminGuard], loadComponent: () => import('./pages/admin/form-editor').then((m) => m.FormEditor), title: 'Nouveau formulaire · IdableForms' },
-  { path: 'admin/login', loadComponent: () => import('./pages/admin/admin-login').then((m) => m.AdminLogin), title: 'Connexion · IdableForms' },
-  { path: 'admin/forms/:id/results', canActivate: [adminGuard], loadComponent: () => import('./pages/admin/form-results').then((m) => m.FormResults), title: 'Résultats · IdableForms' },
-  { path: 'admin/forms', canActivate: [adminGuard], loadComponent: () => import('./pages/admin/form-list').then((m) => m.FormList), title: 'Administration · IdableForms' },
+  { path: 'createNewForm', canActivate: [authGuard], loadComponent: () => import('./pages/admin/form-editor').then((m) => m.FormEditor), title: 'Nouveau formulaire · IdableForms' },
   { path: 'thankyou', loadComponent: () => import('./pages/thank-you/thank-you').then((m) => m.ThankYou), title: 'Merci ! · IdableForms' },
-  { path: 'csv/:id', redirectTo: 'admin/forms' },
+  // Anciennes adresses de l'administration
+  { path: 'admin/login', redirectTo: 'login' },
+  { path: 'admin/forms/:id/results', redirectTo: 'forms/:id/results' },
+  { path: 'admin/forms', redirectTo: 'forms' },
+  { path: 'csv/:id', redirectTo: 'forms' },
   { path: '**', redirectTo: '' },
 ];

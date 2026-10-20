@@ -28,11 +28,21 @@ export interface Step {
   content: StepContent;
 }
 
+export interface FormOwner {
+  _id: string;
+  name: string;
+  email: string;
+}
+
 export interface Form {
   _id?: string;
   title: string;
   description: string;
   imgUrl: string;
+  /** Affiché sur la page d'accueil (modifiable par un administrateur). */
+  featured?: boolean;
+  /** Renseigné dans la liste « Mes formulaires ». */
+  owner?: FormOwner | null;
   steps: Step[];
 }
 

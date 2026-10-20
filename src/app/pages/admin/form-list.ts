@@ -1,5 +1,6 @@
 import { Component, inject, resource } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../core/auth.service';
 import { FormService } from '../../core/form.service';
 import { Form, countQuestions } from '../../core/models';
 import { UiState } from '../../core/ui-state';
@@ -13,6 +14,7 @@ import { SiteHeader } from '../../shared/site-header';
 export class FormList {
   private readonly formService = inject(FormService);
   private readonly ui = inject(UiState);
+  protected readonly auth = inject(AuthService);
 
   protected readonly forms = resource({ loader: () => this.formService.list() });
   protected readonly countQuestions = countQuestions;

@@ -2,9 +2,9 @@
 
 <div class="sticky top-16 z-20 border-b border-stone-200/70 bg-stone-50/90 backdrop-blur-md">
   <div class="mx-auto flex max-w-4xl items-center gap-3 px-4 py-3 sm:px-6">
-    <a routerLink="/admin/forms" class="btn btn-ghost -ml-2 px-2" aria-label="Retour aux formulaires">
+    <a routerLink="/forms" class="btn btn-ghost -ml-2 px-2" aria-label="Retour aux formulaires">
       <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" /></svg>
-      <span class="hidden sm:inline">Formulaires</span>
+      <span class="hidden sm:inline">Mes formulaires</span>
     </a>
     <p class="min-w-0 flex-1 truncate font-semibold">{{ form.title || 'Sans titre' }}</p>
     @if (form._id) {
@@ -33,12 +33,21 @@
           </label>
           <label class="block">
             <span class="label">Description</span>
-            <textarea class="input min-h-24" [(ngModel)]="form.description" placeholder="Affichée sur la page d'accueil"></textarea>
+            <textarea class="input min-h-24" [(ngModel)]="form.description" placeholder="Présentée aux participants avant de commencer"></textarea>
           </label>
           <label class="block">
             <span class="label">Image d'illustration</span>
             <input class="input" type="url" [(ngModel)]="form.imgUrl" placeholder="https://…" />
           </label>
+          @if (auth.user()?.isAdmin) {
+            <label class="flex items-start gap-3 rounded-xl border border-stone-200 p-3.5">
+              <input type="checkbox" class="mt-0.5 size-4 accent-brand-600" [(ngModel)]="form.featured" />
+              <span>
+                <span class="block text-sm font-medium">Mettre à la une</span>
+                <span class="block text-xs text-stone-500">Affiche ce questionnaire sur la page d'accueil, visible par tous.</span>
+              </span>
+            </label>
+          }
         </div>
         <div class="aspect-[16/9] overflow-hidden rounded-xl bg-gradient-to-br from-brand-100 to-brand-300 sm:mt-7 sm:aspect-square">
           @if (form.imgUrl) {

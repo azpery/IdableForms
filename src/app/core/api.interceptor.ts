@@ -19,12 +19,12 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   ui.startRequest();
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 && (req.url === auth.loginUrl || req.url === auth.checkUrl)) {
-        // Géré par la page de connexion (mauvais mot de passe) ou par le guard (jeton refusé).
+      if (auth.silentUrls.includes(req.url) && [400, 401, 409, 429].includes(error.status)) {
+        // Géré par les pages de connexion / inscription ou par le guard (session refusée).
       } else if (error.status === 401) {
-        auth.logout();
+        auth.forget();
         ui.notify('Votre session a expiré. Reconnectez-vous.', 'error');
-        router.navigate(['/admin/login'], { queryParams: { redirect: router.url } });
+        router.navigate(['/login'], { queryParams: { redirect: router.url } });
       } else {
         ui.notify(errorMessage(error), 'error');
       }
