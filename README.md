@@ -33,3 +33,12 @@ Les pages d'administration (`/admin/forms…`, `/createNewForm`, `/form/edit/:id
 ```sh
 npm run build   # dist/idables-forms, utilise src/environments/environment.prod.ts
 ```
+
+## Déploiement (alwaysdata)
+
+Le site sert `~/IdableFormsFront/dist/idables-forms/browser`, un clone de ce dépôt compilé sur le serveur (la règle de réécriture `public/.htaccess` est incluse dans le build) :
+
+```sh
+ssh rdelaporte@ssh-rdelaporte.alwaysdata.net \
+  'cd ~/IdableFormsFront && git pull --ff-only && export PATH=/usr/alwaysdata/nodejs/24.21.0/bin:$PATH && npm ci && npx ng build'
+```

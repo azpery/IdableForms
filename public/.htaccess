@@ -1,0 +1,8 @@
+RewriteEngine On
+# Fichier ou dossier existant : servi tel quel
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+RewriteRule ^ - [L]
+
+# Sinon, l'application Angular gère la route
+RewriteRule ^ /index.html
