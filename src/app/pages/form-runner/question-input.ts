@@ -1,5 +1,5 @@
 import { Component, ElementRef, afterNextRender, computed, input, output, viewChild } from '@angular/core';
-import { AnswerValue, Step } from '../../core/models';
+import { AnswerValue, MultipleValue, Step } from '../../core/models';
 
 @Component({
   selector: 'app-question-input',
@@ -16,21 +16,38 @@ export class QuestionInput {
   protected readonly alreadyDoing = computed(() => this.value() === -1);
 
   private readonly openInput = viewChild<ElementRef<HTMLInputElement>>('openInput');
+  private readonly otherInput = viewChild<ElementRef<HTMLInputElement>>('otherInput');
+
+  /** Réponse actuelle d'un choix multiple (rien de coché par défaut). */
+  protected readonly multiple = computed<MultipleValue>(() => {
+    const value = this.value();
+    if (typeof value === 'object') return value;
+    return { checked: (this.content().choices ?? []).map(() => false) };
+  });
+  protected readonly otherChecked = computed(() => this.multiple().other !== undefined);
 
   constructor() {
     afterNextRender(() => this.openInput()?.nativeElement.focus());
   }
 
   protected isChecked(index: number): boolean {
-    const value = this.value();
-    return Array.isArray(value) && value[index];
+    return !!this.multiple().checked[index];
   }
 
   protected toggle(index: number) {
-    const value = this.value();
-    const checked = Array.isArray(value) ? [...value] : (this.content().choices ?? []).map(() => false);
+    const checked = [...this.multiple().checked];
     checked[index] = !checked[index];
-    this.valueChange.emit(checked);
+    this.valueChange.emit({ ...this.multiple(), checked });
+  }
+
+  protected toggleOther() {
+    const { checked, other } = this.multiple();
+    this.valueChange.emit(other === undefined ? { checked, other: '' } : { checked });
+    if (other === undefined) setTimeout(() => this.otherInput()?.nativeElement.focus());
+  }
+
+  protected setOther(other: string) {
+    this.valueChange.emit({ ...this.multiple(), other });
   }
 
   protected setAlreadyDoing(checked: boolean) {

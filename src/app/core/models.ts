@@ -19,6 +19,8 @@ export interface StepContent {
   disablable?: boolean;
   /** Le participant peut passer la question sans répondre. */
   optional?: boolean;
+  /** Choix multiples : propose aussi « Autre » avec une réponse libre. */
+  allowOther?: boolean;
   steps?: Step[];
 }
 
@@ -46,14 +48,22 @@ export interface Form {
   steps: Step[];
 }
 
-/** Valeur d'une réponse : texte (oui/non, choix, réponse libre), nombre (jauge, -1 = « je le fais déjà ») ou cases cochées. */
-export type AnswerValue = string | number | boolean[];
+/** Choix multiples : cases cochées et, si « Autre » est coché, son texte (undefined : non coché). */
+export interface MultipleValue {
+  checked: boolean[];
+  other?: string;
+}
+
+/** Valeur d'une réponse : texte (oui/non, choix, réponse libre), nombre (jauge, -1 = « je le fais déjà ») ou choix multiples. */
+export type AnswerValue = string | number | MultipleValue;
 
 export interface Answer {
   form: string;
   formInstance: string;
   question: string;
-  answer: AnswerValue;
+  answer: string | number | boolean[];
+  /** Texte de « Autre » d'un choix multiple. */
+  other?: string;
 }
 
 export const STEP_TYPES: { value: StepType; label: string }[] = [

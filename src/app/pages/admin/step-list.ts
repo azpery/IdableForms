@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -45,7 +45,7 @@ function prepareContent(content: StepContent, type: StepType) {
 
 @Component({
   selector: 'app-step-list',
-  imports: [FormsModule, CKEditorModule],
+  imports: [FormsModule, CKEditorModule, NgTemplateOutlet],
   templateUrl: './step-list.html',
   // Le formulaire est un objet mutable édité via ngModel : on vérifie la vue à chaque cycle.
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -86,6 +86,55 @@ export class StepList {
     const target = index + offset;
     if (target < 0 || target >= steps.length) return;
     [steps[index], steps[target]] = [steps[target], steps[index]];
+  }
+
+  /** Déplace un choix proposé de la position `from` à la position `to`. */
+  protected moveChoice(step: Step, from: number, to: number) {
+    const choices = step.content.choices!;
+    if (to < 0 || to >= choices.length || to === from) return;
+    const [choice] = choices.splice(from, 1);
+    choices.splice(to, 0, choice);
+  }
+
+  // Glisser-déposer des choix : la ligne ne devient déplaçable que quand on saisit sa poignée,
+  // pour ne pas gêner la sélection de texte dans le champ.
+  protected grabbed?: { step: Step; index: number };
+  protected dragged?: { step: Step; index: number };
+  protected dropTarget?: { step: Step; index: number };
+
+  protected isGrabbed(step: Step, index: number): boolean {
+    return this.grabbed?.step === step && this.grabbed.index === index;
+  }
+
+  protected isDragged(step: Step, index: number): boolean {
+    return this.dragged?.step === step && this.dragged.index === index;
+  }
+
+  protected isDropTarget(step: Step, index: number): boolean {
+    return this.dropTarget?.step === step && this.dropTarget.index === index && !this.isDragged(step, index);
+  }
+
+  protected startDrag(step: Step, index: number, event: DragEvent) {
+    this.dragged = { step, index };
+    event.dataTransfer?.setData('text/plain', String(index));
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+  }
+
+  protected dragOver(step: Step, index: number, event: DragEvent) {
+    // On n'accepte que les choix de la même question.
+    if (this.dragged?.step !== step) return;
+    event.preventDefault();
+    this.dropTarget = { step, index };
+  }
+
+  protected drop(step: Step, index: number, event: DragEvent) {
+    event.preventDefault();
+    if (this.dragged?.step === step) this.moveChoice(step, this.dragged.index, index);
+    this.endDrag();
+  }
+
+  protected endDrag() {
+    this.grabbed = this.dragged = this.dropTarget = undefined;
   }
 
   protected changeType(step: Step, type: StepType) {

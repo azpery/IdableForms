@@ -121,7 +121,13 @@ export class FormRunner {
         // Une question passée (facultative, ou choix multiples sans case cochée) n'est pas enregistrée :
         // les résultats ne comptent ainsi que les personnes concernées.
         const value = this.answers()[question];
-        if (value !== undefined && hasContent(value)) answers.push({ form: form._id, formInstance, question, answer: value });
+        if (value === undefined || !hasContent(value)) continue;
+        if (typeof value === 'object') {
+          const other = value.other?.trim();
+          answers.push({ form: form._id, formInstance, question, answer: value.checked, ...(other ? { other } : {}) });
+        } else {
+          answers.push({ form: form._id, formInstance, question, answer: value });
+        }
       }
     }
 
@@ -171,7 +177,8 @@ export class FormRunner {
 function isAnswered(step: Step, value: AnswerValue | undefined): boolean {
   switch (step.content.type) {
     case 'multiple':
-      return true;
+      // « Autre » coché demande un texte ; sinon aucune case n'est obligatoire.
+      return typeof value !== 'object' || value.other === undefined || value.other.trim() !== '';
     case 'jauge':
       return typeof value === 'number';
     case 'open':
@@ -182,6 +189,6 @@ function isAnswered(step: Step, value: AnswerValue | undefined): boolean {
 }
 
 function hasContent(value: AnswerValue): boolean {
-  if (Array.isArray(value)) return value.some(Boolean);
+  if (typeof value === 'object') return value.checked.some(Boolean) || !!value.other?.trim();
   return typeof value === 'number' || value.trim() !== '';
 }

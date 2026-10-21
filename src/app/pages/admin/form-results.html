@@ -173,6 +173,9 @@
                 }
 
                 @if (q.texts; as texts) {
+                  @if (q.step.content.type === 'multiple') {
+                    <p class="mt-6 text-sm font-semibold text-stone-700">Réponses « Autre »</p>
+                  }
                   @if (texts.length) {
                     <ul class="mt-5 max-h-96 divide-y divide-stone-100 overflow-y-auto pr-2">
                       @for (item of texts; track $index) {

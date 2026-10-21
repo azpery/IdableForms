@@ -31,7 +31,7 @@ export interface QuestionResult {
   bars?: Bar[];
   /** Échelle 1 à 5. */
   scale?: { bars: Bar[]; average: number | null; alreadyDoing: number };
-  /** Réponses libres, les plus récentes d'abord. */
+  /** Réponses libres (ou textes « Autre » d'un choix multiple), les plus récentes d'abord. */
   texts?: { text: string; date: Date }[];
 }
 
@@ -113,8 +113,11 @@ function questionResult(step: Step, answers: RawAnswer[]): QuestionResult {
     case 'media':
       return { step, respondents, bars: countChoices((content.medias ?? []).map((m) => m.name), answers.map((a) => a.answer)) };
     case 'multiple': {
-      const counts = (content.choices ?? []).map((_, i) => answers.filter((a) => a.answers?.[i] === 'true').length);
-      return { step, respondents, bars: toBars(content.choices ?? [], counts, respondents) };
+      const labels = [...(content.choices ?? [])];
+      const counts = labels.map((_, i) => answers.filter((a) => a.answers?.[i] === 'true').length);
+      if (!content.allowOther) return { step, respondents, bars: toBars(labels, counts, respondents) };
+      const texts = toTexts(answers);
+      return { step, respondents, bars: toBars([...labels, 'Autre'], [...counts, texts.length], respondents), texts };
     }
     case 'jauge': {
       const values = answers.map((a) => Number(a.answer));
@@ -131,15 +134,19 @@ function questionResult(step: Step, answers: RawAnswer[]): QuestionResult {
       };
     }
     case 'open': {
-      const texts = answers
-        .filter((a) => a.answer?.trim())
-        .map((a) => ({ text: a.answer!.trim(), date: new Date(Number(a.formInstance)) }))
-        .sort((a, b) => b.date.getTime() - a.date.getTime());
+      const texts = toTexts(answers);
       return { step, respondents: texts.length, texts };
     }
     default:
       return { step, respondents };
   }
+}
+
+function toTexts(answers: RawAnswer[]): { text: string; date: Date }[] {
+  return answers
+    .filter((a) => a.answer?.trim())
+    .map((a) => ({ text: a.answer!.trim(), date: new Date(Number(a.formInstance)) }))
+    .sort((a, b) => b.date.getTime() - a.date.getTime());
 }
 
 function countChoices(choices: string[], values: (string | undefined)[]): Bar[] {

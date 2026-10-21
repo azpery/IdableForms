@@ -59,6 +59,39 @@
           {{ choice }}
         </button>
       }
+      @if (c.allowOther) {
+        @let otherIndex = c.choices?.length ?? 0;
+        <div class="rounded-xl border transition" [class]="optionClass(otherChecked())">
+          <button
+            type="button"
+            role="checkbox"
+            [attr.aria-checked]="otherChecked()"
+            class="flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+            (click)="toggleOther()"
+          >
+            <span class="flex size-6 shrink-0 items-center justify-center rounded-md border" [class]="badgeClass(otherChecked(), otherIndex)">
+              @if (otherChecked()) {
+                <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
+              }
+            </span>
+            Autre
+          </button>
+          @if (otherChecked()) {
+            <div class="px-4 pb-4 pl-13">
+              <input
+                #otherInput
+                type="text"
+                class="w-full border-0 border-b-2 border-stone-300 bg-transparent px-0 py-2 text-lg transition placeholder:text-stone-400 focus:border-orchid focus:outline-none"
+                placeholder="Précisez…"
+                aria-label="Précisez votre réponse « Autre »"
+                maxlength="500"
+                [value]="multiple().other ?? ''"
+                (input)="setOther($any($event.target).value)"
+              />
+            </div>
+          }
+        </div>
+      }
     </div>
   }
 
