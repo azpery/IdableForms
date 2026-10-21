@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Form, FormOwner, MediaItem, Step, StepType } from './models';
+import { Form, FormOwner, MediaItem, OpenFormat, Step, StepType } from './models';
 
 /** Question telle que renvoyée par l'API (sous-étapes et médias peuplés). */
 interface QuestionJson {
@@ -19,6 +19,7 @@ interface QuestionJson {
   disablable?: boolean;
   optional?: boolean;
   allowOther?: boolean;
+  format?: OpenFormat;
   steps?: (QuestionJson | string)[];
 }
 
@@ -105,6 +106,7 @@ function decodeStep(json: QuestionJson): Step {
       disablable: !!json.disablable,
       optional: !!json.optional,
       allowOther: !!json.allowOther,
+      format: json.format ?? 'long',
       steps: (json.steps ?? []).filter((s): s is QuestionJson => typeof s === 'object').map(decodeStep),
     },
   };

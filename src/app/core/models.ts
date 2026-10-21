@@ -1,5 +1,27 @@
 export type StepType = 'media' | 'section' | 'yesno' | 'radio' | 'multiple' | 'jauge' | 'text' | 'open';
 
+/** Format d'une réponse libre : texte mis en forme, ou champ d'une ligne. */
+export type OpenFormat = 'long' | 'short' | 'email' | 'tel';
+
+export const OPEN_FORMATS: { value: OpenFormat; label: string }[] = [
+  { value: 'long', label: 'Texte long, mis en forme' },
+  { value: 'short', label: 'Texte court (une ligne)' },
+  { value: 'email', label: 'Adresse e-mail' },
+  { value: 'tel', label: 'Numéro de téléphone' },
+];
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE = /^\+?[\d\s.\-()]{6,20}$/;
+
+/** Réponse libre saisie mais mal formée (adresse e-mail ou numéro de téléphone). */
+export function isMalformed(format: OpenFormat | undefined, value: string): boolean {
+  const text = value.trim();
+  if (!text) return false;
+  if (format === 'email') return !EMAIL.test(text);
+  if (format === 'tel') return !PHONE.test(text) || text.replace(/\D/g, '').length < 6;
+  return false;
+}
+
 export interface MediaItem {
   _id?: string;
   name: string;
@@ -19,6 +41,8 @@ export interface StepContent {
   disablable?: boolean;
   /** Le participant peut passer la question sans répondre. */
   optional?: boolean;
+  /** Réponse libre : format du champ (texte long mis en forme par défaut). */
+  format?: OpenFormat;
   /** Choix unique ou multiples : propose aussi « Autre » avec une réponse libre. */
   allowOther?: boolean;
   steps?: Step[];

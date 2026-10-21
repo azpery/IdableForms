@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AnswerService } from '../../core/answer.service';
 import { FormService } from '../../core/form.service';
 import { toEmbedUrl } from '../../core/media';
-import { Answer, AnswerValue, Form, MediaItem, Step, isMultipleValue, isOtherValue } from '../../core/models';
+import { Answer, AnswerValue, Form, MediaItem, Step, isMalformed, isMultipleValue, isOtherValue } from '../../core/models';
 import { htmlToText } from '../../shared/rich-text';
 import { QuestionInput } from './question-input';
 
@@ -52,7 +52,11 @@ export class FormRunner {
   protected readonly canContinue = computed(() => {
     const screen = this.current();
     if (!screen || this.submitting()) return false;
-    return screen.kind !== 'question' || screen.step.content.optional || isAnswered(screen.step, this.answers()[screen.step._id!]);
+    if (screen.kind !== 'question') return true;
+    const value = this.answers()[screen.step._id!];
+    // Une adresse e-mail ou un numéro mal formé bloque, même sur une question facultative.
+    if (isInvalid(screen.step, value)) return false;
+    return screen.step.content.optional || isAnswered(screen.step, value);
   });
   /** Question facultative laissée vide : le bouton propose de la passer. */
   protected readonly canSkip = computed(() => {
@@ -60,7 +64,8 @@ export class FormRunner {
     return (
       screen?.kind === 'question' &&
       !!screen.step.content.optional &&
-      !isAnswered(screen.step, this.answers()[screen.step._id!])
+      !isAnswered(screen.step, this.answers()[screen.step._id!]) &&
+      !isInvalid(screen.step, this.answers()[screen.step._id!])
     );
   });
 
@@ -187,11 +192,17 @@ function isAnswered(step: Step, value: AnswerValue | undefined): boolean {
     case 'jauge':
       return typeof value === 'number';
     case 'open':
-      return typeof value === 'string' && htmlToText(value).trim() !== '';
+      if (typeof value !== 'string') return false;
+      if (step.content.format && step.content.format !== 'long') return value.trim() !== '' && !isInvalid(step, value);
+      return htmlToText(value).trim() !== '';
     default:
       if (isOtherValue(value)) return value.other.trim() !== '';
       return typeof value === 'string' && value !== '';
   }
+}
+
+function isInvalid(step: Step, value: AnswerValue | undefined): boolean {
+  return step.content.type === 'open' && typeof value === 'string' && isMalformed(step.content.format, value);
 }
 
 function hasContent(value: AnswerValue): boolean {

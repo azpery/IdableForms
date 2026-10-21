@@ -1,5 +1,5 @@
-import { Component, ElementRef, computed, input, output, viewChild } from '@angular/core';
-import { AnswerValue, MultipleValue, Step, isMultipleValue, isOtherValue } from '../../core/models';
+import { Component, ElementRef, afterNextRender, computed, input, output, signal, viewChild } from '@angular/core';
+import { AnswerValue, MultipleValue, Step, isMalformed, isMultipleValue, isOtherValue } from '../../core/models';
 import { RichAnswer } from './rich-answer';
 
 @Component({
@@ -18,6 +18,19 @@ export class QuestionInput {
   protected readonly alreadyDoing = computed(() => this.value() === -1);
 
   private readonly otherInput = viewChild<ElementRef<HTMLInputElement>>('otherInput');
+  private readonly lineInput = viewChild<ElementRef<HTMLInputElement>>('lineInput');
+
+  /** Réponse libre d'une ligne : l'erreur de format ne s'affiche qu'en quittant le champ. */
+  protected readonly lineTouched = signal(false);
+  protected readonly lineError = computed(() => {
+    const value = this.value();
+    if (!this.lineTouched() || typeof value !== 'string' || !isMalformed(this.content().format, value)) return '';
+    return this.content().format === 'email' ? 'Cette adresse e-mail ne semble pas valide.' : 'Ce numéro de téléphone ne semble pas valide.';
+  });
+
+  constructor() {
+    afterNextRender(() => this.lineInput()?.nativeElement.focus());
+  }
 
   /** Réponse actuelle d'un choix multiple (rien de coché par défaut). */
   protected readonly multiple = computed<MultipleValue>(() => {

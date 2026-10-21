@@ -160,6 +160,26 @@
   }
 
   @case ('open') {
+    @if (c.format && c.format !== 'long') {
+      <input
+        #lineInput
+        [type]="c.format === 'short' ? 'text' : c.format"
+        [attr.autocomplete]="c.format === 'short' ? 'off' : c.format"
+        [attr.inputmode]="c.format === 'short' ? null : c.format"
+        class="mt-8 w-full border-0 border-b-2 bg-transparent px-0 py-3 text-2xl transition placeholder:text-stone-300 focus:outline-none"
+        [class]="lineError() ? 'border-red-400 focus:border-red-500' : 'border-stone-300 focus:border-orchid'"
+        [placeholder]="c.format === 'email' ? 'nom@exemple.fr' : c.format === 'tel' ? '06 12 34 56 78' : 'Votre réponse…'"
+        [attr.aria-label]="c.title"
+        [attr.aria-invalid]="!!lineError()"
+        maxlength="300"
+        [value]="$any(value()) ?? ''"
+        (input)="valueChange.emit($any($event.target).value)"
+        (blur)="lineTouched.set(true)"
+      />
+      @if (lineError(); as error) {
+        <p class="mt-2 text-sm text-red-600" role="alert">{{ error }}</p>
+      }
+    } @else {
     <div class="mt-8">
       @defer (on immediate) {
         <app-rich-answer [value]="$any(value()) ?? ''" [label]="c.title" (valueChange)="valueChange.emit($event)" />
@@ -167,5 +187,6 @@
         <div class="h-48 animate-pulse rounded-xl border border-stone-200 bg-white/70"></div>
       }
     </div>
+    }
   }
 }

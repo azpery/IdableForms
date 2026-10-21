@@ -91,6 +91,17 @@
         }
 
         @switch (step.content.type) {
+          @case ('open') {
+            <label class="block">
+              <span class="label">Format de la réponse</span>
+              <select class="input w-auto" [(ngModel)]="step.content.format">
+                @for (format of openFormats; track format.value) {
+                  <option [value]="format.value">{{ format.label }}</option>
+                }
+              </select>
+            </label>
+          }
+
           @case ('jauge') {
             <div class="grid gap-4 sm:grid-cols-2">
               <label class="block">

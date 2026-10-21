@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { Bold, ClassicEditor, EditorConfig, Essentials, Heading, Italic, Link, List, Paragraph } from 'ckeditor5';
 import translations from 'ckeditor5/translations/fr.js';
-import { STEP_TYPES, Step, StepContent, StepType } from '../../core/models';
+import { OPEN_FORMATS, STEP_TYPES, Step, StepContent, StepType } from '../../core/models';
 import { loadEditorStyles } from '../../shared/rich-text';
 
 const ids = new WeakMap<object, number>();
@@ -27,6 +27,7 @@ function prepareContent(content: StepContent, type: StepType) {
   if (type === 'media' && !content.medias?.length) content.medias = [{ name: '', url: '', isVideo: true }];
   if (type === 'section') content.steps ??= [];
   if (type === 'text') content.body ??= '';
+  if (type === 'open') content.format ??= 'long';
   if (type === 'jauge') {
     content.borneBasse ??= '';
     content.borneHaute ??= '';
@@ -47,6 +48,7 @@ export class StepList {
   readonly nested = input(false);
 
   protected readonly uid = uid;
+  protected readonly openFormats = OPEN_FORMATS;
   protected readonly types = computed(() => STEP_TYPES.filter((t) => !this.nested() || t.value !== 'section'));
 
   protected readonly Editor = ClassicEditor;
