@@ -180,7 +180,8 @@
                     <ul class="mt-5 max-h-96 divide-y divide-stone-100 overflow-y-auto pr-2">
                       @for (item of texts; track $index) {
                         <li class="flex items-baseline justify-between gap-4 py-3">
-                          <p class="text-stone-800">« {{ item.text }} »</p>
+                          <!-- Réponse libre mise en forme : HTML assaini par Angular -->
+                          <div class="prose-lite min-w-0 text-stone-800 [&>*+*]:mt-2" [innerHTML]="item.text"></div>
                           <span class="shrink-0 text-xs text-stone-400">{{ formatShortDate(item.date) }}</span>
                         </li>
                       }

@@ -5,6 +5,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { Bold, ClassicEditor, EditorConfig, Essentials, Heading, Italic, Link, List, Paragraph } from 'ckeditor5';
 import translations from 'ckeditor5/translations/fr.js';
 import { STEP_TYPES, Step, StepContent, StepType } from '../../core/models';
+import { loadEditorStyles } from '../../shared/rich-text';
 
 const ids = new WeakMap<object, number>();
 let nextId = 0;
@@ -13,16 +14,6 @@ let nextId = 0;
 function uid(item: object): number {
   if (!ids.has(item)) ids.set(item, nextId++);
   return ids.get(item)!;
-}
-
-/** Le CSS de CKEditor est un bundle à part (voir angular.json), chargé seulement dans l'éditeur. */
-function loadEditorStyles(document: Document) {
-  if (document.getElementById('ckeditor5-styles')) return;
-  const link = document.createElement('link');
-  link.id = 'ckeditor5-styles';
-  link.rel = 'stylesheet';
-  link.href = 'ckeditor5.css';
-  document.head.appendChild(link);
 }
 
 export function newStep(): Step {

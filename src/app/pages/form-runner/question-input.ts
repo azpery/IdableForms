@@ -1,8 +1,10 @@
-import { Component, ElementRef, afterNextRender, computed, input, output, viewChild } from '@angular/core';
+import { Component, ElementRef, computed, input, output, viewChild } from '@angular/core';
 import { AnswerValue, MultipleValue, Step, isMultipleValue, isOtherValue } from '../../core/models';
+import { RichAnswer } from './rich-answer';
 
 @Component({
   selector: 'app-question-input',
+  imports: [RichAnswer],
   templateUrl: './question-input.html',
 })
 export class QuestionInput {
@@ -15,7 +17,6 @@ export class QuestionInput {
   protected readonly content = computed(() => this.step().content);
   protected readonly alreadyDoing = computed(() => this.value() === -1);
 
-  private readonly openInput = viewChild<ElementRef<HTMLInputElement>>('openInput');
   private readonly otherInput = viewChild<ElementRef<HTMLInputElement>>('otherInput');
 
   /** Réponse actuelle d'un choix multiple (rien de coché par défaut). */
@@ -30,10 +31,6 @@ export class QuestionInput {
     const value = this.value();
     return isOtherValue(value) ? value.other : undefined;
   });
-
-  constructor() {
-    afterNextRender(() => this.openInput()?.nativeElement.focus());
-  }
 
   protected isChecked(index: number): boolean {
     return !!this.multiple().checked[index];

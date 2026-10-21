@@ -5,6 +5,7 @@ import { AnswerService } from '../../core/answer.service';
 import { FormService } from '../../core/form.service';
 import { toEmbedUrl } from '../../core/media';
 import { Answer, AnswerValue, Form, MediaItem, Step, isMultipleValue, isOtherValue } from '../../core/models';
+import { htmlToText } from '../../shared/rich-text';
 import { QuestionInput } from './question-input';
 
 /** Un écran du parcours : un média, l'introduction d'une partie, un texte ou une question. */
@@ -96,7 +97,8 @@ export class FormRunner {
 
   protected onEnter(event: Event) {
     const target = event.target as HTMLElement;
-    if (target.closest('a, textarea')) return;
+    // Dans l'éditeur de réponse libre, Entrée crée un nouveau paragraphe.
+    if (target.closest('a, textarea, [contenteditable=true]')) return;
     const option = target.closest('[role=radio], [role=checkbox]');
     // Les autres boutons (Continuer, navigation) gardent leur comportement natif.
     if (target.closest('button') && !option) return;
@@ -122,6 +124,7 @@ export class FormRunner {
         // les résultats ne comptent ainsi que les personnes concernées.
         const value = this.answers()[question];
         if (value === undefined || !hasContent(value)) continue;
+        if (screen.step.content.type === 'open' && !isAnswered(screen.step, value)) continue;
         if (isOtherValue(value)) {
           answers.push({ form: form._id, formInstance, question, answer: value.other.trim() });
         } else if (isMultipleValue(value)) {
@@ -184,7 +187,7 @@ function isAnswered(step: Step, value: AnswerValue | undefined): boolean {
     case 'jauge':
       return typeof value === 'number';
     case 'open':
-      return typeof value === 'string' && value.trim() !== '';
+      return typeof value === 'string' && htmlToText(value).trim() !== '';
     default:
       if (isOtherValue(value)) return value.other.trim() !== '';
       return typeof value === 'string' && value !== '';

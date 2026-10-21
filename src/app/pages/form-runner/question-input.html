@@ -160,14 +160,12 @@
   }
 
   @case ('open') {
-    <input
-      #openInput
-      type="text"
-      class="mt-8 w-full border-0 border-b-2 border-stone-300 bg-transparent px-0 py-3 text-2xl transition placeholder:text-stone-300 focus:border-orchid focus:outline-none"
-      placeholder="Votre réponse…"
-      [attr.aria-label]="c.title"
-      [value]="value() ?? ''"
-      (input)="valueChange.emit($any($event.target).value)"
-    />
+    <div class="mt-8">
+      @defer (on immediate) {
+        <app-rich-answer [value]="$any(value()) ?? ''" [label]="c.title" (valueChange)="valueChange.emit($event)" />
+      } @placeholder (minimum 200ms) {
+        <div class="h-48 animate-pulse rounded-xl border border-stone-200 bg-white/70"></div>
+      }
+    </div>
   }
 }
