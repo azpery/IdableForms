@@ -1,6 +1,6 @@
 {
-  "name": "IdableForms",
-  "short_name": "IdableForms",
+  "name": "IdableForm",
+  "short_name": "IdableForm",
   "description": "Créez et partagez vos questionnaires.",
   "start_url": "/",
   "display": "standalone",

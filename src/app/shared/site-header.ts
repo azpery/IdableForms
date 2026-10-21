@@ -8,9 +8,9 @@ import { AuthService } from '../core/auth.service';
   template: `
     <header class="sticky top-0 z-30 glass-tinted border-b border-white/60">
       <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-        <a routerLink="/" class="flex shrink-0 items-center gap-2.5 font-semibold tracking-tight" aria-label="IdableForms, accueil">
+        <a routerLink="/" class="flex shrink-0 items-center gap-2.5 font-semibold tracking-tight" aria-label="IdableForm, accueil">
           <img src="assets/logo.svg" alt="" class="size-8" />
-          <span class="hidden font-display text-lg font-bold text-gradient min-[440px]:inline">IdableForms</span>
+          <span class="hidden font-display text-lg font-bold text-gradient min-[440px]:inline">IdableForm</span>
         </a>
         <nav class="flex items-center gap-1 text-sm font-medium">
           @if (auth.user(); as user) {

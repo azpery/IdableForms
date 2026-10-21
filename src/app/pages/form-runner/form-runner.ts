@@ -65,7 +65,7 @@ export class FormRunner {
 
   constructor() {
     effect(() => {
-      if (this.form.hasValue()) this.title.setTitle(`${this.form.value().title} · IdableForms`);
+      if (this.form.hasValue()) this.title.setTitle(`${this.form.value().title} · IdableForm`);
     });
   }
 

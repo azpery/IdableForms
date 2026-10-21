@@ -46,7 +46,7 @@ export class ThankYou {
   protected async share() {
     const url = this.shareUrl();
     if (navigator.share) {
-      await navigator.share({ title: 'IdableForms', url }).catch(() => undefined);
+      await navigator.share({ title: 'IdableForm', url }).catch(() => undefined);
       return;
     }
     await navigator.clipboard.writeText(url);

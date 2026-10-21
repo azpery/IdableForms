@@ -1,4 +1,4 @@
-# IdableForms
+# IdableForm
 
 Questionnaires appliqués à l'étude des comportements et de la psychosociologie : une question par écran pour les participants, un éditeur et un export CSV pour les administrateurs.
 
