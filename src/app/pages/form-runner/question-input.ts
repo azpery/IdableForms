@@ -39,11 +39,19 @@ export class QuestionInput {
 
   protected optionClass(selected: boolean): string {
     return selected
-      ? 'border-brand-500 bg-brand-50 ring-1 ring-brand-500'
-      : 'border-stone-200 bg-white hover:border-stone-300 hover:bg-stone-50';
+      ? 'border-brand-400 bg-brand-50 ring-2 ring-brand-400/60'
+      : 'border-stone-200 bg-white hover:border-brand-200 hover:bg-white hover:shadow-sm';
   }
 
-  protected badgeClass(selected: boolean): string {
-    return selected ? 'border-brand-500 bg-brand-500 text-white' : 'border-stone-300 text-stone-500';
+  /** Pastilles de lettre : une couleur Wopopop par réponse, pleine une fois choisie. */
+  private readonly badgeTones = [
+    'border-coral/40 bg-coral/10 text-coral-ink',
+    'border-saffron/50 bg-saffron/15 text-saffron-ink',
+    'border-orchid/40 bg-orchid/10 text-orchid-ink',
+    'border-lagoon/40 bg-lagoon/10 text-lagoon-ink',
+  ];
+
+  protected badgeClass(selected: boolean, index: number): string {
+    return selected ? 'border-transparent bg-gradient-cta text-white' : this.badgeTones[index % this.badgeTones.length];
   }
 }

@@ -6,23 +6,23 @@ import { AuthService } from '../core/auth.service';
   selector: 'app-site-header',
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <header class="sticky top-0 z-30 border-b border-stone-200/70 bg-white/80 backdrop-blur-md">
+    <header class="sticky top-0 z-30 glass-tinted border-b border-white/60">
       <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         <a routerLink="/" class="flex shrink-0 items-center gap-2.5 font-semibold tracking-tight" aria-label="IdableForms, accueil">
           <img src="assets/logo.svg" alt="" class="size-8" />
-          <span class="hidden min-[440px]:inline">IdableForms</span>
+          <span class="hidden font-display text-lg font-bold text-gradient min-[440px]:inline">IdableForms</span>
         </a>
         <nav class="flex items-center gap-1 text-sm font-medium">
           @if (auth.user(); as user) {
             <a
               routerLink="/forms"
-              routerLinkActive="!bg-stone-100 !text-stone-900"
+              routerLinkActive="!bg-white/70 !text-stone-900"
               class="rounded-lg px-3 py-2 text-stone-500 transition hover:text-stone-900"
               >Mes formulaires</a
             >
             <span class="mx-1 hidden h-5 w-px bg-stone-200 sm:block" aria-hidden="true"></span>
             <span class="hidden max-w-40 items-center gap-2 truncate px-2 text-stone-700 sm:flex" [title]="user.email">
-              <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-800 uppercase">
+              <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-cta text-xs font-semibold text-white uppercase">
                 {{ user.name.charAt(0) }}
               </span>
               <span class="truncate">{{ user.name }}</span>
@@ -39,7 +39,7 @@ import { AuthService } from '../core/auth.service';
           } @else {
             <a
               routerLink="/login"
-              routerLinkActive="!bg-stone-100 !text-stone-900"
+              routerLinkActive="!bg-white/70 !text-stone-900"
               class="rounded-lg px-3 py-2 text-stone-500 transition hover:text-stone-900"
               >Se connecter</a
             >

@@ -11,10 +11,14 @@ import { SiteHeader } from '../../shared/site-header';
   imports: [FormsModule, RouterLink, SiteHeader],
   template: `
     <app-site-header />
-    <main class="flex min-h-[calc(100dvh-4rem)] items-center justify-center px-4 py-16">
-      <form class="w-full max-w-sm animate-screen-in" (ngSubmit)="submit()">
+    <main class="relative flex min-h-[calc(100dvh-4rem)] items-center justify-center overflow-hidden px-4 py-16">
+      <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+        <div class="absolute top-[-6rem] right-[15%] size-[22rem] rounded-full bg-orchid/25 blur-3xl"></div>
+        <div class="absolute bottom-[-6rem] left-[15%] size-[22rem] rounded-full bg-saffron/25 blur-3xl"></div>
+      </div>
+      <form class="w-full max-w-sm animate-screen-in rounded-2xl border border-white/70 bg-white/75 p-8 shadow-xl shadow-orchid/10 backdrop-blur" (ngSubmit)="submit()">
         <img src="assets/logo.svg" alt="" class="mx-auto size-12" />
-        <h1 class="mt-6 text-center text-2xl font-semibold tracking-tight">
+        <h1 class="mt-6 text-center text-3xl font-bold tracking-tight">
           {{ isSignup() ? 'Créer un compte' : 'Connexion' }}
         </h1>
         <p class="mt-2 text-center text-sm text-stone-500">
@@ -74,10 +78,10 @@ import { SiteHeader } from '../../shared/site-header';
         <p class="mt-6 text-center text-sm text-stone-500">
           @if (isSignup()) {
             Déjà un compte ?
-            <a routerLink="/login" [queryParams]="{ redirect: redirect() }" class="font-semibold text-brand-700 hover:underline">Se connecter</a>
+            <a routerLink="/login" [queryParams]="{ redirect: redirect() }" class="font-semibold text-coral-ink hover:underline">Se connecter</a>
           } @else {
             Pas encore de compte ?
-            <a routerLink="/signup" [queryParams]="{ redirect: redirect() }" class="font-semibold text-brand-700 hover:underline">Créer un compte</a>
+            <a routerLink="/signup" [queryParams]="{ redirect: redirect() }" class="font-semibold text-coral-ink hover:underline">Créer un compte</a>
           }
         </p>
       </form>

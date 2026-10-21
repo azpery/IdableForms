@@ -1,33 +1,36 @@
 <app-site-header />
 
-<section class="relative overflow-hidden border-b border-stone-200/70 bg-white">
-  <div
-    class="pointer-events-none absolute -top-40 right-[-10%] size-[36rem] rounded-full bg-brand-100/70 blur-3xl"
-    aria-hidden="true"
-  ></div>
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div class="absolute -top-32 right-[-8%] size-[30rem] rounded-full bg-orchid/35 blur-3xl"></div>
+    <div class="absolute top-24 right-[22%] size-[22rem] rounded-full bg-saffron/35 blur-3xl"></div>
+    <div class="absolute -bottom-24 left-[-6%] size-[26rem] rounded-full bg-coral/25 blur-3xl"></div>
+    <div class="absolute right-[-4%] bottom-[-6rem] size-[20rem] rounded-full bg-lagoon/30 blur-3xl"></div>
+    <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-page"></div>
+  </div>
   <div class="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
     <p class="eyebrow">Questionnaires en ligne</p>
-    <h1 class="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-      Créez vos questionnaires, partagez&#8209;les, analysez les réponses.
+    <h1 class="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-balance sm:text-6xl">
+      Créez vos questionnaires, partagez&#8209;les, <span class="text-gradient">analysez les réponses.</span>
     </h1>
-    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-stone-600 text-pretty">
+    <p class="mt-6 max-w-2xl text-xl leading-relaxed text-stone-700 text-pretty">
       Choix multiples, échelles, réponses libres, vidéos et images : composez un questionnaire en quelques minutes,
       envoyez le lien et suivez les résultats en direct, avec un export CSV quand vous en avez besoin.
     </p>
     <div class="mt-10 flex flex-wrap gap-3">
       @if (auth.isLoggedIn()) {
         <a routerLink="/createNewForm" class="btn btn-primary btn-lg">Nouveau questionnaire</a>
-        <a routerLink="/forms" class="btn btn-secondary btn-lg">Mes formulaires</a>
+        <a routerLink="/forms" class="btn btn-secondary btn-lg bg-white/70">Mes formulaires</a>
       } @else {
         <a routerLink="/signup" class="btn btn-primary btn-lg">Créer un compte gratuit</a>
-        <a routerLink="/login" class="btn btn-secondary btn-lg">Se connecter</a>
+        <a routerLink="/login" class="btn btn-secondary btn-lg bg-white/70">Se connecter</a>
       }
     </div>
 
     <ul class="mt-16 grid max-w-4xl gap-6 text-sm sm:grid-cols-3">
       @for (feature of features; track feature.title) {
-        <li class="flex gap-3">
-          <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
+        <li class="flex gap-3 rounded-2xl border border-white/70 bg-white/60 p-4 backdrop-blur-sm">
+          <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg text-white shadow-sm" [class]="feature.color">
             <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
           </span>
           <span>
@@ -41,7 +44,7 @@
 </section>
 
 <main id="questionnaires" class="mx-auto max-w-6xl scroll-mt-16 px-4 py-16 sm:px-6">
-  <h2 class="text-2xl font-semibold tracking-tight">Questionnaires à la une</h2>
+  <h2 class="text-3xl font-bold tracking-tight">Questionnaires <span class="text-gradient">à la une</span></h2>
   <p class="mt-2 text-stone-500">Participez aux études en cours.</p>
 
   @if (forms.isLoading()) {
@@ -52,12 +55,12 @@
     </div>
   } @else if (forms.hasValue()) {
     <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      @for (form of forms.value(); track form._id) {
+      @for (form of forms.value(); track form._id; let i = $index) {
         <a
           [routerLink]="['/form', form._id]"
-          class="group flex flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-xs transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-brand-500"
+          class="group flex flex-col overflow-hidden rounded-2xl border border-stone-200/70 bg-white shadow-xs transition hover:-translate-y-1 hover:shadow-xl hover:shadow-orchid/15 focus-visible:outline-2 focus-visible:outline-brand-500"
         >
-          <div class="aspect-[16/9] overflow-hidden bg-gradient-to-br from-brand-100 to-brand-300">
+          <div class="aspect-[16/9] overflow-hidden" [class]="covers[i % covers.length]">
             @if (form.imgUrl) {
               <img
                 [src]="form.imgUrl"
@@ -74,7 +77,7 @@
             }
             <div class="mt-auto flex items-center justify-between pt-6 text-sm">
               <span class="text-stone-500">{{ countQuestions(form.steps) }} questions</span>
-              <span class="flex items-center gap-1 font-semibold text-brand-700">
+              <span class="flex items-center gap-1 font-semibold text-coral-ink">
                 Participer
                 <svg class="size-4 transition group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" /></svg>
               </span>
@@ -82,7 +85,7 @@
           </div>
         </a>
       } @empty {
-        <div class="col-span-full rounded-2xl border border-dashed border-stone-300 bg-white px-6 py-16 text-center">
+        <div class="col-span-full rounded-2xl border border-dashed border-orchid/50 bg-white/70 px-6 py-16 text-center">
           <p class="font-medium">Aucun questionnaire à la une pour le moment.</p>
           <p class="mt-1 text-sm text-stone-500">Revenez bientôt, ou créez le vôtre.</p>
         </div>

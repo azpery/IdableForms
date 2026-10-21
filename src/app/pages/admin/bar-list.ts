@@ -19,7 +19,7 @@ import { formatPercent } from '../../shared/format';
           <div class="mt-1.5 h-2.5 overflow-hidden rounded-full bg-stone-100">
             <div
               class="h-full origin-left animate-grow-x rounded-full transition-colors"
-              [class]="bar.leader ? 'bg-brand-500 group-hover:bg-brand-600' : 'bg-stone-400 group-hover:bg-stone-500'"
+              [class]="bar.leader ? 'bg-gradient-cta group-hover:brightness-110' : 'bg-brand-200 group-hover:bg-brand-300'"
               [style.width.%]="bar.share"
               [style.animation-delay.ms]="i * 60"
             ></div>

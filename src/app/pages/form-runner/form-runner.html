@@ -1,12 +1,16 @@
-<div class="flex min-h-dvh flex-col bg-white">
-  <div class="fixed inset-x-0 top-0 z-20 h-1 bg-stone-100">
-    <div class="h-full bg-brand-500 transition-[width] duration-500 ease-out" [style.width.%]="progress()"></div>
+<div class="relative flex min-h-dvh flex-col overflow-hidden">
+  <div class="pointer-events-none fixed inset-0 -z-10" aria-hidden="true">
+    <div class="absolute -top-40 -right-32 size-[28rem] rounded-full bg-orchid/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-32 size-[28rem] rounded-full bg-saffron/20 blur-3xl"></div>
+  </div>
+  <div class="fixed inset-x-0 top-0 z-20 h-1.5 bg-white/70">
+    <div class="h-full bg-gradient-brand transition-[width] duration-500 ease-out" [style.width.%]="progress()"></div>
   </div>
 
   <header class="flex items-center justify-between gap-4 px-4 py-5 sm:px-8">
     <a routerLink="/" class="flex items-center gap-2 text-sm font-semibold text-stone-500 transition hover:text-stone-900">
       <img src="assets/logo.svg" alt="" class="size-7" />
-      IdableForms
+      <span class="font-display text-base font-bold text-gradient">IdableForms</span>
     </a>
     @if (screens().length) {
       <span class="text-sm text-stone-400 tabular-nums">{{ index() + 1 }} / {{ screens().length }}</span>
@@ -15,7 +19,7 @@
 
   <main class="flex flex-1 items-center justify-center px-4 pt-4 pb-28 sm:px-8">
     @if (form.isLoading()) {
-      <div class="size-8 animate-spin rounded-full border-2 border-stone-200 border-t-brand-500" aria-label="Chargement"></div>
+      <div class="size-8 animate-spin rounded-full border-2 border-brand-100 border-t-coral" aria-label="Chargement"></div>
     } @else if (form.error()) {
       <div class="max-w-md text-center">
         <h1 class="text-2xl font-semibold tracking-tight">Ce questionnaire est introuvable</h1>
@@ -52,7 +56,7 @@
             }
             @case ('intro') {
               <p class="eyebrow">Nouvelle partie</p>
-              <h2 class="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">{{ s.step.content.title }}</h2>
+              <h2 class="mt-4 text-4xl font-bold tracking-tight text-balance text-gradient sm:text-5xl">{{ s.step.content.title }}</h2>
               @if (s.step.content.description) {
                 <p class="mt-5 text-lg leading-relaxed text-stone-600 text-pretty">{{ s.step.content.description }}</p>
               }
@@ -62,10 +66,10 @@
               <div class="prose-lite mt-6 text-lg text-stone-700" [innerHTML]="s.step.content.body"></div>
             }
             @case ('question') {
-              <p class="mb-3 flex items-center gap-1.5 text-sm font-semibold text-brand-600">
+              <p class="mb-3 flex items-center gap-1.5 text-sm font-bold tracking-wide text-orchid-ink uppercase">
                 Question {{ s.number }}
                 @if (s.step.content.optional) {
-                  <span class="font-normal text-stone-400">· facultatif</span>
+                  <span class="font-normal tracking-normal text-stone-400 normal-case">· facultatif</span>
                 }
                 <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" /></svg>
               </p>
@@ -98,7 +102,7 @@
   </main>
 
   @if (screens().length) {
-    <nav class="fixed right-4 bottom-4 flex overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm sm:right-8 sm:bottom-8" aria-label="Navigation">
+    <nav class="fixed right-4 bottom-4 flex overflow-hidden rounded-xl border border-stone-200/70 bg-white/80 shadow-sm backdrop-blur sm:right-8 sm:bottom-8" aria-label="Navigation">
       <button type="button" class="flex size-11 items-center justify-center text-stone-500 transition hover:bg-stone-50 hover:text-stone-900 disabled:opacity-30" [disabled]="index() === 0" (click)="previous()" aria-label="Écran précédent">
         <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M14.77 12.79a.75.75 0 0 1-1.06-.02L10 8.832 6.29 12.77a.75.75 0 1 1-1.08-1.04l4.25-4.5a.75.75 0 0 1 1.08 0l4.25 4.5a.75.75 0 0 1-.02 1.06Z" clip-rule="evenodd" /></svg>
       </button>

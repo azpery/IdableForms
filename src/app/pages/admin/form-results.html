@@ -45,16 +45,16 @@
     } @else {
       <!-- Chiffres clés -->
       <div class="mt-8 grid gap-4 sm:grid-cols-3">
-        <div class="rounded-2xl border border-stone-200 bg-white p-6 shadow-xs">
+        <div class="rounded-2xl border border-t-4 border-stone-200 border-t-coral bg-white p-6 shadow-xs">
           <p class="text-sm text-stone-500">Participations</p>
-          <p class="mt-2 text-5xl font-semibold tracking-tight">{{ results.participations }}</p>
+          <p class="mt-2 font-display text-5xl font-bold tracking-tight text-gradient">{{ results.participations }}</p>
         </div>
-        <div class="rounded-2xl border border-stone-200 bg-white p-6 shadow-xs">
+        <div class="rounded-2xl border border-t-4 border-stone-200 border-t-orchid bg-white p-6 shadow-xs">
           <p class="text-sm text-stone-500">Dernière participation</p>
           <p class="mt-2 text-2xl font-semibold tracking-tight first-letter:uppercase">{{ formatRelative(results.last!) }}</p>
           <p class="mt-1 text-sm text-stone-500">{{ formatLongDate(results.last!) }}</p>
         </div>
-        <div class="rounded-2xl border border-stone-200 bg-white p-6 shadow-xs">
+        <div class="rounded-2xl border border-t-4 border-stone-200 border-t-lagoon bg-white p-6 shadow-xs">
           <p class="text-sm text-stone-500">Première participation</p>
           <p class="mt-2 text-2xl font-semibold tracking-tight first-letter:uppercase">{{ formatRelative(results.first!) }}</p>
           <p class="mt-1 text-sm text-stone-500">{{ formatLongDate(results.first!) }}</p>
@@ -85,7 +85,7 @@
                   <div class="group relative flex h-full flex-1 items-end justify-center outline-none" role="listitem" tabindex="0" [attr.aria-label]="dayLabel(day)">
                     @if (day.count) {
                       <div
-                        class="w-full max-w-6 origin-bottom animate-grow-y rounded-t-[4px] bg-brand-500 transition-colors group-hover:bg-brand-600 group-focus-visible:bg-brand-600"
+                        class="w-full max-w-6 origin-bottom animate-grow-y rounded-t-[4px] bg-gradient-to-t from-coral to-orchid transition group-hover:brightness-110 group-focus-visible:brightness-110"
                         [style.height.%]="(day.count / t.max) * 100"
                         [style.animation-delay.ms]="i * 15"
                       ></div>

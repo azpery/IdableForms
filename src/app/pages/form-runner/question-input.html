@@ -14,7 +14,7 @@
           [class]="optionClass(value() === choice)"
           (click)="valueChange.emit(choice)"
         >
-          <span class="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs font-semibold" [class]="badgeClass(value() === choice)">{{ letters[i] }}</span>
+          <span class="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs font-semibold" [class]="badgeClass(value() === choice, i)">{{ letters[i] }}</span>
           {{ choice }}
         </button>
       }
@@ -32,7 +32,7 @@
           [class]="optionClass(value() === choice)"
           (click)="valueChange.emit(choice)"
         >
-          <span class="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs font-semibold" [class]="badgeClass(value() === choice)">{{ letters[i] }}</span>
+          <span class="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs font-semibold" [class]="badgeClass(value() === choice, i)">{{ letters[i] }}</span>
           {{ choice }}
         </button>
       }
@@ -51,7 +51,7 @@
           [class]="optionClass(isChecked(i))"
           (click)="toggle(i)"
         >
-          <span class="flex size-6 shrink-0 items-center justify-center rounded-md border" [class]="badgeClass(isChecked(i))">
+          <span class="flex size-6 shrink-0 items-center justify-center rounded-md border" [class]="badgeClass(isChecked(i), i)">
             @if (isChecked(i)) {
               <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
             }
@@ -72,7 +72,7 @@
             [attr.aria-checked]="value() === n"
             [disabled]="alreadyDoing()"
             class="h-14 rounded-xl border text-lg font-semibold tabular-nums transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 disabled:cursor-not-allowed"
-            [class]="value() === n ? 'border-brand-600 bg-brand-600 text-white shadow-sm' : 'border-stone-200 bg-white hover:border-brand-300 hover:bg-brand-50'"
+            [class]="value() === n ? 'border-transparent bg-gradient-cta text-white shadow-md shadow-orchid/30' : 'border-stone-200 bg-white hover:border-brand-300 hover:bg-brand-50'"
             (click)="valueChange.emit(n)"
           >
             {{ n }}
@@ -101,7 +101,7 @@
     <input
       #openInput
       type="text"
-      class="mt-8 w-full border-0 border-b-2 border-stone-200 bg-transparent px-0 py-3 text-2xl transition placeholder:text-stone-300 focus:border-brand-500 focus:outline-none"
+      class="mt-8 w-full border-0 border-b-2 border-stone-300 bg-transparent px-0 py-3 text-2xl transition placeholder:text-stone-300 focus:border-orchid focus:outline-none"
       placeholder="Votre réponse…"
       [attr.aria-label]="c.title"
       [value]="value() ?? ''"
