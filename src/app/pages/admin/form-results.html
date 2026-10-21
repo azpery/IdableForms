@@ -173,7 +173,7 @@
                 }
 
                 @if (q.texts; as texts) {
-                  @if (q.step.content.type === 'multiple') {
+                  @if (q.step.content.type === 'multiple' || q.step.content.type === 'radio') {
                     <p class="mt-6 text-sm font-semibold text-stone-700">Réponses « Autre »</p>
                   }
                   @if (texts.length) {

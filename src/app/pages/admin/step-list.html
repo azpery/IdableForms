@@ -76,7 +76,7 @@
           </div>
         }
 
-        @if (step.content.type === 'multiple') {
+        @if (hasChoices(step)) {
           <label class="flex items-center gap-3 text-sm">
             <input type="checkbox" class="size-4 rounded accent-brand-600" [(ngModel)]="step.content.allowOther" />
             Proposer « Autre » avec une réponse libre

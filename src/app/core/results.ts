@@ -108,8 +108,14 @@ function questionResult(step: Step, answers: RawAnswer[]): QuestionResult {
   switch (content.type) {
     case 'yesno':
       return { step, respondents, bars: countChoices(['Oui', 'Non'], answers.map((a) => a.answer)) };
-    case 'radio':
-      return { step, respondents, bars: countChoices(content.choices ?? [], answers.map((a) => a.answer)) };
+    case 'radio': {
+      const choices = content.choices ?? [];
+      const bars = countChoices(choices, answers.map((a) => a.answer));
+      if (!content.allowOther) return { step, respondents, bars };
+      // Réponses hors des choix proposés : textes saisis dans « Autre » (ou choix renommés depuis).
+      const known = new Set(choices);
+      return { step, respondents, bars, texts: toTexts(answers.filter((a) => a.answer && !known.has(a.answer))) };
+    }
     case 'media':
       return { step, respondents, bars: countChoices((content.medias ?? []).map((m) => m.name), answers.map((a) => a.answer)) };
     case 'multiple': {

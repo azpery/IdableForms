@@ -36,6 +36,35 @@
           {{ choice }}
         </button>
       }
+      @if (c.allowOther) {
+        @let otherIndex = c.choices?.length ?? 0;
+        <div class="rounded-xl border transition" [class]="optionClass(radioOther() !== undefined)">
+          <button
+            type="button"
+            role="radio"
+            [attr.aria-checked]="radioOther() !== undefined"
+            class="flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+            (click)="selectRadioOther()"
+          >
+            <span class="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs font-semibold" [class]="badgeClass(radioOther() !== undefined, otherIndex)">{{ letters[otherIndex] }}</span>
+            Autre
+          </button>
+          @if (radioOther() !== undefined) {
+            <div class="px-4 pb-4 pl-14">
+              <input
+                #otherInput
+                type="text"
+                class="w-full border-0 border-b-2 border-stone-300 bg-transparent px-0 py-2 text-lg transition placeholder:text-stone-400 focus:border-orchid focus:outline-none"
+                placeholder="Précisez…"
+                aria-label="Précisez votre réponse « Autre »"
+                maxlength="500"
+                [value]="radioOther()"
+                (input)="setRadioOther($any($event.target).value)"
+              />
+            </div>
+          }
+        </div>
+      }
     </div>
   }
 

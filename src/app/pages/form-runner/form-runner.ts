@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AnswerService } from '../../core/answer.service';
 import { FormService } from '../../core/form.service';
 import { toEmbedUrl } from '../../core/media';
-import { Answer, AnswerValue, Form, MediaItem, Step } from '../../core/models';
+import { Answer, AnswerValue, Form, MediaItem, Step, isMultipleValue, isOtherValue } from '../../core/models';
 import { QuestionInput } from './question-input';
 
 /** Un écran du parcours : un média, l'introduction d'une partie, un texte ou une question. */
@@ -72,8 +72,8 @@ export class FormRunner {
   protected setAnswer(step: Step, value: AnswerValue | undefined) {
     this.answers.update((answers) => ({ ...answers, [step._id!]: value }));
 
-    // Comme sur Typeform : un choix unique fait passer automatiquement à l'écran suivant.
-    if ((step.content.type === 'yesno' || step.content.type === 'radio') && !this.isLast()) {
+    // Comme sur Typeform : un choix unique fait passer automatiquement à l'écran suivant (sauf « Autre », à préciser).
+    if ((step.content.type === 'yesno' || step.content.type === 'radio') && typeof value === 'string' && !this.isLast()) {
       const key = this.current()?.key;
       setTimeout(() => {
         if (this.current()?.key === key) this.next();
@@ -122,7 +122,9 @@ export class FormRunner {
         // les résultats ne comptent ainsi que les personnes concernées.
         const value = this.answers()[question];
         if (value === undefined || !hasContent(value)) continue;
-        if (typeof value === 'object') {
+        if (isOtherValue(value)) {
+          answers.push({ form: form._id, formInstance, question, answer: value.other.trim() });
+        } else if (isMultipleValue(value)) {
           const other = value.other?.trim();
           answers.push({ form: form._id, formInstance, question, answer: value.checked, ...(other ? { other } : {}) });
         } else {
@@ -178,17 +180,19 @@ function isAnswered(step: Step, value: AnswerValue | undefined): boolean {
   switch (step.content.type) {
     case 'multiple':
       // « Autre » coché demande un texte ; sinon aucune case n'est obligatoire.
-      return typeof value !== 'object' || value.other === undefined || value.other.trim() !== '';
+      return !isMultipleValue(value) || value.other === undefined || value.other.trim() !== '';
     case 'jauge':
       return typeof value === 'number';
     case 'open':
       return typeof value === 'string' && value.trim() !== '';
     default:
+      if (isOtherValue(value)) return value.other.trim() !== '';
       return typeof value === 'string' && value !== '';
   }
 }
 
 function hasContent(value: AnswerValue): boolean {
-  if (typeof value === 'object') return value.checked.some(Boolean) || !!value.other?.trim();
+  if (isMultipleValue(value)) return value.checked.some(Boolean) || !!value.other?.trim();
+  if (isOtherValue(value)) return value.other.trim() !== '';
   return typeof value === 'number' || value.trim() !== '';
 }

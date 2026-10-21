@@ -1,5 +1,5 @@
 import { Component, ElementRef, afterNextRender, computed, input, output, viewChild } from '@angular/core';
-import { AnswerValue, MultipleValue, Step } from '../../core/models';
+import { AnswerValue, MultipleValue, Step, isMultipleValue, isOtherValue } from '../../core/models';
 
 @Component({
   selector: 'app-question-input',
@@ -21,10 +21,15 @@ export class QuestionInput {
   /** Réponse actuelle d'un choix multiple (rien de coché par défaut). */
   protected readonly multiple = computed<MultipleValue>(() => {
     const value = this.value();
-    if (typeof value === 'object') return value;
+    if (isMultipleValue(value)) return value;
     return { checked: (this.content().choices ?? []).map(() => false) };
   });
   protected readonly otherChecked = computed(() => this.multiple().other !== undefined);
+  /** Choix unique : texte de « Autre » s'il est choisi (undefined sinon). */
+  protected readonly radioOther = computed(() => {
+    const value = this.value();
+    return isOtherValue(value) ? value.other : undefined;
+  });
 
   constructor() {
     afterNextRender(() => this.openInput()?.nativeElement.focus());
@@ -48,6 +53,16 @@ export class QuestionInput {
 
   protected setOther(other: string) {
     this.valueChange.emit({ ...this.multiple(), other });
+  }
+
+  protected selectRadioOther() {
+    if (this.radioOther() !== undefined) return;
+    this.valueChange.emit({ other: '' });
+    setTimeout(() => this.otherInput()?.nativeElement.focus());
+  }
+
+  protected setRadioOther(other: string) {
+    this.valueChange.emit({ other });
   }
 
   protected setAlreadyDoing(checked: boolean) {
