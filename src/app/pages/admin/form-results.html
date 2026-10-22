@@ -43,6 +43,25 @@
         <p class="mt-1 text-sm text-stone-500">Partagez le lien du formulaire : les résultats apparaîtront ici.</p>
       </div>
     } @else {
+      <div class="mt-8 flex gap-1 border-b border-stone-200" role="tablist">
+        @for (t of tabs; track t.value) {
+          <button
+            type="button"
+            role="tab"
+            [attr.aria-selected]="tab() === t.value"
+            class="-mb-px border-b-2 px-4 py-2.5 text-sm font-semibold transition"
+            [class]="tab() === t.value ? 'border-orchid text-stone-900' : 'border-transparent text-stone-500 hover:text-stone-900'"
+            (click)="tab.set(t.value)"
+          >
+            {{ t.label }}
+            @if (t.value === 'responses') {
+              <span class="ml-1 rounded-full bg-brand-100 px-2 py-0.5 text-xs text-brand-800 tabular-nums">{{ results.responses.rows.length }}</span>
+            }
+          </button>
+        }
+      </div>
+
+      @if (tab() === 'summary') {
       <!-- Chiffres clés -->
       <div class="mt-8 grid gap-4 sm:grid-cols-3">
         <div class="rounded-2xl border border-t-4 border-stone-200 border-t-coral bg-white p-6 shadow-xs">
@@ -194,6 +213,84 @@
             }
           </div>
         </section>
+      }
+      } @else {
+        @let table = results.responses;
+        <div class="mt-6 flex min-h-10 flex-wrap items-center justify-between gap-3">
+          <p class="text-sm text-stone-500">
+            {{ table.rows.length }} participation{{ table.rows.length > 1 ? 's' : '' }}, les plus récentes d'abord.
+          </p>
+          @if (selected().size) {
+            <div class="flex items-center gap-2">
+              <button type="button" class="btn btn-ghost" (click)="selected.set(emptySelection)">Désélectionner</button>
+              <button type="button" class="btn border border-red-200 bg-white text-red-600 hover:bg-red-50" [disabled]="deleting()" (click)="removeSelected()">
+                Supprimer la sélection ({{ selected().size }})
+              </button>
+            </div>
+          }
+        </div>
+
+        <div class="mt-3 overflow-x-auto rounded-2xl border border-stone-200 bg-white shadow-xs">
+          <table class="w-full border-collapse text-left text-sm">
+            <thead>
+              <tr class="border-b border-stone-200 bg-stone-50/80 align-bottom">
+                <th class="sticky left-0 z-10 bg-stone-50 px-4 py-3">
+                  <input
+                    type="checkbox"
+                    class="size-4 rounded accent-brand-600"
+                    aria-label="Tout sélectionner"
+                    [checked]="selected().size === table.rows.length"
+                    [indeterminate]="selected().size > 0 && selected().size < table.rows.length"
+                    (change)="toggleAll(table.rows, $any($event.target).checked)"
+                  />
+                </th>
+                <th class="px-4 py-3 font-semibold whitespace-nowrap text-stone-700">Date</th>
+                @for (col of table.columns; track col.id) {
+                  <th class="min-w-48 px-4 py-3 font-semibold text-stone-700">
+                    @if (col.section) {
+                      <span class="mb-0.5 block text-xs font-medium text-stone-400">{{ col.section }}</span>
+                    }
+                    <span class="line-clamp-2">{{ col.title }}</span>
+                  </th>
+                }
+                <th class="sticky right-0 z-10 bg-stone-50 px-4 py-3"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100">
+              @for (row of table.rows; track row.instance) {
+                <tr class="group align-top transition hover:bg-brand-50/40" [class.bg-brand-50]="selected().has(row.instance)">
+                  <td class="sticky left-0 z-10 bg-white px-4 py-3 group-hover:bg-brand-50" [class.!bg-brand-50]="selected().has(row.instance)">
+                    <input
+                      type="checkbox"
+                      class="size-4 rounded accent-brand-600"
+                      [attr.aria-label]="'Sélectionner la participation du ' + formatLongDate(row.date)"
+                      [checked]="selected().has(row.instance)"
+                      (change)="toggle(row.instance)"
+                    />
+                  </td>
+                  <td class="px-4 py-3 whitespace-nowrap text-stone-500 tabular-nums" [title]="formatLongDate(row.date)">{{ formatLongDate(row.date) }}</td>
+                  @for (col of table.columns; track col.id) {
+                    @let cell = row.cells[col.id];
+                    <td class="max-w-sm px-4 py-3 text-stone-800">
+                      @if (!cell || !cell.text) {
+                        <span class="text-stone-300">—</span>
+                      } @else if (cell.html) {
+                        <div class="prose-lite line-clamp-4 [&>*+*]:mt-1" [innerHTML]="cell.text"></div>
+                      } @else {
+                        <span class="line-clamp-4">{{ cell.text }}</span>
+                      }
+                    </td>
+                  }
+                  <td class="sticky right-0 z-10 bg-white px-2 py-2 text-right group-hover:bg-brand-50" [class.!bg-brand-50]="selected().has(row.instance)">
+                    <button type="button" class="btn-icon hover:!bg-red-50 hover:!text-red-600" [disabled]="deleting()" (click)="remove(row)" title="Supprimer cette participation" aria-label="Supprimer cette participation">
+                      <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" /></svg>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       }
     }
   }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Form, Step } from './models';
+import { Form, Step, isQuestion } from './models';
 
 interface RawAnswer {
   question: string;
@@ -40,8 +40,30 @@ export interface ResultSection {
   questions: QuestionResult[];
 }
 
+/** Colonne du tableau des réponses : une par question (et par média à plusieurs variantes). */
+export interface ResponseColumn {
+  id: string;
+  title: string;
+  section?: string;
+}
+
+export interface ResponseCell {
+  text: string;
+  /** Réponse libre mise en forme : à afficher comme HTML (assaini par Angular). */
+  html?: boolean;
+}
+
+/** Une participation : toutes les réponses d'un même envoi du formulaire. */
+export interface ResponseRow {
+  instance: string;
+  date: Date;
+  cells: Record<string, ResponseCell>;
+}
+
 export interface FormResults {
   participations: number;
+  /** Tableau des réponses, les plus récentes d'abord. */
+  responses: { columns: ResponseColumn[]; rows: ResponseRow[] };
   first: Date | null;
   last: Date | null;
   perDay: DayCount[];
@@ -57,6 +79,16 @@ export class ResultsService {
       this.http.get<{ answers: RawAnswer[] }>(`${environment.apiUrl}/api/answer/byform/${form._id}`),
     );
     return computeResults(form, answers);
+  }
+
+  /** Supprime des participations entières ; renvoie le nombre de réponses supprimées. */
+  async removeParticipations(formId: string, instances: string[]): Promise<number> {
+    const { deleted } = await firstValueFrom(
+      this.http.post<{ deleted: number }>(`${environment.apiUrl}/api/answer/byform/${formId}/remove`, {
+        formInstances: instances,
+      }),
+    );
+    return deleted;
   }
 }
 
@@ -90,7 +122,50 @@ export function computeResults(form: Form, answers: RawAnswer[]): FormResults {
     last: instances.length ? new Date(instances.at(-1)!) : null,
     perDay: perDay(instances),
     sections: sections.filter((s) => s.questions.length),
+    responses: responseTable(form, answers),
   };
+}
+
+function responseTable(form: Form, answers: RawAnswer[]): FormResults['responses'] {
+  const columns: ResponseColumn[] = [];
+  const steps = new Map<string, Step>();
+  const addColumn = (step: Step, section?: string) => {
+    const multiVariant = step.content.type === 'media' && (step.content.medias?.length ?? 0) > 1;
+    if (!isQuestion(step) && !multiVariant) return;
+    columns.push({ id: step._id!, title: multiVariant ? `${step.content.title} (média affiché)` : step.content.title, section });
+    steps.set(step._id!, step);
+  };
+  for (const step of form.steps) {
+    if (step.content.type === 'section') (step.content.steps ?? []).forEach((s) => addColumn(s, step.content.title));
+    else addColumn(step);
+  }
+
+  const rows = new Map<string, ResponseRow>();
+  for (const answer of answers) {
+    const step = steps.get(answer.question);
+    if (!step) continue;
+    let row = rows.get(answer.formInstance);
+    if (!row) rows.set(answer.formInstance, (row = { instance: answer.formInstance, date: new Date(Number(answer.formInstance)), cells: {} }));
+    row.cells[answer.question] = toCell(step, answer);
+  }
+  return { columns, rows: [...rows.values()].sort((a, b) => b.date.getTime() - a.date.getTime()) };
+}
+
+function toCell(step: Step, answer: RawAnswer): ResponseCell {
+  const { content } = step;
+  switch (content.type) {
+    case 'multiple': {
+      const checked = (content.choices ?? []).filter((_, i) => answer.answers?.[i] === 'true');
+      if (answer.answer?.trim()) checked.push(`Autre : ${answer.answer.trim()}`);
+      return { text: checked.join(' · ') };
+    }
+    case 'jauge':
+      return { text: answer.answer === '-1' ? 'Le fait déjà' : `${answer.answer ?? ''} / 5` };
+    case 'open':
+      return { text: answer.answer ?? '', html: !content.format || content.format === 'long' };
+    default:
+      return { text: answer.answer ?? '' };
+  }
 }
 
 /** Les textes informatifs et les médias à variante unique n'apportent rien aux résultats. */

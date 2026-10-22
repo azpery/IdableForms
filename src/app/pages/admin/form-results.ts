@@ -1,9 +1,10 @@
-import { Component, computed, effect, inject, input, resource } from '@angular/core';
+import { Component, computed, effect, inject, input, resource, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { FormService } from '../../core/form.service';
 import { STEP_TYPES, StepType } from '../../core/models';
-import { DayCount, ResultsService } from '../../core/results';
+import { DayCount, ResponseRow, ResultsService } from '../../core/results';
+import { UiState } from '../../core/ui-state';
 import { formatDecimal, formatLongDate, formatPercent, formatRelative, formatShortDate } from '../../shared/format';
 import { SiteHeader } from '../../shared/site-header';
 import { BarList } from './bar-list';
@@ -25,6 +26,7 @@ export class FormResults {
   private readonly formService = inject(FormService);
   private readonly resultsService = inject(ResultsService);
   private readonly title = inject(Title);
+  private readonly ui = inject(UiState);
 
   readonly id = input.required<string>();
 
@@ -44,6 +46,17 @@ export class FormResults {
     return { days, max, ticks: [max, max / 2, 0], middle: days[Math.floor((days.length - 1) / 2)].date };
   });
 
+  protected readonly tabs = [
+    { value: 'summary', label: 'Synthèse' },
+    { value: 'responses', label: 'Réponses' },
+  ] as const;
+  protected readonly tab = signal<'summary' | 'responses'>('summary');
+
+  /** Participations cochées dans le tableau (identifiées par leur formInstance). */
+  protected readonly emptySelection = new Set<string>();
+  protected readonly selected = signal<Set<string>>(this.emptySelection);
+  protected readonly deleting = signal(false);
+
   protected readonly formatPercent = formatPercent;
   protected readonly formatDecimal = formatDecimal;
   protected readonly formatShortDate = formatShortDate;
@@ -54,6 +67,41 @@ export class FormResults {
     effect(() => {
       if (this.data.hasValue()) this.title.setTitle(`Résultats · ${this.data.value().form.title}`);
     });
+  }
+
+  protected toggle(instance: string) {
+    const next = new Set(this.selected());
+    if (!next.delete(instance)) next.add(instance);
+    this.selected.set(next);
+  }
+
+  protected toggleAll(rows: ResponseRow[], checked: boolean) {
+    this.selected.set(checked ? new Set(rows.map((r) => r.instance)) : this.emptySelection);
+  }
+
+  protected remove(row: ResponseRow) {
+    if (!confirm(`Supprimer la participation du ${formatLongDate(row.date)} ? Ses réponses seront définitivement effacées.`)) return;
+    this.removeParticipations([row.instance]);
+  }
+
+  protected removeSelected() {
+    const count = this.selected().size;
+    if (!confirm(`Supprimer ${count} participation${count > 1 ? 's' : ''} ? Leurs réponses seront définitivement effacées.`)) return;
+    this.removeParticipations([...this.selected()]);
+  }
+
+  private async removeParticipations(instances: string[]) {
+    if (!this.data.hasValue()) return;
+    this.deleting.set(true);
+    try {
+      await this.resultsService.removeParticipations(this.data.value().form._id!, instances);
+      const n = instances.length;
+      this.ui.notify(n > 1 ? `${n} participations supprimées` : 'Participation supprimée');
+      this.selected.set(this.emptySelection);
+      this.data.reload();
+    } finally {
+      this.deleting.set(false);
+    }
   }
 
   protected typeLabel(type: StepType): string {
