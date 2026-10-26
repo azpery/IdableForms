@@ -4,5 +4,9 @@ RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
 RewriteRule ^ - [L]
 
+# Page d'un questionnaire : balises de partage du questionnaire (titre, description, image)
+RewriteRule ^form/([0-9a-f]{24})/?$ /og/form.php?id=$1 [L,QSA]
+RewriteRule ^sitemap\.xml$ /og/sitemap.php [L]
+
 # Sinon, l'application Angular gère la route
 RewriteRule ^ /index.html

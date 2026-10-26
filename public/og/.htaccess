@@ -1,0 +1,6 @@
+# Le cache des pages et images de partage n'est pas accessible depuis le web
+<IfModule mod_authz_core.c>
+  <FilesMatch "\.json$">
+    Require all denied
+  </FilesMatch>
+</IfModule>

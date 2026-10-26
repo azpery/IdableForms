@@ -4,7 +4,7 @@ import { authGuard } from './core/auth.guard';
 const authPage = () => import('./pages/auth/auth-page').then((m) => m.AuthPage);
 
 export const routes: Routes = [
-  { path: '', loadComponent: () => import('./pages/home/home').then((m) => m.Home), title: 'IdableForm' },
+  { path: '', loadComponent: () => import('./pages/home/home').then((m) => m.Home), title: 'IdableForm · Créez et partagez vos questionnaires' },
   { path: 'login', loadComponent: authPage, data: { mode: 'login' }, title: 'Connexion · IdableForm' },
   { path: 'signup', loadComponent: authPage, data: { mode: 'signup' }, title: 'Créer un compte · IdableForm' },
   { path: 'forms', canActivate: [authGuard], loadComponent: () => import('./pages/admin/form-list').then((m) => m.FormList), title: 'Mes formulaires · IdableForm' },

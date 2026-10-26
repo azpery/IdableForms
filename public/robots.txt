@@ -1,0 +1,8 @@
+User-agent: *
+# Espace de gestion des formulaires
+Disallow: /forms
+Disallow: /form/edit/
+Disallow: /createNewForm
+Disallow: /thankyou
+
+Sitemap: https://idableform.robin-delaporte.fr/sitemap.xml
