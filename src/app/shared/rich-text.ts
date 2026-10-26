@@ -8,6 +8,22 @@ export function loadEditorStyles(document: Document) {
   document.head.appendChild(link);
 }
 
+/** Contenu saisi dans un éditeur riche (les anciens contenus sont du texte simple). */
+export function isHtml(value: string): boolean {
+  return /<\/?[a-z][^>]*>/i.test(value);
+}
+
+/** Texte simple -> HTML pour l'éditeur riche : une ligne par paragraphe, caractères spéciaux échappés. */
+export function plainToHtml(text: string): string {
+  if (!text.trim() || isHtml(text)) return text;
+  const escape = (line: string) => line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return text
+    .split(/\n+/)
+    .filter((line) => line.trim())
+    .map((line) => `<p>${escape(line.trim())}</p>`)
+    .join('');
+}
+
 /** Texte brut d'un contenu HTML (réponse libre mise en forme), pour savoir s'il est vide. */
 export function htmlToText(html: string): string {
   return new DOMParser().parseFromString(html, 'text/html').body.textContent ?? '';

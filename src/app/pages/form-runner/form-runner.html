@@ -58,7 +58,11 @@
               <p class="eyebrow">Nouvelle partie</p>
               <h2 class="mt-4 text-4xl font-bold tracking-tight text-balance text-gradient sm:text-5xl">{{ s.step.content.title }}</h2>
               @if (s.step.content.description) {
-                <p class="mt-5 text-lg leading-relaxed text-stone-600 text-pretty">{{ s.step.content.description }}</p>
+                @if (isHtml(s.step.content.description)) {
+                  <div class="prose-lite mt-5 text-lg text-stone-600 text-pretty" [innerHTML]="s.step.content.description"></div>
+                } @else {
+                  <p class="mt-5 text-lg leading-relaxed whitespace-pre-line text-stone-600 text-pretty">{{ s.step.content.description }}</p>
+                }
               }
             }
             @case ('info') {

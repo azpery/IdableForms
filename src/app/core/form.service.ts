@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { plainToHtml } from '../shared/rich-text';
 import { Form, FormOwner, MediaItem, OpenFormat, Step, StepType } from './models';
 
 /** Question telle que renvoyée par l'API (sous-étapes et médias peuplés). */
@@ -97,7 +98,8 @@ function decodeStep(json: QuestionJson): Step {
     content: {
       type: json.type,
       title: json.title,
-      description: json.description ?? '',
+      // Description de partie : saisie dans un éditeur riche (les anciennes sont du texte simple)
+      description: json.type === 'section' ? plainToHtml(json.description ?? '') : (json.description ?? ''),
       body: json.content ?? '',
       choices: json.choices ?? [],
       medias: (json.medias ?? []).map(({ _id, name, url, isVideo }) => ({ _id, name, url, isVideo })),

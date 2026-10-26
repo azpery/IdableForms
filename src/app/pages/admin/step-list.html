@@ -154,10 +154,11 @@
           }
 
           @case ('section') {
-            <label class="block">
+            <div>
               <span class="label">Description</span>
-              <textarea class="input min-h-20" [(ngModel)]="step.content.description" placeholder="Affichée en introduction de la partie"></textarea>
-            </label>
+              <p class="mb-2 text-sm text-stone-500">Affichée en introduction de la partie.</p>
+              <ckeditor [editor]="Editor" [config]="editorConfig" [(ngModel)]="step.content.description" />
+            </div>
             <div>
               <span class="label">Questions de la partie</span>
               <app-step-list [steps]="step.content.steps!" [nested]="true" />

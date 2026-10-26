@@ -5,7 +5,7 @@ import { AnswerService } from '../../core/answer.service';
 import { FormService } from '../../core/form.service';
 import { toEmbedUrl } from '../../core/media';
 import { Answer, AnswerValue, Form, MediaItem, Step, isMalformed, isMultipleValue, isOtherValue } from '../../core/models';
-import { htmlToText } from '../../shared/rich-text';
+import { htmlToText, isHtml } from '../../shared/rich-text';
 import { QuestionInput } from './question-input';
 
 /** Un écran du parcours : un média, l'introduction d'une partie, un texte ou une question. */
@@ -42,6 +42,7 @@ export class FormRunner {
   protected readonly index = signal(0);
   protected readonly answers = signal<Record<string, AnswerValue | undefined>>({});
   protected readonly submitting = signal(false);
+  protected readonly isHtml = isHtml;
 
   protected readonly current = computed<Screen | undefined>(() => this.screens()[this.index()]);
   protected readonly isLast = computed(() => this.index() === this.screens().length - 1);
