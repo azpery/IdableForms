@@ -162,7 +162,7 @@
   @case ('open') {
     @if (c.format && c.format !== 'long') {
       <input
-        #lineInput
+        #textInput
         [type]="c.format === 'short' ? 'text' : c.format"
         [attr.autocomplete]="c.format === 'short' ? 'off' : c.format"
         [attr.inputmode]="c.format === 'short' ? null : c.format"
@@ -180,13 +180,17 @@
         <p class="mt-2 text-sm text-red-600" role="alert">{{ error }}</p>
       }
     } @else {
-    <div class="mt-8">
-      @defer (on immediate) {
-        <app-rich-answer [value]="$any(value()) ?? ''" [label]="c.title" (valueChange)="valueChange.emit($event)" />
-      } @placeholder (minimum 200ms) {
-        <div class="h-48 animate-pulse rounded-xl border border-stone-200 bg-white/70"></div>
-      }
-    </div>
+      <!-- Zone de texte simple : l'éditeur riche ne prenait pas la saisie sur certains appareils. -->
+      <textarea
+        #textInput
+        class="mt-8 block min-h-36 w-full resize-y rounded-xl border border-stone-300 bg-white px-4 py-3 text-lg transition [field-sizing:content] placeholder:text-stone-400 focus:border-orchid focus:ring-2 focus:ring-orchid/20 focus:outline-none"
+        placeholder="Votre réponse…"
+        [attr.aria-label]="c.title"
+        maxlength="5000"
+        rows="5"
+        [value]="$any(value()) ?? ''"
+        (input)="valueChange.emit($any($event.target).value)"
+      ></textarea>
     }
   }
 }

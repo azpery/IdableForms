@@ -103,7 +103,7 @@ export class FormRunner {
 
   protected onEnter(event: Event) {
     const target = event.target as HTMLElement;
-    // Dans l'éditeur de réponse libre, Entrée crée un nouveau paragraphe.
+    // Dans la zone de réponse libre, Entrée va à la ligne.
     if (target.closest('a, textarea, [contenteditable=true]')) return;
     const option = target.closest('[role=radio], [role=checkbox]');
     // Les autres boutons (Continuer, navigation) gardent leur comportement natif.
@@ -195,7 +195,8 @@ function isAnswered(step: Step, value: AnswerValue | undefined): boolean {
     case 'open':
       if (typeof value !== 'string') return false;
       if (step.content.format && step.content.format !== 'long') return value.trim() !== '' && !isInvalid(step, value);
-      return htmlToText(value).trim() !== '';
+      // Anciennes réponses saisies avec l'éditeur riche : HTML ; désormais texte simple.
+      return (isHtml(value) ? htmlToText(value) : value).trim() !== '';
     default:
       if (isOtherValue(value)) return value.other.trim() !== '';
       return typeof value === 'string' && value !== '';

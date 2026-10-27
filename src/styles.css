@@ -210,11 +210,6 @@
   .ck.ck-editor__editable_inline {
     min-height: 10rem;
   }
-  /* Réponse libre du questionnaire : plus grande, comme les autres réponses */
-  .rich-answer .ck.ck-editor__editable_inline {
-    min-height: 9rem;
-    font-size: 1.125rem;
-  }
 }
 
 /* Thème CKEditor (spécificité supérieure au :root de ckeditor5.css, chargé après) */

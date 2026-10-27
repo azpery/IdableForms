@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { isHtml } from '../shared/rich-text';
 import { Form, Step, isQuestion } from './models';
 
 interface RawAnswer {
@@ -32,7 +33,7 @@ export interface QuestionResult {
   /** Échelle 1 à 5. */
   scale?: { bars: Bar[]; average: number | null; alreadyDoing: number };
   /** Réponses libres (ou textes « Autre » d'un choix multiple), les plus récentes d'abord. */
-  texts?: { text: string; date: Date }[];
+  texts?: { text: string; date: Date; html: boolean }[];
 }
 
 export interface ResultSection {
@@ -162,7 +163,8 @@ function toCell(step: Step, answer: RawAnswer): ResponseCell {
     case 'jauge':
       return { text: answer.answer === '-1' ? 'Le fait déjà' : `${answer.answer ?? ''} / 5` };
     case 'open':
-      return { text: answer.answer ?? '', html: !content.format || content.format === 'long' };
+      // Les anciennes réponses longues sont du HTML (éditeur riche), les nouvelles du texte simple.
+      return { text: answer.answer ?? '', html: isHtml(answer.answer ?? '') };
     default:
       return { text: answer.answer ?? '' };
   }
@@ -223,10 +225,10 @@ function questionResult(step: Step, answers: RawAnswer[]): QuestionResult {
   }
 }
 
-function toTexts(answers: RawAnswer[]): { text: string; date: Date }[] {
+function toTexts(answers: RawAnswer[]): { text: string; date: Date; html: boolean }[] {
   return answers
     .filter((a) => a.answer?.trim())
-    .map((a) => ({ text: a.answer!.trim(), date: new Date(Number(a.formInstance)) }))
+    .map((a) => ({ text: a.answer!.trim(), date: new Date(Number(a.formInstance)), html: isHtml(a.answer!) }))
     .sort((a, b) => b.date.getTime() - a.date.getTime());
 }
 
