@@ -220,18 +220,97 @@
       }
       } @else {
         @let table = results.responses;
-        <div class="mt-6 flex min-h-10 flex-wrap items-center justify-between gap-3">
+        @let rows = filteredRows();
+        @let selectedCount = visibleSelected().length;
+
+        <!-- Filtres -->
+        <div class="mt-6 flex flex-wrap items-center gap-2">
+          <div class="relative w-full sm:w-72">
+            <svg class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-stone-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd" /></svg>
+            <input
+              type="search"
+              class="input py-2 pl-9"
+              placeholder="Rechercher dans les réponses"
+              aria-label="Rechercher dans les réponses"
+              [value]="search()"
+              (input)="search.set($any($event.target).value)"
+            />
+          </div>
+          @if (unfilteredColumns().length) {
+            <select
+              class="input w-auto py-2 pr-8 text-stone-600"
+              aria-label="Ajouter un filtre sur une question"
+              (change)="addFilter($any($event.target).value); $any($event.target).value = ''"
+            >
+              <option value="">+ Filtrer par question…</option>
+              @for (col of unfilteredColumns(); track col.id) {
+                <option [value]="col.id">{{ col.section ? col.section + ' · ' : '' }}{{ col.title }}</option>
+              }
+            </select>
+          }
+          @if (filtering() || filters().length) {
+            <button type="button" class="btn btn-ghost py-2" (click)="clearFilters()">Effacer les filtres</button>
+          }
+        </div>
+
+        @if (filters().length) {
+          <div class="mt-3 flex flex-wrap gap-2">
+            @for (filter of filters(); track filter.column; let i = $index) {
+              @let col = column(filter.column);
+              <div class="flex max-w-full items-center gap-2 rounded-xl border border-brand-200 bg-brand-50 py-1 pr-1 pl-3 text-sm">
+                <span class="max-w-56 truncate font-medium text-brand-900" [title]="col?.title">{{ col?.title }}</span>
+                @if (col?.options; as options) {
+                  <select
+                    class="rounded-lg border border-brand-200 bg-white px-2 py-1 text-sm focus:outline-brand-400"
+                    [attr.aria-label]="'Valeur du filtre : ' + col?.title"
+                    [value]="filter.value"
+                    (change)="setFilter(i, $any($event.target).value)"
+                  >
+                    <option value="">Toutes les réponses</option>
+                    @for (option of options; track option) {
+                      <option [value]="option">{{ option }}</option>
+                    }
+                    <option [value]="NO_ANSWER">Sans réponse</option>
+                  </select>
+                } @else {
+                  <input
+                    type="text"
+                    class="w-44 rounded-lg border border-brand-200 bg-white px-2 py-1 text-sm focus:outline-brand-400"
+                    placeholder="Contient…"
+                    [attr.aria-label]="'Texte recherché : ' + col?.title"
+                    [value]="filter.value === NO_ANSWER ? '' : filter.value"
+                    (input)="setFilter(i, $any($event.target).value)"
+                  />
+                }
+                <button type="button" class="btn-icon size-7" (click)="removeFilter(i)" title="Retirer ce filtre" aria-label="Retirer ce filtre">
+                  <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" /></svg>
+                </button>
+              </div>
+            }
+          </div>
+        }
+
+        <div class="mt-4 flex min-h-10 flex-wrap items-center justify-between gap-3">
           <p class="text-sm text-stone-500">
-            {{ table.rows.length }} participation{{ table.rows.length > 1 ? 's' : '' }}, les plus récentes d'abord.
+            @if (filtering()) {
+              <strong class="font-semibold text-stone-800">{{ rows.length }}</strong> participation{{ rows.length > 1 ? 's' : '' }} sur {{ table.rows.length }},
+            } @else {
+              {{ table.rows.length }} participation{{ table.rows.length > 1 ? 's' : '' }},
+            }
+            les plus récentes d'abord. Cliquez sur une ligne pour lire ses réponses en entier.
           </p>
-          @if (selected().size) {
-            <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2">
+            @if (selectedCount) {
               <button type="button" class="btn btn-ghost" (click)="selected.set(emptySelection)">Désélectionner</button>
               <button type="button" class="btn border border-red-200 bg-white text-red-600 hover:bg-red-50" [disabled]="deleting()" (click)="removeSelected()">
-                Supprimer la sélection ({{ selected().size }})
+                Supprimer la sélection ({{ selectedCount }})
               </button>
-            </div>
-          }
+            } @else {
+              <button type="button" class="btn btn-secondary" [attr.aria-pressed]="expandAll()" (click)="expandAll.set(!expandAll()); expanded.set(emptySelection)">
+                {{ expandAll() ? 'Réduire les réponses' : 'Afficher les réponses en entier' }}
+              </button>
+            }
+          </div>
         </div>
 
         <div class="mt-3 overflow-x-auto rounded-2xl border border-stone-200 bg-white shadow-xs">
@@ -243,27 +322,57 @@
                     type="checkbox"
                     class="size-4 rounded accent-brand-600"
                     aria-label="Tout sélectionner"
-                    [checked]="selected().size === table.rows.length"
-                    [indeterminate]="selected().size > 0 && selected().size < table.rows.length"
-                    (change)="toggleAll(table.rows, $any($event.target).checked)"
+                    [disabled]="!rows.length"
+                    [checked]="rows.length > 0 && selectedCount === rows.length"
+                    [indeterminate]="selectedCount > 0 && selectedCount < rows.length"
+                    (change)="toggleAll(rows, $any($event.target).checked)"
                   />
                 </th>
                 <th class="px-4 py-3 font-semibold whitespace-nowrap text-stone-700">Date</th>
                 @for (col of table.columns; track col.id) {
-                  <th class="min-w-48 px-4 py-3 font-semibold text-stone-700">
+                  @let width = widths()[col.id];
+                  <th
+                    class="relative px-4 py-3 font-semibold text-stone-700"
+                    [class.min-w-48]="!width"
+                    [style.width.px]="width"
+                    [style.min-width.px]="width"
+                    [style.max-width.px]="width"
+                    [title]="col.title"
+                  >
                     @if (col.section) {
                       <span class="mb-0.5 block text-xs font-medium text-stone-400">{{ col.section }}</span>
                     }
                     <span class="line-clamp-2">{{ col.title }}</span>
+                    <span
+                      role="separator"
+                      aria-orientation="vertical"
+                      tabindex="0"
+                      class="group/resize absolute inset-y-0 -right-1.5 z-20 flex w-3 cursor-col-resize touch-none justify-center outline-none"
+                      [attr.aria-label]="'Largeur de la colonne ' + col.title + ' (flèches gauche et droite)'"
+                      title="Glisser pour redimensionner · double-clic pour réinitialiser"
+                      (pointerdown)="startResize($event, col.id)"
+                      (dblclick)="resetWidth(col.id)"
+                      (keydown.arrowleft)="resizeBy(col.id, -24, $event)"
+                      (keydown.arrowright)="resizeBy(col.id, 24, $event)"
+                      (click)="$event.stopPropagation()"
+                    >
+                      <span class="h-full w-0.5 bg-stone-200 transition group-hover/resize:bg-brand-400 group-focus-visible/resize:bg-brand-500"></span>
+                    </span>
                   </th>
                 }
                 <th class="sticky right-0 z-10 bg-stone-50 px-4 py-3"><span class="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody class="divide-y divide-stone-100">
-              @for (row of table.rows; track row.instance) {
-                <tr class="group align-top transition hover:bg-brand-50/40" [class.bg-brand-50]="selected().has(row.instance)">
-                  <td class="sticky left-0 z-10 bg-white px-4 py-3 group-hover:bg-brand-50" [class.!bg-brand-50]="selected().has(row.instance)">
+              @for (row of rows; track row.instance) {
+                @let open = isExpanded(row);
+                <tr
+                  class="group cursor-pointer align-top transition hover:bg-brand-50/40"
+                  [class.bg-brand-50]="selected().has(row.instance)"
+                  [attr.aria-expanded]="open"
+                  (click)="toggleExpanded(row, $event)"
+                >
+                  <td class="sticky left-0 z-10 bg-white px-4 py-3 group-hover:bg-brand-50" [class.!bg-brand-50]="selected().has(row.instance)" (click)="$event.stopPropagation()">
                     <input
                       type="checkbox"
                       class="size-4 rounded accent-brand-600"
@@ -275,20 +384,28 @@
                   <td class="px-4 py-3 whitespace-nowrap text-stone-500 tabular-nums" [title]="formatLongDate(row.date)">{{ formatLongDate(row.date) }}</td>
                   @for (col of table.columns; track col.id) {
                     @let cell = row.cells[col.id];
-                    <td class="max-w-sm px-4 py-3 text-stone-800">
+                    @let width = widths()[col.id];
+                    <td class="px-4 py-3 break-words text-stone-800" [class.max-w-sm]="!width" [style.max-width.px]="width">
                       @if (!cell || !cell.text) {
                         <span class="text-stone-300">—</span>
                       } @else if (cell.html) {
-                        <div class="prose-lite line-clamp-4 [&>*+*]:mt-1" [innerHTML]="cell.text"></div>
+                        <div class="prose-lite [&>*+*]:mt-1" [class.line-clamp-4]="!open" [innerHTML]="cell.text"></div>
                       } @else {
-                        <span class="line-clamp-4 whitespace-pre-line">{{ cell.text }}</span>
+                        <span class="whitespace-pre-line" [class.line-clamp-4]="!open">{{ cell.text }}</span>
                       }
                     </td>
                   }
-                  <td class="sticky right-0 z-10 bg-white px-2 py-2 text-right group-hover:bg-brand-50" [class.!bg-brand-50]="selected().has(row.instance)">
+                  <td class="sticky right-0 z-10 bg-white px-2 py-2 text-right group-hover:bg-brand-50" [class.!bg-brand-50]="selected().has(row.instance)" (click)="$event.stopPropagation()">
                     <button type="button" class="btn-icon hover:!bg-red-50 hover:!text-red-600" [disabled]="deleting()" (click)="remove(row)" title="Supprimer cette participation" aria-label="Supprimer cette participation">
                       <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" /></svg>
                     </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td class="px-4 py-12 text-center text-stone-500" [attr.colspan]="table.columns.length + 3">
+                    Aucune participation ne correspond à ces filtres.
+                    <button type="button" class="ml-1 font-medium text-brand-700 underline underline-offset-2" (click)="clearFilters()">Effacer les filtres</button>
                   </td>
                 </tr>
               }

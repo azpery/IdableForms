@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { isHtml } from '../shared/rich-text';
+import { htmlToText, isHtml } from '../shared/rich-text';
 import { Form, Step, isQuestion } from './models';
 
 interface RawAnswer {
@@ -46,12 +46,18 @@ export interface ResponseColumn {
   id: string;
   title: string;
   section?: string;
+  /** Valeurs possibles pour filtrer (questions à choix, échelle, média) ; absent pour une réponse libre. */
+  options?: string[];
 }
 
 export interface ResponseCell {
   text: string;
   /** Réponse libre mise en forme : à afficher comme HTML (assaini par Angular). */
   html?: boolean;
+  /** Valeurs choisies, parmi les options de la colonne (pour les filtres). */
+  values?: string[];
+  /** Texte brut en minuscules sans accents, pour la recherche. */
+  search: string;
 }
 
 /** Une participation : toutes les réponses d'un même envoi du formulaire. */
@@ -133,7 +139,7 @@ function responseTable(form: Form, answers: RawAnswer[]): FormResults['responses
   const addColumn = (step: Step, section?: string) => {
     const multiVariant = step.content.type === 'media' && (step.content.medias?.length ?? 0) > 1;
     if (!isQuestion(step) && !multiVariant) return;
-    columns.push({ id: step._id!, title: multiVariant ? `${step.content.title} (média affiché)` : step.content.title, section });
+    columns.push({ id: step._id!, title: multiVariant ? `${step.content.title} (média affiché)` : step.content.title, section, options: columnOptions(step) });
     steps.set(step._id!, step);
   };
   for (const step of form.steps) {
@@ -152,21 +158,56 @@ function responseTable(form: Form, answers: RawAnswer[]): FormResults['responses
   return { columns, rows: [...rows.values()].sort((a, b) => b.date.getTime() - a.date.getTime()) };
 }
 
-function toCell(step: Step, answer: RawAnswer): ResponseCell {
+function columnOptions(step: Step): string[] | undefined {
   const { content } = step;
+  const other = content.allowOther ? ['Autre'] : [];
+  switch (content.type) {
+    case 'yesno':
+      return ['Oui', 'Non'];
+    case 'radio':
+    case 'multiple':
+      return [...(content.choices ?? []), ...other];
+    case 'jauge':
+      return ['1', '2', '3', '4', '5', 'Le fait déjà'];
+    case 'media':
+      return (content.medias ?? []).map((m) => m.name);
+    default:
+      return undefined;
+  }
+}
+
+/** Minuscules sans accents, pour comparer des textes. */
+export function normalize(text: string): string {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function toCell(step: Step, answer: RawAnswer): ResponseCell {
+  const cell = (text: string, values?: string[], html = false): ResponseCell => ({
+    text,
+    values,
+    html: html || undefined,
+    search: normalize(html ? htmlToText(text) : text),
+  });
+  const { content } = step;
+  const value = answer.answer ?? '';
   switch (content.type) {
     case 'multiple': {
       const checked = (content.choices ?? []).filter((_, i) => answer.answers?.[i] === 'true');
-      if (answer.answer?.trim()) checked.push(`Autre : ${answer.answer.trim()}`);
-      return { text: checked.join(' · ') };
+      const other = answer.answer?.trim();
+      return cell([...checked, ...(other ? [`Autre : ${other}`] : [])].join(' · '), other ? [...checked, 'Autre'] : checked);
     }
-    case 'jauge':
-      return { text: answer.answer === '-1' ? 'Le fait déjà' : `${answer.answer ?? ''} / 5` };
+    case 'radio':
+      // Réponse hors des choix proposés : texte saisi dans « Autre » (ou choix renommé depuis).
+      return cell(value, [(content.choices ?? []).includes(value) ? value : 'Autre']);
+    case 'jauge': {
+      const label = value === '-1' ? 'Le fait déjà' : value;
+      return cell(value === '-1' ? label : `${value} / 5`, [label]);
+    }
     case 'open':
       // Les anciennes réponses longues sont du HTML (éditeur riche), les nouvelles du texte simple.
-      return { text: answer.answer ?? '', html: isHtml(answer.answer ?? '') };
+      return cell(value, undefined, isHtml(value));
     default:
-      return { text: answer.answer ?? '' };
+      return cell(value, [value]);
   }
 }
 
